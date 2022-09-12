@@ -1,0 +1,44 @@
+{
+	"bgmvolume": 100,
+	"keys2": {
+		"special": 70,
+		"up": 101,
+		"down": 98,
+		"left": 97,
+		"right": 99,
+		"slow": 65,
+		"shoot": 83,
+		"spell": 68
+	},
+	"keysys": {
+		"menu_confirm": 90,
+		"repfast": 17,
+		"repslow": 16,
+		"menu": 27,
+		"snapshot": 36,
+		"retry": 82,
+		"menu_up": 38,
+		"menu_right": 39,
+		"menu_left": 37,
+		"menu_down": 40
+	},
+	"username": "User",
+	"locale": "zh_cn",
+	"timezone": 8,
+	"keys": {
+		"special": 67,
+		"up": 38,
+		"down": 40,
+		"left": 37,
+		"right": 39,
+		"slow": 16,
+		"shoot": 90,
+		"spell": 88
+	},
+	"mod": "empty",
+	"windowed": true,
+	"resx": 1600,
+	"resy": 900,
+	"vsync": false,
+	"sevolume": 100
+}

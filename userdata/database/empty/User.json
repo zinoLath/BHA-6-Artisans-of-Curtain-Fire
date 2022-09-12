@@ -1,0 +1,37 @@
+{
+	"player_select": 1,
+	"difficulty_select": 2,
+	"hiscore": {
+		
+	},
+	"spell_card_hist": {
+		"All": {
+			"「」": {
+				"reimu_player": [
+					0,
+					1
+				]
+			}
+		}
+	},
+	"SpellHistory": {
+		"test": [
+			0,
+			0,
+			0,
+			216
+		],
+		"g": [
+			0,
+			0,
+			0,
+			1
+		],
+		"gtest": [
+			11,
+			10,
+			9,
+			723
+		]
+	}
+}
