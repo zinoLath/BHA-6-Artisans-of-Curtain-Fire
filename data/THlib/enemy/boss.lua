@@ -38,9 +38,6 @@ function M:frame()
     self.dmg_red_ratio = 1
     if self.timer % 4 == 0 then
         for k,v in pairs(self.dmg_list) do
-            if v.sum and v.sum ~= 0 then
-                Print(math.tween.circOut(math.tween.quadOut(v.sum)))
-            end
             table.clear(v)
         end
     end
@@ -73,10 +70,11 @@ function M:onDamage(other,dmg)
     local dmgarr = self.dmg_list[other_class.type]
     dmgarr.sum = dmgarr.sum or 0
     table.insert(dmgarr,dmg)
-    local yass_exponent = #dmgarr + 1
-    dmgarr.sum = dmgarr.sum + 1/math.pow(2,yass_exponent)
-    self.lastdmg = dmg * math.tween.circOut(dmgarr.sum)
-    self.hp = self.hp - dmg * math.tween.circOut(dmgarr.sum)
+    local yass_exponent = 1/2^(#dmgarr + 1)
+    dmgarr.sum = dmgarr.sum + yass_exponent
+    local ratio = dmg *math.tween.circOut(yass_exponent)
+    self.lastdmg = ratio
+    self.hp = self.hp - ratio
 end
 function M:kill()
     Kill(self.hpbar)

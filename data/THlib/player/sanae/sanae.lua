@@ -47,6 +47,20 @@ end
 M.shot = Class(player_bullet_straight)
 M.shot.type = "sanaeA_shot"
 M.shot.dmg = 1
+local spdrat = 0.25
+function M.shot:kill()
+    PreserveObject(self)
+    self.group = GROUP_GHOST
+    self.vx, self.vy = self.vx*spdrat, self.vy*spdrat
+    task.New(self,function()
+        for t=1, 0, -1/15 do
+            --local t = i/10
+            self._a = 128 * t
+            task.Wait(1)
+        end
+        Del(self)
+    end)
+end
 local obj_tsk = function(obj)
     obj.bound = false
     for t=0, 1, 1/5 do
