@@ -36,6 +36,20 @@ function table.clear(dst)
     end
     return dst
 end
+
+function table.sum(tb,num_only)
+    local i = 0
+    if num_only then
+        for k,v in ipairs(tb) do
+            i = i + v
+        end
+    else
+        for k,v in pairs(tb) do
+            i = i + v
+        end
+    end
+end
+
 local function PrintTableRecursive(tb,level)
     if type(tb) ~= "table" then
         return tb

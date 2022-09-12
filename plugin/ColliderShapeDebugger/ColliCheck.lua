@@ -20,7 +20,7 @@ local toggle, KeyDown192, KeyDown123, img,
 Collision_Checker = {}
 Collision_Checker.list = {
     {GROUP_PLAYER, Color(255, 50, 255, 50)},
-    {GROUP_PLAYER_BULLET, Color(255, 127, 127, 192)},
+    {GROUP_PLAYER_BULLET, Color(255, 0, 255, 255)},
     {GROUP_SPELL, Color(255, 255, 50, 255)},
     {GROUP_NONTJT, Color(255, 128, 255, 255)},
     {GROUP_ENEMY, Color(255, 255, 255, 128)},

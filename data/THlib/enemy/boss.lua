@@ -31,8 +31,19 @@ function M:init(cards)
     self.rect = false
     self.bonus = item.sc_bonus_max
     self.skip_card = false
+    self.dmg_red_ratio = 1
+    self.dmg_list = {}
 end
 function M:frame()
+    self.dmg_red_ratio = 1
+    if self.timer % 4 == 0 then
+        for k,v in pairs(self.dmg_list) do
+            if v.sum and v.sum ~= 0 then
+                Print(math.tween.circOut(math.tween.quadOut(v.sum)))
+            end
+            table.clear(v)
+        end
+    end
     local card = self.current_card
     if not card.noncombat then
         if self.timer < card.invult then
@@ -53,6 +64,19 @@ function M:frame()
             error(E)
         end
     end
+end
+function M:onDamage(other,dmg)
+    local other_class = other.class
+    if not self.dmg_list[other_class.type] then
+        self.dmg_list[other_class.type] = {}
+    end
+    local dmgarr = self.dmg_list[other_class.type]
+    dmgarr.sum = dmgarr.sum or 0
+    table.insert(dmgarr,dmg)
+    local yass_exponent = #dmgarr + 1
+    dmgarr.sum = dmgarr.sum + 1/math.pow(2,yass_exponent)
+    self.lastdmg = dmg * math.tween.circOut(dmgarr.sum)
+    self.hp = self.hp - dmg * math.tween.circOut(dmgarr.sum)
 end
 function M:kill()
     Kill(self.hpbar)

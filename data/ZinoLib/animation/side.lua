@@ -83,7 +83,7 @@ function M:co(manager)
     if is_segmented == sTypes.NO_LOOP then
         while lrcheck(manager) do
             local t = math.clamp((manager.lr*way)/Lmax,0,1)
-            self.img = self.imgs[self.ids[int(math.lerp(1,#self.ids),t)]]
+            self.img = self.imgs[self.ids[int(math.lerp(1,#self.ids,t))]]
             task.Wait(self.interval)
         end
     elseif is_segmented == sTypes.LOOP_BODY then

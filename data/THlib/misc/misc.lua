@@ -243,45 +243,34 @@ end
 ---震屏效果
 ---@class THlib.shaker_maker:object
 shaker_maker = Class(object)
+shaker_maker[".render"] = false
 --local lstg = lstg
 
 function shaker_maker:init(time, size)
     lstg.tmpvar.shaker = self
     self.time = time
     self.size = size
-    self.l = lstg.world.l
-    self.r = lstg.world.r
-    self._b = lstg.world.b
-    self.t = lstg.world.t
+    self.bound = false
+    self.colli = false
 end
 
 function shaker_maker:frame()
     local a = int(self.timer / 3) * 360 / 5 * 2--每3帧增加0.8pi
     local x = self.size * cos(a)
     local y = self.size * sin(a)
-    lstg.world.l = self.l + x
-    lstg.world.r = self.r + x
-    lstg.world.b = self._b + y
-    lstg.world.t = self.t + y
+    SetWorldOffset(x, y, 1, 1)
     if self.timer == self.time then
         Del(self)
     end
 end
 
 function shaker_maker:del()
-    lstg.world.l = self.l
-    lstg.world.r = self.r
-    lstg.world.b = self._b
-    lstg.world.t = self.t
+    ResetWorldOffset()
     lstg.tmpvar.shaker = nil
 end
 
 function shaker_maker:kill()
-    lstg.world.l = self.l
-    lstg.world.r = self.r
-    lstg.world.b = self._b
-    lstg.world.t = self.t
-    lstg.tmpvar.shaker = nil
+    Del(self)
 end
 
 local task_Do = task.Do

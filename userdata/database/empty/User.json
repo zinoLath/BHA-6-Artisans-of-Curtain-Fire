@@ -1,9 +1,5 @@
 {
 	"player_select": 1,
-	"difficulty_select": 2,
-	"hiscore": {
-		
-	},
 	"spell_card_hist": {
 		"All": {
 			"「」": {
@@ -14,7 +10,17 @@
 			}
 		}
 	},
+	"hiscore": {
+		
+	},
+	"difficulty_select": 2,
 	"SpellHistory": {
+		"gtest": [
+			15,
+			14,
+			13,
+			806
+		],
 		"test": [
 			0,
 			0,
@@ -26,12 +32,6 @@
 			0,
 			0,
 			1
-		],
-		"gtest": [
-			11,
-			10,
-			9,
-			723
 		]
 	}
 }

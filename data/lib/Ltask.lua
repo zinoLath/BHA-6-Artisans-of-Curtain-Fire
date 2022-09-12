@@ -25,7 +25,7 @@ function task:Do()
             if coroutine.status(co) ~= 'dead' then
                 table.insert(task.stack, self)
                 table.insert(task.co, co)
-                local flag, errmsg = coroutine.resume(co)
+                local flag, errmsg = coroutine.resume(co,self)
                 if errmsg then
                     error(tostring(errmsg) .. "\n========== coroutine traceback ==========\n" .. debug.traceback(co) .. "\n========== C traceback ==========")
                 end
