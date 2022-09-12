@@ -1,4 +1,25 @@
 {
+	"SpellHistory": {
+		"test": [
+			0,
+			0,
+			0,
+			216
+		],
+		"gtest": [
+			17,
+			16,
+			15,
+			829
+		],
+		"g": [
+			0,
+			0,
+			0,
+			1
+		]
+	},
+	"difficulty_select": 2,
 	"player_select": 1,
 	"spell_card_hist": {
 		"All": {
@@ -10,28 +31,7 @@
 			}
 		}
 	},
-	"SpellHistory": {
-		"g": [
-			0,
-			0,
-			0,
-			1
-		],
-		"test": [
-			0,
-			0,
-			0,
-			216
-		],
-		"gtest": [
-			17,
-			16,
-			15,
-			827
-		]
-	},
 	"hiscore": {
 		
-	},
-	"difficulty_select": 2
+	}
 }
