@@ -8,7 +8,7 @@ SetImageCenter("spellnamebg",cx,cy)
 local cutin_font_default = BMF:loadFont("philosopher",font_path)
 local history_font_default = BMF:loadFont("square",font_path)
 local timer_font = BMF:loadFont("chaney",font_path)
-timer_font:setMonospace(80,{",",".",":"})
+timer_font:setMonospace(40,{",",".",":"})
 --local timer_state = BMF:createState("timer_state")
 local namestate = {
     font = cutin_font_default,

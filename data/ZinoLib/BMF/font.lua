@@ -29,7 +29,6 @@ local cbdefault = Color(255,255,255,255)
 CreateRenderTarget("BMF_FONT_BUFFER")
 CreateRenderTarget("BMF_FONT_BORDER")
 LoadFX("BMF_BORDER_SHADER", GCSD .. "shader.fx")
-LoadFX("BMF_EMPTY_SHADER", GCSD .. "empty.fx")
 
 for k,v in ipairs(M.charlist) do
     M.charlist[v] = k
@@ -130,7 +129,7 @@ function M.font_functions:getSize(str,scale,offsetfunc)
             local char = chars[c]
             local width = char.width*scale * GetImageScale()
             if monospace and not self.mono_exception[c] then
-                width = monospace*scale*0.5
+                width = monospace*scale
             end
             local height = char.height*scale * GetImageScale()
             local x,y = cursor.x,
@@ -140,9 +139,9 @@ function M.font_functions:getSize(str,scale,offsetfunc)
             min_y = math.min(min_y,y)
             max_y = math.max(max_y,y + height)
             if monospace and not self.mono_exception[c] then
-                cursor.x = cursor.x + monospace*scale*0.5
+                cursor.x = cursor.x + monospace*scale
             else
-                cursor.x = cursor.x + char.xadvance*scale*0.5
+                cursor.x = cursor.x + char.xadvance*scale
             end
         else
             base_c.y = base_c.y + self.lineHeight*scale
@@ -158,7 +157,7 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,offsetfunc)
     valign = valign or "vcenter"
     local move_scale = 1
     if lstg.viewmode ~= "ui" then
-        move_scale = 0.7
+        move_scale = 0.4444
     end
     local wd, hg = self:getSize(str,scale*move_scale)
     local cursor = Vector(x,y - self.base*scale*move_scale/2)
@@ -189,7 +188,11 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,offsetfunc)
                 vec = offsetfunc(i,c,str)
             end
             if color then
-                SetImageColor(char.sprite,color)
+                if type(color) == "userdata" then
+                    SetImageColor(char.sprite,color)
+                else
+                    SetImageColor(char.sprite,unpack(color))
+                end
             end
             Render(char.sprite,cursor.x + offset + vec.x,cursor.y - char.yoffset*scale*move_scale + vec.y,
                     0,scale,scale,0)
@@ -198,9 +201,9 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,offsetfunc)
             end
             if monospace and not self.mono_exception[c] then
                 local current_space = monospace
-                cursor.x = cursor.x + current_space/2*scale*move_scale
+                cursor.x = cursor.x + current_space*scale*move_scale
             else
-                cursor.x = cursor.x + char.xadvance/2*scale*move_scale
+                cursor.x = cursor.x + char.xadvance*scale*move_scale
             end
         else
             base_c.y = base_c.y - self.lineHeight*scale*move_scale

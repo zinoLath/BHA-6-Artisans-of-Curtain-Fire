@@ -46,7 +46,7 @@ end
 OriginalLoadTexture = LoadTexture
 function LoadTexture(tex,...)
     OriginalLoadTexture(tex,...)
-    --SetTextureSamplerState(tex,"point+clamp")
+    SetTextureSamplerState(tex,"linear+wrap")
     return tex
 end
 ----------------------------------------
@@ -82,7 +82,7 @@ end
 function LoadImageGroup(prefix, texname, x, y, w, h, cols, rows, a, b, rect)
     local ret = {}
     for i = 0, cols * rows - 1 do
-        local img = LoadImage(prefix .. (i + 1), texname, x + w * (i % cols), y + h * (int(i / cols)), w, h, a or 0, b or 0, rect or false)
+        local img = LoadImage(prefix .. (i + 1), texname, x + w * (i % cols), y + h * (int(i / cols))+1, w, h, a or 0, b or 0, rect or false)
         table.insert(ret,img)
     end
     return ret
@@ -103,7 +103,7 @@ end
 function LoadImageGroupFromFile(texaniname, filename, mipmap, n, m, a, b, rect)
     LoadTexture(texaniname, filename, mipmap)
     local w, h = GetTextureSize(texaniname)
-    return LoadImageGroup(texaniname, texaniname, 0, 0, w / n, h / m, n, m, a, b, rect)
+    return LoadImageGroup(texaniname, texaniname, 0, 0, int(w / n), int(h / m), n, m, a, b, rect)
 end
 
 function LoadTTF(ttfname, filename, size)
@@ -136,3 +136,7 @@ end
 function FileExist(filename)
     return lstg.FileManager.FileExist(filename, true)
 end
+
+
+
+LoadFX("EMPTY_SHADER", "shader/empty.fx")
