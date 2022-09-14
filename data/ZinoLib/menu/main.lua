@@ -59,6 +59,7 @@ function M.option:render()
     end
     local font = self.font or self.class.font
     if not font then
+        SetFontState("menu","",self._color)
         RenderText('menu',self.tid,self.x,self.y,0.6*2.25*self.scale,'center')
     elseif type(font) == "table" then
         font:render(self.tid,self.x,self.y,self.scale)
@@ -121,6 +122,7 @@ function M.menu:init(manager)
     self.selected = 1
     self.manager = manager
     self.options = {}
+    self._servants = {}
     self.group = GROUP_MENU
     self.layer = LAYER_MENU
     CallClass(self,"createOptions")
@@ -139,6 +141,9 @@ function M.menu:init(manager)
         end
     end
     CallClass(self, "ctor", manager)
+end
+function M.menu:frame()
+    task.Do(self)
 end
 --manager,menu,tid,id,data
 function M.menu:createOptions()
@@ -183,9 +188,11 @@ function M.menu:_in()
     end
     if self._servants then
         for k,v in pairs(self._servants) do
-            task.New(v, function()
-                v.class._in(v)
-            end)
+            if v.class._in then
+                task.New(v, function()
+                    v.class._in(v)
+                end)
+            end
         end
     end
 end
@@ -237,7 +244,7 @@ end
 function M.menu:hover(option)
     local newid = option.id
     if newid ~= self.selected then
-        CallClass(self,"changeSelect",newid)
+       --CallClass(self,"changeSelect",newid)
     end
 end
 function M.menu:select()
@@ -255,7 +262,7 @@ function M.menu.key_events.confirm(self)
     local func = (obj.onEnter or obj.class.onEnter) or voidfunc
     func(obj)
 end
-function M.menu.obj_init(self,menu)
+function M.menu:obj_init(menu)
     self._x, self._y = 300, 300 - self.id * 50
     self.delx = -400
     self.dely = self._y
@@ -270,7 +277,7 @@ function M.menu:coroutine()
         for k,v in pairs(self.class.key_events) do
             if self.key_co[k] ~= nil then
                 local e, key_status
-                e, key_status = coroutine.resume(self.key_co[k],k)
+                e, key_status = coroutine.resume(self.key_co[k],k,self.scroll_wait1,self.scroll_wait2)
                 if key_status then
                     self.class.key_events[k](self)
                 end
@@ -292,15 +299,15 @@ M.manager.menus = {
     {M.menu, "main_menu"}
 }
 M.manager.intro_menu = "main_menu"
-function M.manager:init()
+function M.manager:init(...)
     self.menus = {}
     self.bound = false
     self.group = GROUP_MENU
     self.layer = LAYER_MENU-100
     self.stack = stack()
     for k,v in ipairs(self.class.menus) do
-        Print(PrintTable(v))
-        self.menus[v[2]] = New(v[1],self)
+        --Print(PrintTable(v))
+        self.menus[v[2]] = New(v[1],self,...)
     end
     task.New(self,function()
         self.class.enter_menu(self,self.menus[self.class.intro_menu])
@@ -312,9 +319,11 @@ function M.manager:render()
 end
 function M.manager:frame()
     task.Do(self)
-    local C, E = coroutine.resume(self.stack[0].coroutine, self.stack[0])
-    if(not C)then
-        error(E)
+    if self.active ~= false then
+        local C, E = coroutine.resume(self.stack[0].coroutine, self.stack[0])
+        if(not C)then
+            error(E)
+        end
     end
 end
 function M.manager:kill()
@@ -358,13 +367,15 @@ function M.manager:go_back()
     end
 end
 
-function MenuInputChecker(name)
+function MenuInputChecker(name,wait1,wait2)
+    wait1 = wait1 or 30
+    wait2 = wait2 or 3
     while(true) do
         while(not SysKeyIsPressed(name))do
             coroutine.yield(false) --return false until the key is pressed
         end
         coroutine.yield(true) --return true once
-        for i=0, 30 do
+        for i=0, wait1 do
             coroutine.yield(false) --return false for 30 frames
             if (not SysKeyIsDown(name)) then
                 break --if the key is not being held down, break out of for (which will make you consequently restart
@@ -372,7 +383,7 @@ function MenuInputChecker(name)
         end
         while (SysKeyIsDown(name)) do
             coroutine.yield(true) -- return true once every 3 frames
-            for i=0, 3 do
+            for i=0, wait2 do
                 coroutine.yield(false) --return false for 3 frames
             end
         end

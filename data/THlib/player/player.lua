@@ -1,4 +1,5 @@
 --TODO: IMPLEMENT EVENTDISPATCHER
+cheat = true
 local clamp = math.clamp
 local Event = Event
 local lerp = math.lerp
@@ -385,11 +386,11 @@ function player_death_red:init()
     self.colli = false
     self._blend = "mul+screen"
     task.New(self,function()
-        SetFieldInTime(self,player.deathbombtimer*0.3,math.tween.cubicIn,{"_a",255})
-        task.Wait(player.deathbombtimer*0.17)
+        SetFieldInTime(self,player.deathbombtimer*0.1,math.tween.cubicIn,{"_a",255})
+        task.Wait(player.deathbombtimer*0.4)
         PlaySound('pldead00',1,self.x/610)
-        task.Wait(player.deathbombtimer*0.17)
-        SetFieldInTime(self,player.deathbombtimer*0.3,math.tween.cubicOut,{"_a", 0})
+        task.Wait(player.deathbombtimer*0.4)
+        SetFieldInTime(self,player.deathbombtimer*0.1,math.tween.cubicOut,{"_a", 0})
         Del(self)
     end)
 end

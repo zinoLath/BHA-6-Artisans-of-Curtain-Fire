@@ -16,7 +16,7 @@ function M:init(cards)
         self.cardlist[k] = v
     end
     self.img = "parimg10"
-    self.hscale, self.vscale = 5,5
+    self.hscale, self.vscale = 3,3
     self.bound = false
     self.cards = cards or self.class.patterns
     self.current_card = cards[1]
@@ -88,7 +88,11 @@ SetImageState("boss_indicator", "", Color(128,255,255,255))
 function M:render()
     Render("boss_indicator",self.x,self.y,0,200,0.2)
     Render("boss_indicator",self.x,self.y,0,0.2,200)
-    DefaultRenderFunc(self)
+    if self.animManager then
+        self.animManager:render(self)
+    else
+        DefaultRenderFunc(self)
+    end
 end
 function M:onDeath()
 end

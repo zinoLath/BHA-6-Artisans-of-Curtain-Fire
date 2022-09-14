@@ -140,7 +140,7 @@ function circular_hpbar:render()
             self.radius-self.width/2-self.outline,self.radius+self.width/2+self.outline,self.seg)
 
     SetImageState(self.imgfill, self.fillrm, Color(self.colorfill.a*self.alpha,self.colorfill.r,self.colorfill.g,self.colorfill.b))
-    misc.RenderRing(self.imgfill,self.x,self.y,-270,-270+360*self.fill,
+    misc.RenderRing(self.imgfill,self.x,self.y,-270,-270-360*self.fill,
             self.radius-self.width/2,self.radius+self.width/2,self.seg)
 end
 function circular_hpbar:kill()

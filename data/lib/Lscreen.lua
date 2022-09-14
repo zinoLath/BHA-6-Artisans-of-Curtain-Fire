@@ -44,7 +44,7 @@ local rw, rh = ww*stg_scale, wh*stg_scale --render width and height (the size of
 local boundw, boundh = 32, 32 --object deletion box size (stg frame + bound)
 Print(string.format("STG size: %d x %d", ww, wh))
 
-local pw, ph = 800/stg_scale, 1000/stg_scale --player bounds (no idea why its different lol)
+local pw, ph = 800/stg_scale-8, 1000/stg_scale-8 --player bounds (no idea why its different lol)
 local RAW_DEFAULT_WORLD = {--this one is the "standard" one that will always be the base for everything
     l = -ww/2, r = ww/2, b = -wh/2, t = wh/2,
     boundl = -ww/2-boundw, boundr = ww/2+boundw, boundb = -wh/2-boundh, boundt = wh/2+boundh,

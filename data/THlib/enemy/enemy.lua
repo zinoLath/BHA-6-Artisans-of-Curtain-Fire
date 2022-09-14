@@ -49,7 +49,7 @@ function enemybase:del()
 end
 function enemybase:render()
     if self.animManager then
-        self.animManager:render()
+        self.animManager:render(self)
     else
         DefaultRenderFunc(self)
     end
