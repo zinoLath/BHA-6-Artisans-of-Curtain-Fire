@@ -1,6 +1,8 @@
 local path = GetCurrentScriptDirectory()
+local mathpath = path.."math\\"
+Vector = Include(mathpath..'Vector.lua')
+Rect = Include(mathpath..'Rect.lua')
 local miscpath = path.."misc\\"
-Vector = Include(miscpath..'BrineVector.lua')
 Include(miscpath..'Stack.lua')
 Include(miscpath..'EventDispatcher.lua')
 Include(miscpath..'MiscFunctions.lua')
@@ -8,6 +10,7 @@ Include(miscpath..'MulticastDelegate.lua')
 Include(miscpath..'TextManager.lua')
 Include(miscpath..'VertexRenderer.lua')
 Include(miscpath..'PatternObject.lua')
+Include(miscpath..'ObjectHelpers.lua')
 Include(path..'BMF\\font.lua') --TO REFACTOR
 Include(path..'animation\\main.lua')
 Include(path..'particle\\particle.lua')

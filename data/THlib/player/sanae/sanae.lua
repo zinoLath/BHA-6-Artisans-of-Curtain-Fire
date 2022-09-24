@@ -46,7 +46,7 @@ function M:init()
 end
 M.shot = Class(player_bullet_straight)
 M.shot.type = "sanaeA_shot"
-M.shot.dmg = 1
+M.shot.dmg = 3
 local spdrat = 0.25
 function M.shot:kill()
     PreserveObject(self)

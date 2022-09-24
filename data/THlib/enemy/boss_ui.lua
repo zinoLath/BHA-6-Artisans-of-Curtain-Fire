@@ -152,6 +152,60 @@ function circular_hpbar:kill()
     end)
 end
 
+straight_hpbar = Class(object)
+function straight_hpbar:init(anchor,l,r,b,t,color)
+    self.anchor = anchor
+    self.__l = l or lstg.world.scrl + 130
+    self.__r = r or lstg.world.scrr - 20
+    self.__t = t or lstg.world.scrt - 8
+    self.__b = b or self.__t - 4
+    self.yratio = 0
+    self.outline = 0
+    self.fill = 1
+    self.color = color or Color(255,255,255,255)
+    self.imgfill = "hpbar_fill"
+    self.imgout = "hpbar_bg"
+    self.bound = false
+    self.layer = LAYER_UI
+    self.alpha = 1
+    self.__y = 1
+
+    self.outline = 0
+    self.colorout = Color(128,0,0,0)
+end
+function straight_hpbar:frame()
+    task.Do(self)
+    local anchor = self.anchor
+    if not IsValid(anchor) then return end
+    if anchor.colli and not self.dying then
+        self.yratio = SnapLerp(self.yratio,self.__y,0.1)
+    elseif not anchor.colli and not self.dying then
+        --self.yratio = SnapLerp(self.yratio,0,0.2)
+    end
+    local playerx,playery = WorldToUI(player.x,player.y)
+    if playery > self.__b - 200 then
+        self.alpha = SnapLerp(self.alpha,0.2,0.1)
+    else
+        self.alpha = SnapLerp(self.alpha,1,0.1)
+    end
+    if anchor.hp and anchor.maxhp then
+        self.fill = SnapLerp(self.fill,anchor.hp/anchor.maxhp,0.3)
+    else
+        self.fill = 1
+    end
+end
+function straight_hpbar:render()
+    SetViewMode('ui')
+    SetImageState(self.imgfill, "", Color(self.color.a*self.alpha,self.color.r,self.color.g,self.color.b))
+    SetImageState(self.imgout, "", Color(self.colorout.a*self.alpha,self.colorout.r,self.colorout.g,self.colorout.b))
+    local l,r,b,t = self.__l, self.__r, self.__b, self.__t
+    local _r = math.lerp(l,r,self.fill)
+    local _t = math.lerp(b,t,self.yratio)
+    RenderRect(self.imgout,l+3,_r+3,b-1,_t-1)
+    RenderRect(self.imgfill,l,_r,b,_t)
+    SetViewMode('world')
+end
+
 boss_timer = zclass(object)
 function boss_timer:init(boss)
     self.font = timer_font

@@ -9,7 +9,7 @@
     "amulet": {
       "rect": "M.sdsquare(1)",
       "hitsize": 10,
-      "size": 24
+      "size": 32
     },
     "arrow": {
       "rect": "M.sdsquare(2)",
@@ -76,7 +76,12 @@
     "star": {
       "rect": "M.sdsquare(12)",
       "hitsize": 13,
-      "size": 36
+      "size": 48
+    },
+    "smallstar": {
+      "rect": "M.sdsquare(12)",
+      "hitsize": 13,
+      "size": 24
     },
     "snowflake": {
       "rect": "M.sdsquare(13)",

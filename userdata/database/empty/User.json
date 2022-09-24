@@ -1,17 +1,15 @@
 {
+	"hiscore": {
+		
+	},
 	"difficulty_select": 2,
+	"player_select": 1,
 	"SpellHistory": {
-		"test": [
+		"g": [
 			0,
 			0,
 			0,
-			216
-		],
-		"Barrier Sign ~ Gensokyo Vortex": [
-			1,
-			1,
-			1,
-			12
+			1
 		],
 		"gtest": [
 			27,
@@ -19,7 +17,19 @@
 			25,
 			972
 		],
-		"g": [
+		"Barrier Sign ~ Gensokyo Vortex": [
+			5,
+			5,
+			5,
+			80
+		],
+		"test": [
+			0,
+			0,
+			0,
+			216
+		],
+		"Test": [
 			0,
 			0,
 			0,
@@ -35,9 +45,5 @@
 				]
 			}
 		}
-	},
-	"hiscore": {
-		
-	},
-	"player_select": 1
+	}
 }

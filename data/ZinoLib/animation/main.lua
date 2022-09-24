@@ -47,6 +47,24 @@ end
 function M:getImage(obj)
     return self.anims[self.currentID].img
 end
+function M:getImageList()
+    local ret = {}
+    for k,v in pairs(self.anims) do
+        for _k,_v in pairs(v.imgs) do
+            local check = false
+            for __k,__v in ipairs(ret) do
+                if __v == _v then
+                    check = true
+                    break
+                end
+            end
+            if not check then
+                table.insert(ret,_v)
+            end
+        end
+    end
+    return ret
+end
 function M:sideAnim()
     local dx = self.obj._dx or self.obj.dx
     local lr = self.lr

@@ -25,7 +25,7 @@ sheet_handler.optimize_sheet(shot_sheet)
 local centerDefaultColor = Color(255,0,255,255)
 bullet = zclass(object)
 bullet.default_function = 0x10
-function bullet:init(img,color,subcolor,blend)
+function bullet:init(img,color,subcolor,blend,delay)
     local bullet_style = shot_sheet.shots[img]
     self.img = bullet_style[1]
     self.imgid = img
@@ -34,10 +34,14 @@ function bullet:init(img,color,subcolor,blend)
     self._blend = blend
     self.layer = LAYER_ENEMY_BULLET
     self.group = GROUP_ENEMY_BULLET
+    self.delay = delay
+    if delay == nil then
+        self.delay = true
+    end
 end
 function bullet:frame()
     task.Do(self)
-    if self.timer < self.dt then
+    if self.delay and self.timer < self.dt then
         local j = (self.timer-self.d_base)/(self.dt-self.d_base)
         local i = EaseOutCubic(j)
         local scale = lerp(3.5,1,i)*2.25
@@ -56,10 +60,10 @@ end
 function bullet:kill()
     --New(item_faith_minor, self.x, self.y)
     SpawnPIV(self.x,self.y)
-    New(BulletBreak, self.x, self.y, self._color)
+    New(item.spawn_obj,self.x,self.y,1,self._color)
 end
 function bullet:del()
-    New(BulletBreak, self.x, self.y, self._color)
+    New(item.spawn_obj,self.x,self.y,1,self._color)
 end
 function bullet:delay(time)
     self.dt = time + self.timer
@@ -103,10 +107,16 @@ local default_sub = color.White
 local default_delay = 13
 local default_blend = "grad+alpha"
 function CreateShotA(x,y,speed,angle,graphic,color,subcolor,blend,delay)
+    --do return {} end
     subcolor = subcolor or default_sub
     delay = delay or default_delay
     blend = blend or default_blend
     return New(straight,graphic,color,subcolor,x,y,angle,speed,0,blend,delay)
+end
+function CreateShotR(x,y,spd,ang,img,color,rad,radang,subcolor,blend,delay)
+    radang = radang or ang
+    local xoff, yoff = rad * cos(radang), rad * sin(radang)
+    return CreateShotA(x+xoff,y+yoff,spd,ang,img,color,subcolor,blend,delay)
 end
 straight = zclass(bullet)
 function straight:init(type, color, subcolor, x, y, rot, speed, omiga, blend, delaytime, indes)

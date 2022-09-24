@@ -1,5 +1,5 @@
 --TODO: IMPLEMENT EVENTDISPATCHER
-cheat = true
+--cheat = true
 local clamp = math.clamp
 local Event = Event
 local lerp = math.lerp
@@ -193,9 +193,8 @@ function player_class:shoot()
     self.nextshoot = 10
 end
 function player_class:spell()
-    Print('bomb')
     self.nextspell = 60
-    lstg.var.bomb = lstg.var.bomb - 1
+    Print('bombs left: ' .. lstg.var.bomb)
 end
 function player_class:special()
     Print('special')

@@ -31,7 +31,7 @@ function M:new(img,blend,onInit,onFrame,onDel,poolsize)
     ret.initList = {onInit or voidfunc}
     ret.frameList = {onFrame or voidfunc}
     ret.delList = {onDel or voidfunc}
-    ret.imgList = {img or "white"}
+    ret.imgList = img or {"white"}
     ret.blendList = {blend or ""}
     ret.plist = ffi.new("zparticle[?]", poolsize)
     ret.current_pool_id = 1
@@ -51,7 +51,7 @@ function M:newParticle(x,y,rot,vx,vy,sx,sy,color,init,frame,del,img,blend,extra1
     particle.vy = vy or 0
     particle.sx = sx or 1
     particle.sy = sy or 1
-    particle.color = color or 0
+    particle.color = color or 0xFFFFFFFF
     particle.timer = 0
     particle.initPtr = init or 1
     particle.framePtr = frame or 1
@@ -62,8 +62,9 @@ function M:newParticle(x,y,rot,vx,vy,sx,sy,color,init,frame,del,img,blend,extra1
     particle.extra2 = extra2 or 0
     particle.extra3 = extra3 or 0
     particle.active = true
-    self.frameList[particle.initPtr](self,particle)
+    self.initList[particle.initPtr](self,particle)
     self.current_pool_id = (self.current_pool_id) % (self.poolsize-1) + 1
+    return particle
 end
 function M:update()
     for i = 0, self.poolsize - 1 do
@@ -78,9 +79,9 @@ end
 function M:render()
     for i = 0, self.poolsize - 1 do
         if self.plist[i].active then
-            -- local img = self.imgList[self.plist[i].imgPtr]
-            -- SetImageState(img, self.blendList[v.blendPtr], v.color)
-            lstg.Render("white", self.plist[i].x, self.plist[i].y, self.plist[i].rot, self.plist[i].sx, self.plist[i].sy)
+            local img = self.imgList[self.plist[i].imgPtr]
+            SetImageState(img, self.blendList[self.plist[i].blendPtr], Color(self.plist[i].color))
+            lstg.Render(img, self.plist[i].x, self.plist[i].y, self.plist[i].rot, self.plist[i].sx, self.plist[i].sy)
         end
     end
 end

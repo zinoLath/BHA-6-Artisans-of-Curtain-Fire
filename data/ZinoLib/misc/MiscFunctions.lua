@@ -60,7 +60,11 @@ function AdvancedFor(times,...)
                 end
                 variables[k] = lerp(v[2], v[3], finalt)
             elseif v[1] == 'sinewave' then
-                variables[k] = lerp(v[2], v[3], 0.5 + 0.5 * sin(v[4] + v[6] and (360*v[5])/(times-2) or (360*v[5])/(times-1)))
+                local t = (360*v[5]*i)/(times-1)
+                if v[6] then
+                    t = (360*v[5]*i)/(times-2)
+                end
+                variables[k] = lerp(v[2], v[3], 0.5 + 0.5 * sin(v[4] + t ))
             end
         end
         func(unpack(variables))
@@ -175,6 +179,9 @@ function HSVToRGB( hue, saturation, value )
         return value*255, p*255, q*255;
     end;
 end;
+function NormalizeAngle(angle)
+    return angle % 360
+end
 function AngleDifference(from,to)
     local delta = (to-from)%360
     return (delta > 180 and delta-360 or delta)
@@ -250,7 +257,35 @@ function MultiplyTable(tb)
     end
     return ret
 end
-
+local PIx2 = math.pi*2
+local pi_3 = math.pi/3
+local function fromcx(h_, c, x)
+    local h = math.floor(h_)
+    if h == 0 then
+        return c, x, 0
+    elseif h == 1 then
+        return x, c, 0
+    elseif h == 2 then
+        return 0, c, x
+    elseif h == 3 then
+        return 0, x, c
+    elseif h == 4 then
+        return x, 0, c
+    elseif h == 5 then
+        return c, 0, x
+    else
+        return 0, 0, 0
+    end
+end
+function color.fromHSV(c)
+    local h, s, v = c.h%PIx2, c.s, c.v
+    local ch = v * s
+    local h_ = h / pi_3
+    local x = ch * (1 - math.abs(h_ % 2 - 1))
+    local r1, g1, b1 = fromcx(h_, ch, x)
+    local m = v - ch
+    return r1 + m, g1 + m, b1 + m
+end
 function ColorHSV(a,h,s,v)
     local r,g,b = color.fromHSV({h = h / 57.296, s = s/100, v = v/100})
     return Color(a, r*255, g*255, b*255)
@@ -317,4 +352,7 @@ function Rotate2D(x,y,ang)
     local _cos = cos(ang)
     local _sin = sin(ang)
     return x * _cos - y * _sin, x * _sin + y * _cos
+end
+function Interpolate_QuadraticBezier(a,b,c,x)
+    return ((a * (1 - x)^2) + (2 * c * x * (1 - x)) + (b * x^2))
 end

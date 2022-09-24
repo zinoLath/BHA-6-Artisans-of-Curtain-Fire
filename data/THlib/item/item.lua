@@ -145,7 +145,7 @@ LoadImageFromFile("item_piv1", path.."piv.png")
 LoadImageFromFile("item_piv2", path.."piv_bomb.png")
 local tweenk = math.tween.cubicInOut
 item.spawn_obj = Class()
-function item.spawn_obj:init(x,y,size)
+function item.spawn_obj:init(x,y,size,col)
     self.final_size = size/16
     self.img = "item_spawn_animation"
     self.x,self.y = x,y
@@ -154,6 +154,7 @@ function item.spawn_obj:init(x,y,size)
     self.colli = false
     self.group = GROUP_GHOST
     self.hscale, self.vscale = 0,0
+    self._color = col or color.White
 end
 function item.spawn_obj:frame()
     if self.timer == self.t then
@@ -161,7 +162,7 @@ function item.spawn_obj:frame()
     end
     self.hscale, self.vscale = (self.final_size*tweenk(self.timer/self.t))*self.final_size,
     (self.final_size*tweenk(self.timer/self.t))*self.final_size
-    self.A = 255-255*tweenk(self.timer/self.t)
+    self._a = 255-255*tweenk(self.timer/self.t)
 end
 local item_colli_size = 192
 item.base_item = Class()

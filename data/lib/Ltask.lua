@@ -57,6 +57,9 @@ end
 
 function task.Wait(t)
     t = t or 1
+    if t == 0 then
+        return
+    end
     t = max(1, int(t))
     for i = 1, t do
         coroutine.yield()

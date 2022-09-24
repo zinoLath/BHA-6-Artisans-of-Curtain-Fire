@@ -25,7 +25,8 @@ function M:init(cards)
     self.hp = 1000
     self.cardco = coroutine.create(self.current_card.coroutine or self.class.card_coroutine)
     self.ui_time = 0
-    self.hpbar = New(circular_hpbar,self)
+    --self.hpbar = New(circular_hpbar,self)
+    self.hpbar = New(straight_hpbar,self)
     self.timer_obj = New(boss_timer,self)
     self.a, self.b = 32,32
     self.rect = false
@@ -111,18 +112,20 @@ function M:card_coroutine()
     if otherb then
         task.Clear(otherb)
     end
-    CallClass(self, "setBaseHP", card.hp, otherb)
+    CallClass(self, "setBaseHP", card.hp)
     Print(card.hp)
     if otherb then
-        CallClass(otherb, "setBaseHP", card.hp,self)
+        for k,v in ipairs(otherb) do
+            CallClass(v, "setBaseHP", card.hp)
+        end
     end
     --CallClass(self, "setSpellVars", card)
     if card.before then card.before(self) end
     if otherb then
         --CallClass(otherb, "onBefore",card)
     end
-    CallClass(self, "startHistory", card,otherb)
-    CallClass(self, "cardStartEffect", card,otherb)
+    CallClass(self, "startHistory", card)
+    CallClass(self, "cardStartEffect", card)
     self.timer = 0
     if otherb then
         otherb.timer = 0
@@ -200,6 +203,7 @@ function M:endHistory(card)
     lstg.var.score = lstg.var.score + self.bonus
 end
 function M:killChildren()
+    KillBullets()
     for k,o in pairs(self._servants) do
         if IsValid(o) and not o.killflag then
             Kill(o)
@@ -279,7 +283,8 @@ function mini_boss:init(boss)
     self.hscale, self.vscale = 5,5
     self.bound = false
     self.hp = 1000
-    self.hpbar = New(circular_hpbar,self)
+    --self.hpbar = New(circular_hpbar,self)
+    self.hpbar = New(straight_hpbar,self)
     self.a, self.b = 32,32
     self.rect = false
 end
