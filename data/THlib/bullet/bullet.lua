@@ -34,19 +34,19 @@ function bullet:init(img,color,subcolor,blend,delay)
     self._blend = blend
     self.layer = LAYER_ENEMY_BULLET
     self.group = GROUP_ENEMY_BULLET
-    self.delay = delay
+    self.delay = self.delay or delay
     if delay == nil then
         self.delay = true
     end
 end
 function bullet:frame()
     task.Do(self)
-    if self.delay and self.timer < self.dt then
+    if self.delay and self.timer <= self.dt then
         local j = (self.timer-self.d_base)/(self.dt-self.d_base)
         local i = EaseOutCubic(j)
         local scale = lerp(3.5,1,i)*2.25
         self.hscale,self.vscale = scale, scale
-        self._a = lerp(0,255 or self._alpha,i)
+        self._a = lerp(0, self._alpha or 255,i)
     end
 end
 

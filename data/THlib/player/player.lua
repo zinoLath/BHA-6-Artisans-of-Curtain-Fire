@@ -1,5 +1,5 @@
 --TODO: IMPLEMENT EVENTDISPATCHER
---cheat = true
+cheat = true
 local clamp = math.clamp
 local Event = Event
 local lerp = math.lerp

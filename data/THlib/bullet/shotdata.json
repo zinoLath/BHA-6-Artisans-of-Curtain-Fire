@@ -47,10 +47,15 @@
       "hitsize": 10,
       "size": 36
     },
+    "big_ellipse": {
+      "rect": "M.sdsquare(6)",
+      "hitsize": 10,
+      "size": 48
+    },
     "heart": {
       "rect": "M.sdsquare(7)",
       "hitsize": 8,
-      "size": 24
+      "size": 48
     },
     "ice": {
       "rect": "M.sdsquare(8)",

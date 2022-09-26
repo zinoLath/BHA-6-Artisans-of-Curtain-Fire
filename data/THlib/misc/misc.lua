@@ -413,16 +413,15 @@ SetImageState('.white.rev', 'add+sub',
 ---@param r number
 ---@param point number
 function rendercircle(x, y, r, point)
-    --local ang = 360 / (2 * point)
-    --for angle = 360 / point, 360, 360 / point do
-    --    local x1, y1 = x + r * cos(angle + ang), y + r * sin(angle + ang)
-    --    local x2, y2 = x + r * cos(angle - ang), y + r * sin(angle - ang)
-    --    Render4V('.white.rev', x, y, 0.5,
-    --            x, y, 0.5,
-    --            x1, y1, 0.5,
-    --            x2, y2, 0.5)
-    --end
-    RenderSector('.white.rev', x, y, 0, 360, 0, r, point)
+    local ang = 360 / (2 * point)
+    for angle = 360 / point, 360, 360 / point do
+        local x1, y1 = x + r * cos(angle + ang), y + r * sin(angle + ang)
+        local x2, y2 = x + r * cos(angle - ang), y + r * sin(angle - ang)
+        Render4V('.white.rev', x, y, 0.5,
+                x, y, 0.5,
+                x1, y1, 0.5,
+                x2, y2, 0.5)
+    end
 end
 function misc.RenderRing(img, x, y, rot1, rot2, r1, r2, n)
     --boss card

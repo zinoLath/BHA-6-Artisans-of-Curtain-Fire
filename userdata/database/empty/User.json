@@ -1,11 +1,24 @@
 {
-	"hiscore": {
-		
-	},
-	"difficulty_select": 2,
-	"player_select": 1,
 	"SpellHistory": {
+		"Barrier Sign ~ Gensokyo Vortex": [
+			5,
+			5,
+			5,
+			80
+		],
 		"g": [
+			0,
+			0,
+			0,
+			1
+		],
+		"Shifting Spell ~ Temporal Mismatch": [
+			8,
+			8,
+			8,
+			12
+		],
+		"Test": [
 			0,
 			0,
 			0,
@@ -17,11 +30,11 @@
 			25,
 			972
 		],
-		"Barrier Sign ~ Gensokyo Vortex": [
-			5,
-			5,
-			5,
-			80
+		"Consciousness Locked a Second Ahead": [
+			1,
+			1,
+			1,
+			16
 		],
 		"test": [
 			0,
@@ -29,12 +42,29 @@
 			0,
 			216
 		],
-		"Test": [
+		"Broken Law ~ Temporal Mismatch": [
+			7,
+			7,
+			7,
+			13
+		],
+		"Diminishing Dream ~ Consciousness Locked a Second Ahead": [
 			0,
 			0,
 			0,
 			1
+		],
+		"Gathering Oni - I dont know": [
+			6,
+			12,
+			6,
+			130
 		]
+	},
+	"player_select": 1,
+	"difficulty_select": 2,
+	"hiscore": {
+		
 	},
 	"spell_card_hist": {
 		"All": {

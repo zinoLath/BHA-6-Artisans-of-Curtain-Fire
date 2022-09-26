@@ -16,10 +16,22 @@ end
 function MoveRandom(obj,rangemin,rangemax,xmin,xmax,ymin,ymax,t,tween)
     local ang = ran:Float(0,360)
     local range = ran:Float(rangemin,rangemax)
-    local nextx = obj.x + cos(ang)*range
-    local nexty = obj.y + sin(ang)*range
-    local finalx = math.clamp(nextx,xmin,xmax)
-    local finaly = math.clamp(nexty,ymin,ymax)
+    local nextx = cos(ang)*range
+    local nexty = sin(ang)*range
+    local finalx, finaly = obj.x + nextx, obj.y + nexty
+    if math.clamp(finalx,xmin, xmax) ~= finalx then
+        nextx = -nextx
+    end
+    if math.clamp(finaly,ymin, ymax) ~= finaly then
+        nexty = -nexty
+    end
+    finalx, finaly = obj.x + nextx, obj.y + nexty
+    if math.clamp(finalx,xmin, xmax) ~= finalx then
+        finalx = math.clamp(finalx,xmin, xmax)
+    end
+    if math.clamp(finaly,ymin, ymax) ~= finaly then
+        finaly = math.clamp(finaly,ymin, ymax)
+    end
     MoveTo(obj,finalx,finaly,t,tween)
 end
 function MoveRandomV(obj,range,bound,t,tween)
