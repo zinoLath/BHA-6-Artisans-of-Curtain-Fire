@@ -1,71 +1,6 @@
 {
-	"SpellHistory": {
-		"Barrier Sign ~ Gensokyo Vortex": [
-			5,
-			5,
-			5,
-			80
-		],
-		"g": [
-			0,
-			0,
-			0,
-			1
-		],
-		"Shifting Spell ~ Temporal Mismatch": [
-			8,
-			8,
-			8,
-			12
-		],
-		"Test": [
-			0,
-			0,
-			0,
-			1
-		],
-		"gtest": [
-			27,
-			26,
-			25,
-			972
-		],
-		"Consciousness Locked a Second Ahead": [
-			1,
-			1,
-			1,
-			16
-		],
-		"test": [
-			0,
-			0,
-			0,
-			216
-		],
-		"Broken Law ~ Temporal Mismatch": [
-			7,
-			7,
-			7,
-			13
-		],
-		"Diminishing Dream ~ Consciousness Locked a Second Ahead": [
-			0,
-			0,
-			0,
-			1
-		],
-		"Gathering Oni - I dont know": [
-			6,
-			12,
-			6,
-			130
-		]
-	},
 	"player_select": 1,
 	"difficulty_select": 2,
-	"hiscore": {
-		
-	},
 	"spell_card_hist": {
 		"All": {
 			"「」": {
@@ -75,5 +10,94 @@
 				]
 			}
 		}
+	},
+	"SpellHistory": {
+		"Trigger Happy - Tripwire Barrier": [
+			4,
+			9,
+			4,
+			34
+		],
+		"Infinite Density - Magical Astronomy": [
+			0,
+			2,
+			0,
+			4
+		],
+		"Consciousness Locked a Second Ahead": [
+			1,
+			1,
+			1,
+			16
+		],
+		"gtest": [
+			27,
+			26,
+			25,
+			972
+		],
+		"Broken Law ~ Temporal Mismatch": [
+			7,
+			7,
+			7,
+			13
+		],
+		"Barrier Sign ~ Gensokyo Vortex": [
+			5,
+			5,
+			5,
+			80
+		],
+		"Diminishing Dream ~ Consciousness Locked a Second Ahead": [
+			0,
+			0,
+			0,
+			1
+		],
+		"Test": [
+			0,
+			0,
+			0,
+			1
+		],
+		"6th Degree of Separation ~ Love Dive": [
+			10,
+			19,
+			10,
+			331
+		],
+		"Gathering Oni - Magical Astronomy": [
+			5,
+			7,
+			5,
+			33
+		],
+		"Gathering Oni - I dont know": [
+			10,
+			17,
+			10,
+			149
+		],
+		"Shifting Spell ~ Temporal Mismatch": [
+			11,
+			12,
+			11,
+			19
+		],
+		"g": [
+			0,
+			0,
+			0,
+			1
+		],
+		"test": [
+			0,
+			0,
+			0,
+			216
+		]
+	},
+	"hiscore": {
+		
 	}
 }

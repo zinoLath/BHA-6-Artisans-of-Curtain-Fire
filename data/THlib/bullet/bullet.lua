@@ -63,7 +63,7 @@ function bullet:kill()
     New(item.spawn_obj,self.x,self.y,1,self._color)
 end
 function bullet:del()
-    New(item.spawn_obj,self.x,self.y,1,self._color)
+    New(item.spawn_obj,self.x,self.y,15,self._color)
 end
 function bullet:delay(time)
     self.dt = time + self.timer

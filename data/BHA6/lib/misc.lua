@@ -47,12 +47,7 @@ function boss_particle_instance:frame()
     self._color = color
 end
 
-delay_line = Class()
-function delay_line:init(x,y,ang,t1,t2,t3)
-
-end
-
-function ReimuWarp(self,x,y,loop,t)
+function ReimuWarp(self,x,y,loop,t,tween,loopy)
     local prevmaxf = self.particle_trail.maxf
     local maxscale = self.particle_trail.maxscale
     local prevfreq = self.particle_trail.freq
@@ -61,9 +56,10 @@ function ReimuWarp(self,x,y,loop,t)
     self.particle_trail.maxf = t/math.abs(loop)
     self.particle_trail.maxscale = 1
     self.particle_trail.freq = 1
-    local tween = math.tween.circInOut
+    tween = tween or math.tween.circInOut
     local w = (lstg.world.r-lstg.world.l)
-    local _x, _y = w*loop + x, y
+    local h = (lstg.world.t-lstg.world.b)
+    local _x, _y = w*loop + x, y + h*(loopy or 0)
     local initx, inity = self.x, self.y
     local posx, posy = initx, inity
     for i=1, t do
@@ -71,7 +67,7 @@ function ReimuWarp(self,x,y,loop,t)
         posx = math.lerp(initx,_x,t)
         posy = math.lerp(inity,_y,t)
         self.x = (posx-lstg.world.l) % w + lstg.world.l
-        self.y = posy
+        self.y = (posy-lstg.world.b) % h + lstg.world.b
         coroutine.yield()
     end
     self.particle_trail.maxf = prevmaxf

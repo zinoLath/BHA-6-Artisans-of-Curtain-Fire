@@ -43,6 +43,9 @@ function sc:init()
                         local obj = CreateShotA(self.x,self.y,1,a,"star",
                                 ColorHSV(255,self.timer+180,100,100),nil,"grad+add")
                         obj.layer = LAYER_ENEMY_BULLET+50
+                        obj.omiga = 3
+                        DelayLine(self.x,self.y,a,96)
+                        New(smear,obj,nil,nil,nil,0.2)
                         task.New(obj,function()
                             task.Wait(30)
                             while IsValid(self) do

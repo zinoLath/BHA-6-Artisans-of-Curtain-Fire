@@ -59,16 +59,16 @@ ui.bgpool_vert = {
 function ui:DrawFrame()
     RenderRect("HUD_image", screen.dx, screen.width-screen.dx, screen.dy, screen.height-screen.dy)
 end
-CreateRenderTarget("DROP_SHADOW")
+CreateRenderTarget("UI_DROP_SHADOW")
 function ui:DrawStats()
-    PushRenderTarget("DROP_SHADOW")
+    PushRenderTarget("UI_DROP_SHADOW")
     SetImageState("white","",Color(255,255,255,255))
     RenderClear(0)
     ui.DrawShadowed(self)
-    PopRenderTarget("DROP_SHADOW")
+    PopRenderTarget("UI_DROP_SHADOW")
     local offset = Vector(0.5,1) * -0.005
-    PostEffect("blur","DROP_SHADOW",2,"",{ { 7, offset.x, offset.y, 1 }})
-    PostEffect("EMPTY_SHADER","DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
+    PostEffect("blur","UI_DROP_SHADOW",2,"",{ { 7, offset.x, offset.y, 1 }})
+    PostEffect("EMPTY_SHADER","UI_DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
     for k,v in ipairs(self.divs) do
         Render("ui.div",v.x,v.y)
     end

@@ -1,8 +1,6 @@
 local center = Vector(0,100)
 local sc = boss.card:new("", 60, 2, 2, 600, false)
 function sc:before()
-    self.x = lstg.world.pr + 64
-    self.y = lstg.world.pt + 64
     New(boss_particle_trail,self)
 end
 function sc:init()
@@ -44,12 +42,12 @@ function sc:init()
                 task.Wait(60)
                 --ReimuWarp(self,0,100,-15,300) do return end
                 for i=1, 10 do
-                    MoveRandom(self,32,128,lstg.world.l+32,lstg.world.r-32,50,lstg.world.t-64,30)
+                    MoveRandom(self,32,128,lstg.world.l+32,lstg.world.r-32,50,lstg.world.t-64,15)
                     --task.Wait(30)
                 end
             end)
             local wwait = 5
-            AdvancedFor(420/wwait,{"incremental",0,15},{"linear",2,5},function(ang,_spd)
+            AdvancedFor((180+60+150)/wwait,{"incremental",0,15},{"linear",2,5},function(ang,_spd)
                 AdvancedFor(6,{"linear",0,360,true},function(_ang)
                     AdvancedFor(5,{"linear",0,5},{"linear",_spd*0.925,_spd*1.075},function(__ang,spd)
                         local a = ang+_ang+__ang+Angle(self,player)

@@ -80,6 +80,7 @@ function housui_fire:exit()
     local __time = 60
     task.New(self,function()
         PlaySound("ch00", 1)
+        local delayobj = DelayLine(self.x,self.y,a,96,nil,Color(128,0,0,255),15,0,90)
         for i=1, _infinite do
             local t = math.clamp(i,0,__time)/__time
             vs = math.lerp(svs,10,math.tween.cubicOut(math.clamp(i-__time/2,0,__time)/__time))
@@ -89,6 +90,10 @@ function housui_fire:exit()
             local da = math.clamp(AngleDifference(a, Angle(self,player)),-shoming,shoming)*(1-t)
             a = a + da
             SetV(self,vs,a)
+            if IsValid(delayobj) then
+                delayobj.rot = self.rot
+                delayobj.x,delayobj.y = self.x,self.y
+            end
             coroutine.yield()
             if not BoxCheck(self, lstg_world.l, lstg_world.r, lstg_world.b, lstg_world.t) then
                 local base_ang = Angle(self,player)
@@ -123,8 +128,6 @@ function housui_fire:exit()
 end
 local sc = boss.card:new("", 60, 2, 2, 600, false)
 function sc:before()
-    self.x = lstg.world.pr + 64
-    self.y = lstg.world.pt + 64
     New(boss_particle_trail,self)
     task.New(self.particle_trail,function()
         while(true) do
@@ -149,7 +152,8 @@ function sc:init()
                         end)
                         task.Wait(3)
                     end
-                    task.Wait(120)
+                    MoveRandom(self,8,32,lstg.world.l+64,lstg.world.r-64,100,lstg.world.t-80,100)
+                    --task.Wait(100)
                 end
                 MoveRandom(self,32,64,lstg.world.l+64,lstg.world.r-64,100,lstg.world.t-80,60)
                 task.Wait(120)
@@ -163,7 +167,7 @@ function sc:init()
                     end)
                     task.Wait(5)
                 end)
-                task.Wait(60)
+                --task.Wait(60)
             end
         end)
         task.New(self,function()

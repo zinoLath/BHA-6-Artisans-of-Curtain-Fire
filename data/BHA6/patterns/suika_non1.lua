@@ -1,8 +1,6 @@
 local center = Vector(0,100)
 local sc = boss.card:new("", 60, 2, 2, 600, false)
 function sc:before()
-    self.x = lstg.world.pr + 64
-    self.y = lstg.world.pt + 64
     New(boss_particle_trail,self)
 end
 function sc:init()
@@ -19,37 +17,49 @@ function sc:init()
                             local ty2 = ((_y+_yoff + count)-lstg.world.b)/(lstg.world.t+math.abs(lstg.world.b))
                             local _,t2 = math.modf(ty2)
                             local grp = "ice"
-                            local spd = 2.7
+                            local spd = 3.5
                             local x_off = ran:Float(-10,5)
                             CreateShotA(lstg.world.l-15+x_off,math.lerp(lstg.world.b,lstg.world.t,t),
-                                    spd+ran:Float(0,0.05),0,grp,color.OrangeRed,nil,"grad+add",3)
+                                    spd+ran:Float(0,0.05),0,grp,color.OrangeRed,nil,"grad+add",1)
                             CreateShotA(lstg.world.r+15-x_off,math.lerp(lstg.world.b,lstg.world.t,t2),
-                                    spd+ran:Float(0,0.05),180,grp,color.OrangeRed,nil,"grad+add",3)
+                                    spd+ran:Float(0,0.05),180,grp,color.OrangeRed,nil,"grad+add",1)
                         end)
                     end)
                 end)
-                task.Wait(60)
+                task.Wait(45)
             end
         end)
         task.New(self,function()
             local random_grps = {"scale","snowflake","amulet","square"}
             while true do
-                PlaySound("ch00", 1)
-                MoveRandom(self,32,48,lstg.world.l+64,lstg.world.r-64,50,lstg.world.t-50,120)
-                PlaySound("tan00", 1)
+                MoveRandom(self,32,48,lstg.world.l+64,lstg.world.r-64,50,lstg.world.t-50,30)
                 local wvel = 0.2
+                --task.Wait(30)
                 local ang = Angle(self,player)
-                AdvancedFor(120,{"linear",0,30},{"linear",7,4},function(spread,spd)
+                DelayLine(self.x,self.y,ang,200,1000,Color(255,255,0,0),30,0,15)
+                PlaySound("ch00", 1)
+                task.Wait(30)
+                PlaySound("tan00", 1)
+                AdvancedFor(15,{"linear",3,15},{"linear",7,5},function(spread,spd)
                     --ang = ang + math.clamp(AngleDifference(ang,Angle(self,player)),-wvel,wvel)
                     spd = spd + ran:Float(0,0.2)
                     CreateShotA(self.x,self.y,spd,ang + ran:Float(-spread,spread),random_grps[ran:Int(1,#random_grps)],
-                        color.DarkCyan)
+                        color.DarkCyan,nil,"grad+add")
                     CreateShotA(self.x,self.y,spd,ang + ran:Float(-spread,spread),random_grps[ran:Int(1,#random_grps)],
-                            color.DarkCyan)
+                            color.DarkCyan,nil,"grad+add")
                     task.Wait(1)
                     PlaySound("tan02", 1)
                 end)
-                task.Wait(60)
+            end
+        end)
+        do return end
+        task.New(self,function()
+            task.Wait(300)
+            while true do
+                AdvancedFor(15, {"linear",0,360},function(ang)
+                    CreateShotA(self.x,self.y,0.5,ang+self.timer*2,"scale",color.Red)
+                end)
+                task.Wait(120)
             end
         end)
     end)

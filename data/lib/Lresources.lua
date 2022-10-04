@@ -54,12 +54,14 @@ end
 
 ImageList = {}
 ImageSize = {}--由OLC添加，用于储存加载的图片的大小
+ImageUV = {}
 OriginalLoadImage = LoadImage
 
 function LoadImage(img, ...)
     local arg = { ... }
     ImageList[img] = arg
     ImageSize[img] = { arg[4], arg[5] }--由OLC添加，储存加载的图片的大小
+    ImageUV[img] = { arg[2], arg[3], arg[4], arg[5] }--由OLC添加，储存加载的图片的大小
     OriginalLoadImage(img, ...)
     return img
 end
@@ -67,6 +69,12 @@ end
 ---由OLC添加，获得加载的图片的大小
 function GetImageSize(img)
     return unpack(ImageSize[img])
+end
+function GetImageUV(img)
+    return unpack(ImageUV[img])
+end
+function GetImageTexture(img)
+    return ImageList[img][1]
 end
 
 function CopyImage(newname, img)

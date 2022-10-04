@@ -52,7 +52,7 @@ end
 
 local function PrintTableRecursive(tb,level)
     if type(tb) ~= "table" then
-        return tb
+        return tostring(tb)
     end
     local ret = ""
     level = level or 0

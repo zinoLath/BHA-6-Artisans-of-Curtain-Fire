@@ -91,6 +91,9 @@ function M:sideAnim()
     end
 end
 local function deepcopy(tb,id)
+    if type(tb) ~= "table" then
+        return tb
+    end
     local ret = {}
     for k,v in pairs(tb) do
         if type(v) ~= "table" then
@@ -122,9 +125,12 @@ function M:playAnim(name,...)
     self.anims[name]:start(self,...)
 end
 function M:copy()
-    local ret = M()
-    ret.cos = deepcopy(self.cos)
-    ret.data = deepcopy(self.data)
+    local ret = M(self.side_animated)
+    for k,v in pairs(self) do
+        if k ~= "anims" then
+            ret[k] = deepcopy(v)
+        end
+    end
     for k,v in pairs(self.anims) do
         ret:addAnimationNC(v,k)
     end

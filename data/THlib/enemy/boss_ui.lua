@@ -175,7 +175,7 @@ function straight_hpbar:init(anchor,l,r,b,t,color)
 end
 function straight_hpbar:frame()
     task.Do(self)
-    local anchor = self.anchor
+    local anchor = self.anchor or _boss
     if not IsValid(anchor) then return end
     if anchor.colli and not self.dying then
         self.yratio = SnapLerp(self.yratio,self.__y,0.1)
@@ -209,7 +209,6 @@ end
 boss_timer = zclass(object)
 function boss_timer:init(boss)
     self.font = timer_font
-    self.boss = boss
     self.y1, self.y2 = screen.height, screen.height-100
     self.y = self.y1
     self.x = screen.width/2 - 320
@@ -222,6 +221,7 @@ function boss_timer:init(boss)
         SetFieldInTime(self,60,math.tween.quadOut,{'y',self.y2}, {"_a", 255})
     end)
     self.xoff = 3
+    self.boss = boss
 end
 function boss_timer:frame()
     task.Do(self)
@@ -234,7 +234,8 @@ function boss_timer:frame()
 end
 function boss_timer:render()
     SetViewMode("ui")
-    local t1, t2 = math.modf(self.boss.ui_time or 0)
+    local _boss = self.boss or _boss
+    local t1, t2 = math.modf(_boss.ui_time or 0)
     self.font:renderOutline(string.format("%02d", t2*100),
             self.x+self.xoff, self.y+30,self.scale2,"left","vcenter", Color(self._a,255,255,255),nil,6,Color(255,0,0,0))
     self.font:renderOutline(string.format("%02d", t1),
@@ -300,7 +301,7 @@ function cutin_border:init(card,boss)
     self.layer = LAYER_POST_PROCESS
     self.bound = false
     New(cutin_border_push,self)
-    New(cutin_img,card.cutin_img,120)
+    --New(cutin_img,card.cutin_img,120)
     self.height = screen.height+30
     self.width = screen.width
     self.x, self.y = screen.width/2,screen.height/2

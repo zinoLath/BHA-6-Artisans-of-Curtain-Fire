@@ -46,7 +46,7 @@ function AdvancedFor(times,...)
             if v[1] == 'incremental' then
                 variables[k] = variables[k] + v[3]
             elseif v[1] == 'linear' then
-                variables[k] = lerp(v[2], v[3], v[4] and i/(times-1) or i/(times))
+                variables[k] = lerp(v[2], v[3], (v[5] or math.tween.linear)(v[4] and i/(times-1) or i/(times)))
             elseif v[1] == 'zigzag' then
                 local t = v[5] and i/(times-1) or i/(times)
                 local maxt = t * (v[4]+1)
@@ -203,30 +203,12 @@ function StorePosition(self,max)
     end
 end
 function LoopTable(tb,id)
-    while true do
-        if id > #tb then
-            id = id - #tb
-        else
-            break
-        end
-    end
-    if id < 1 then
-        id = #tb
-    end
-    return tb[id]
+    local tid = (id-1)%#tb + 1
+    return tb[tid]
 end
 function LoopTableK(tb,id)
-    while true do
-        if id > #tb then
-            id = id - #tb
-        else
-            break
-        end
-    end
-    if id < 1 then
-        id = #tb
-    end
-    return id
+    local tid = (id-1)%#tb + 1
+    return tid
 end
 ---@~english Collision check for circle and parameter. Uses Cocos2D positions for operations. Code by Texel (Texel#4217)
 function CircleToCapsule(cP, cR, pA, pB, pR)

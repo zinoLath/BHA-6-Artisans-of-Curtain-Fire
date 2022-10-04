@@ -26,7 +26,7 @@ function M.option:init(manager,menu,tid,id,data)
     self.active = true
     self.manager = manager
     self.menu = menu
-    self.layer = LAYER_MENU
+    self.layer = LAYER_MENU+50
     self.tid = tid
     self.id = id
     self.data = data
@@ -62,7 +62,7 @@ function M.option:render()
         SetFontState("menu","",self._color)
         RenderText('menu',self.tid,self.x,self.y,0.6*2.25*self.scale,'center')
     elseif type(font) == "table" then
-        font:render(self.tid,self.x,self.y,self.scale)
+        font:render(self.tid,self.x,self.y,self.scale,"left","vcenter")
     else
         font:render(self.tid,self.x,self.y,0,0,self.scale,self.scale)
     end
@@ -124,7 +124,7 @@ function M.menu:init(manager)
     self.options = {}
     self._servants = {}
     self.group = GROUP_MENU
-    self.layer = LAYER_MENU
+    self.layer = LAYER_MENU+20
     CallClass(self,"createOptions")
     self.coroutine = coroutine.create(self.class.coroutine)
     self.key_co = {}
@@ -140,6 +140,7 @@ function M.menu:init(manager)
             self.key_co[k] = coroutine.create(MenuInputChecker)
         end
     end
+    self.options[self.selected].selected = true
     CallClass(self, "ctor", manager)
 end
 function M.menu:frame()
@@ -230,6 +231,7 @@ function M.menu:changeSelect(newid,vert)
     for i=1, #t_ids do
         if i ~= newid then
             local obj = self.options[i]
+            obj.selected = false
             task.New(obj, function()
                 obj.class._unselect(obj,oldid,newid,vert)
             end)
@@ -239,6 +241,7 @@ function M.menu:changeSelect(newid,vert)
     self.selected = newid
 
     local obj2 = self.options[self.selected]
+    obj2.selected = true
     obj2.class._select(obj2,oldid,newid,vert)
 end
 function M.menu:hover(option)
@@ -257,10 +260,13 @@ end
 function M.menu.key_events.menu_up(self)
     self.class.scroll(self,-1)
 end
-function M.menu.key_events.confirm(self)
+function M.menu.key_events.menu_confirm(self)
     local obj = self.options[self.selected]
     local func = (obj.onEnter or obj.class.onEnter) or voidfunc
     func(obj)
+end
+function M.menu.key_events.menu_cancel(self)
+    CallClass(self.manager,"go_back")
 end
 function M.menu:obj_init(menu)
     self._x, self._y = 300, 300 - self.id * 50
@@ -309,9 +315,13 @@ function M.manager:init(...)
         --Print(PrintTable(v))
         self.menus[v[2]] = New(v[1],self,...)
     end
+    CallClass(self,"ctor")
     task.New(self,function()
         self.class.enter_menu(self,self.menus[self.class.intro_menu])
     end)
+end
+function M.manager:ctor()
+
 end
 function M.manager:render()
     SetViewMode("ui")
@@ -346,6 +356,7 @@ function M.manager:switch_menu(menu)
     end
     local prev_menu = self.stack[0]
     if menu.exit_other == nil or menu.exit_other then
+        prev_menu.last_trans_out = true
         prev_menu.class._out(prev_menu)
     end
     self.class.enter_menu(self,menu)
@@ -362,6 +373,9 @@ function M.manager:go_back()
         local menu = self.stack[0]
         menu.class._out(menu)
         self.stack:pop()
+        if self.stack[0].last_trans_out then
+            CallClass(self.stack[0],"_in")
+        end
     else
         CallClass(self,"exit")
     end

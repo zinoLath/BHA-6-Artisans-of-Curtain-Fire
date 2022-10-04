@@ -50,8 +50,6 @@ local function HCreateShotA(x,y,speed,angle,graphic,color,subcolor,blend,delay)
     return obj1,obj2
 end
 function sc:before()
-    self.x = lstg.world.pr + 64
-    self.y = lstg.world.pt + 64
     New(boss_particle_trail,self)
 end
 function sc:init()

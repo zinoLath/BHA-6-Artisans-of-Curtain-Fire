@@ -11,11 +11,10 @@ Include("THlib\\enemy\\boss.lua")
 --Include("THlib\\enemy\\dialogue.lua")
 Include('THlib\\player\\player.lua') --TO REFACTOR
 Include'THlib/bullet/bullet.lua' --TO REFACTOR
---Include'THlib/laser/laser.lua' --TO REFACTOR
+Include'THlib/laser/laser.lua' --TO REFACTOR
 Include'THlib/background/background.lua' --TO REFACTOR
 Include'THlib/ext/ext.lua'
 --Include'THlib/menu.lua'
 Include'THlib/editor.lua' --TO REFACTOR
 Include'THlib/UI/UI.lua' --TO REWRITE
 
---Include "BHAlib\\BHAlib.lua"

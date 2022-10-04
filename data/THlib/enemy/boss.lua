@@ -26,14 +26,15 @@ function M:init(cards)
     self.cardco = coroutine.create(self.current_card.coroutine or self.class.card_coroutine)
     self.ui_time = 0
     --self.hpbar = New(circular_hpbar,self)
-    self.hpbar = New(straight_hpbar,self)
-    self.timer_obj = New(boss_timer,self)
+    --self.hpbar = New(straight_hpbar,self)
+    --self.timer_obj = New(boss_timer,self)
     self.a, self.b = 32,32
     self.rect = false
     self.bonus = item.sc_bonus_max
     self.skip_card = false
     self.dmg_red_ratio = 1
     self.dmg_list = {}
+    _boss = self
 end
 function M:frame()
     self.dmg_red_ratio = 1
@@ -78,8 +79,8 @@ function M:onDamage(other,dmg)
     self.hp = self.hp - ratio
 end
 function M:kill()
-    Kill(self.hpbar)
-    Kill(self.timer_obj)
+    --Kill(self.hpbar)
+    --Kill(self.timer_obj)
     if self.other_boss then
         Kill(self.other_boss)
     end
@@ -100,6 +101,7 @@ end
 function M:changeSpell()
     table.remove(self.cards,1)
     self.current_card = self.cards[1]
+    Print(self.current_card.coroutine)
     self.cardco = coroutine.create(self.current_card.coroutine or self.class.card_coroutine)
     self.card_num = self.card_num + 1
     self.timer = 0
@@ -204,11 +206,26 @@ function M:endHistory(card)
 end
 function M:killChildren()
     KillBullets()
+    KillGroup(GROUP_BOSS_EFFECT)
     for k,o in pairs(self._servants) do
         if IsValid(o) and not o.killflag then
             Kill(o)
         end
     end
+    New(tasker,function()
+        for i=1, 10 do
+            KillBullets()
+            KillGroup(GROUP_BOSS_EFFECT)
+            if IsValid(self) then
+                for k,o in pairs(self._servants) do
+                    if IsValid(o) and not o.killflag then
+                        Kill(o)
+                    end
+                end
+            end
+            task.Wait(1)
+        end
+    end)
 end
 function M:initNonCombat()
     self.noncombat = true

@@ -267,6 +267,9 @@ end
 ---视口、投影等的转换和坐标映射
 
 function SetViewMode(mode)
+    if lstg.viewmode == mode then
+        return
+    end
     lstg.viewmode = mode
     if mode == '3d' then
         SetViewport(0 * screen.scale + screen.dx, screen.width * screen.scale + screen.dx,

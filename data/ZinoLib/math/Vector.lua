@@ -132,7 +132,7 @@ end
 Vector.unpack = Vector.split
 
 function Vector.lerp(v1,v2,a)
-    return v1 + (v2 - v1) * a
+    return Vector(v1.x + (v2.x - v1.x) * a,v1.y + (v2.y - v1.y) * a)
 end
 
 local function clamp(x, min, max)
@@ -229,8 +229,9 @@ function Vector.perpendicularCC(v)
 end
 Vector.perpendicular = Vector.perpendicularC
 function Vector.list_lerp(arr, t)
-    local src = arr[int(t)] --get the first value for lerp
-    local did = int(t + 1) > #arr and int(t + 1 - #arr) or int(t + 1)-- loops through the array
+    local src = arr[LoopTableK(arr,int(t))] --get the first value for lerp
+    --local did = int(t + 1) > #arr and int(t + 1 - #arr) or int(t + 1)-- loops through the array
+    local did = LoopTableK(arr,int(t+1))
     local dest = arr[did] --get the second index for lerp
     local _t = t - int(t)
     return Vector.lerp(src,dest,_t)

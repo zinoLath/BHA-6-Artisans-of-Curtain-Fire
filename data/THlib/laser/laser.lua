@@ -21,7 +21,11 @@ local lerp = math.lerp
 local clamp = math.clamp
 local path = GetCurrentScriptDirectory()
 
+function CreateStraightLaser(x,y,rot,len,width,ratioH,ratioB,ratioT,_color,img,rm)
+    return New(laser,x,y,rot,len,width,ratioH,ratioB,ratioT,_color,img,rm)
+end
 LoadImageGroupFromFile("laser", path.."laser.png",true,3,1)
+LoadImageFromFile("laser", path.."laser.png",true)
 ---@class THlib.laser:object
 laser = Class(object)
 function laser:init(x,y,rot,len,width,ratioH,ratioB,ratioT,_color,img,rm)
@@ -29,7 +33,7 @@ function laser:init(x,y,rot,len,width,ratioH,ratioB,ratioT,_color,img,rm)
     ratioH, ratioB, ratioT = ratioH or 0.2, ratioB or 3, ratioT or 0.2
     self.x, self.y = x,y
     self.rot = rot
-    self.rm = rm or "bul++"
+    self.rm = rm or "grad+add"
     self.color = _color or color.Red
     self.lastrot = rot
     self.dirvec = Vector.fromAngle(rot)
@@ -107,42 +111,20 @@ function laser:render()
 end
 local tween = math.tween.cubicInOut
 function laser:kill()
-    PreserveObject(self)
-    if self.dying then
-        return
+    --PreserveObject(self)
+    if self.item then
+        for i=0, self.l, self.item do
+            local t = i/self.l
+            SpawnPIV(self.x + self.dirvec.x*self.l*t,self.y + self.dirvec.y*self.l*t)
+        end
     end
-    self.dying = true
-    task.Clear(self)
-    task.New(self, function()
-        local w1 = self.w
-        for i=0,1,1/10 do
-            self.w = lerp(w1,0,tween(i))
-            task.Wait(1)
-        end
-        if self.item then
-            for i=0, self.l, self.item do
-                local t = i/self.l
-                SpawnPIV(self.x + self.dirvec.x*self.l*t,self.y + self.dirvec.y*self.l*t)
-            end
-        end
-        RawKill(self)
-    end)
 end
 function laser:del()
-    PreserveObject(self)
-    if self.dying then
-        return
-    end
-    self.dying = true
-    task.Clear(self)
-    task.New(self, function()
-        local w1 = self.w
-        for i=0,1,1/10 do
-            self.w = lerp(w1,0,tween(i))
-            task.Wait(1)
+    if self.item then
+        for i=0, self.l, self.item do
+            local t = i/self.l
+            New(item.spawn_obj,self.x,self.y,15,self._color)
         end
-        RawDel(self)
-    end)
+    end
 end
-do return end
-Include("THlib\\laser\\bent laser.lua")
+Include("THlib\\laser\\curvylaser.lua")
