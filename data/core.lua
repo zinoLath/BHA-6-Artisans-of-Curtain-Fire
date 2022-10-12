@@ -34,7 +34,7 @@ lstg.DoFile("lib/Lcolor.lua")--misc global functions
 ---行为帧动作(和游戏循环的帧更新分开)
 function DoFrame()
     --设置标题
-    lstg.SetTitle(string.format("%s | %.2f FPS | %d OBJ | %s", setting.mod, lstg.GetFPS(), lstg.GetnObj(), "test"))
+    lstg.SetTitle(string.format("%s | %.2f FPS | %d OBJ | %s", lstg.title, lstg.GetFPS(), lstg.GetnObj(), "test"))
     --获取输入
     GetInput()
     --切关处理
@@ -89,7 +89,7 @@ local Ldebug = require("lib.Ldebug")
 
 function GameInit()
     --加载mod包
-    if setting.mod ~= 'launcher' then
+    if lstg.title ~= 'launcher' then
         Include 'root.lua'
         lstg.plugin.DispatchEvent("afterMod")
         -- TODO: 这玩意还有什么用吗？？？

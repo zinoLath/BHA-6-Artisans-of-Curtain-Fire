@@ -338,3 +338,23 @@ end
 function Interpolate_QuadraticBezier(a,b,c,x)
     return ((a * (1 - x)^2) + (2 * c * x * (1 - x)) + (b * x^2))
 end
+
+function SetImageAlign(img,halign,valign)
+    local w,h = GetImageSize(img)
+    local x,y = 0,0
+    if halign == "center" then
+        x = w/2
+    elseif halign == "right" then
+        x = w
+    elseif halign == "left" then
+        x = 0
+    end
+    if valign == "center" then
+        y = h/2
+    elseif valign == "bottom" then
+        y = h
+    elseif valign == "top" then
+        y = 0
+    end
+    return SetImageCenter(img,x,y)
+end

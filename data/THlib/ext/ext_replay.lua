@@ -65,7 +65,7 @@ function ext.replay.SaveReplay(stageNames, slot, playerName, finish)
 
     -- TODO: gameName和gameVersion可以被用来检查录像文件的合法性
     plus.ReplayManager.SaveReplayInfo(replayManager:MakeReplayFilename(slot), {
-        gameName = setting.mod,
+        gameName = lstg.title,
         gameVersion = 1,
         userName = playerName,
         group_finish = finish,
@@ -74,7 +74,7 @@ function ext.replay.SaveReplay(stageNames, slot, playerName, finish)
 end
 
 function ext.reload()
-    replayManager = plus.ReplayManager(lstg.LocalUserData.GetReplayDirectory() .. "/" .. setting.mod)
+    replayManager = plus.ReplayManager(lstg.LocalUserData.GetReplayDirectory() .. "/" .. lstg.title)
 end
 
 ext.reload()--加载一次replay管理器

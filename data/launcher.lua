@@ -1242,7 +1242,7 @@ function stage_launcher:init()
         end
     end
     function setMod(mod_name)
-        setting.mod = mod_name
+        lstg.title = mod_name
         saveConfigure()
         pushMenuStack(nil)
         self.color_value_d = -1 / 30
@@ -1351,17 +1351,17 @@ end
 local stage_launcher_loading = stage.New('launcher_loading_scene', false, true)
 function stage_launcher_loading:init()
     if lstg.FileManager and lstg.FileManager.AddSearchPath then
-        if lstg.FileManager.FileExist(string.format("mod/%s.zip", setting.mod)) then
-            lstg.LoadPack(string.format("mod/%s.zip", setting.mod))
+        if lstg.FileManager.FileExist(string.format("mod/%s.zip", lstg.title)) then
+            lstg.LoadPack(string.format("mod/%s.zip", lstg.title))
         else
-            lstg.FileManager.AddSearchPath(string.format("mod/%s/", setting.mod))
+            lstg.FileManager.AddSearchPath(string.format("mod/%s/", lstg.title))
         end
     else
-        lstg.LoadPack(string.format("mod/%s.zip", setting.mod))
+        lstg.LoadPack(string.format("mod/%s.zip", lstg.title))
     end
 
     lstg.SetSplash(false)
-    lstg.SetTitle(setting.mod)
+    lstg.SetTitle(lstg.title)
     --lstg.SetSEVolume(setting.sevolume / 100)
     --lstg.SetBGMVolume(setting.bgmvolume / 100)
     --if not lstg.ChangeVideoMode(setting.resx, setting.resy, setting.windowed, setting.vsync) then

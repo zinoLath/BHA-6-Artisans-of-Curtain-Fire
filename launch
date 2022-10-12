@@ -59,9 +59,9 @@ for k, v in pairs(editor_setting) do
 	setting[k] = v
 end
 
-setting.last_mod = setting.mod
+setting.last_mod = lstg.title
 if not start_game then
-	setting.mod = "launcher"
+	lstg.title = "launcher"
 	--setting.resx = 480
 	--setting.resy = 640
 	--setting.windowed = true
@@ -70,10 +70,10 @@ end
 -- 按需加载启动器包
 
 lstg.FileManager.CreateDirectory("mod")
-if setting.mod ~= 'launcher' then
-	local zip_path = string.format("mod/%s.zip", setting.mod) -- 压缩包文件
-	local dir_path = string.format("mod/%s/", setting.mod) -- 文件夹模式的搜索路径
-	local dir_root_script = string.format("mod/%s/root.lua", setting.mod) -- 文件夹模式下，这里应该有个 root.lua 脚本
+if lstg.title ~= 'launcher' then
+	local zip_path = string.format("mod/%s.zip", lstg.title) -- 压缩包文件
+	local dir_path = string.format("mod/%s/", lstg.title) -- 文件夹模式的搜索路径
+	local dir_root_script = string.format("mod/%s/root.lua", lstg.title) -- 文件夹模式下，这里应该有个 root.lua 脚本
 	if lstg.FileManager.FileExist(zip_path) then
 		lstg.LoadPack(zip_path) -- 有压缩包则加载压缩包
 	elseif lstg.FileManager.FileExist(dir_root_script) then
@@ -95,7 +95,7 @@ end
 -- 引擎初始化设置
 
 lstg.SetSplash(true)
-lstg.SetTitle(setting.mod)
+lstg.SetTitle(lstg.title)
 lstg.SetWindowed(setting.windowed)
 lstg.SetResolution(setting.resx,setting.resy)
 lstg.SetFPS(60)

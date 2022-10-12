@@ -35,14 +35,21 @@ function M.option:init(manager,menu,tid,id,data)
     menu.class.obj_init(self,menu)
     self._x = self._x or self.x
     self._y = self._y or self.y
-    self.rect = true
-    self.a, self.b = 128,128
     self.font = self.class.font or manager.class.font
     self.pool = self.class.pool
     self.class.ctor(self,data,manager)
 end
 function M.option:frame()
     task.Do(self)
+    if self._a == 0 then
+        self.hide = true
+    else
+        if self._hide ~= nil then
+            self.hide = self._hide
+        else
+            self.hide = false
+        end
+    end
 end
 function M.option:ctor(data,manager)
 
@@ -183,14 +190,14 @@ function M.menu:delOptions()
 end
 function M.menu:_in()
     for k,v in ipairs(self.options) do
-        task.New(v, function()
+        task.NewHashed(v,"inOut", function()
             v.class._in(v)
         end)
     end
     if self._servants then
         for k,v in pairs(self._servants) do
             if v.class._in then
-                task.New(v, function()
+                task.NewHashed(v,"inOut", function()
                     v.class._in(v)
                 end)
             end
@@ -199,13 +206,13 @@ function M.menu:_in()
 end
 function M.menu:_out()
     for k,v in ipairs(self.options) do
-        task.New(v, function()
+        task.NewHashed(v,"inOut", function()
             v.class._out(v)
         end)
     end
     if self._servants then
         for k,v in pairs(self._servants) do
-            task.New(v, function()
+            task.NewHashed(v,"inOut", function()
                 v.class._out(v)
             end)
         end
@@ -232,7 +239,7 @@ function M.menu:changeSelect(newid,vert)
         if i ~= newid then
             local obj = self.options[i]
             obj.selected = false
-            task.New(obj, function()
+            task.NewHashed(obj,"select", function()
                 obj.class._unselect(obj,oldid,newid,vert)
             end)
         end

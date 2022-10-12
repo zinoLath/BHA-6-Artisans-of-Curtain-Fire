@@ -75,7 +75,7 @@ local function get_safe_username()
 end
 
 local function get_file_name()
-    local path = lstg.LocalUserData.GetDatabaseDirectory() .. "/" .. setting.mod
+    local path = lstg.LocalUserData.GetDatabaseDirectory() .. "/" .. lstg.title
     lstg.FileManager.CreateDirectory(path)
     return path .. "/" .. get_safe_username() .. ".json"
 end

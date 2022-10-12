@@ -34,6 +34,7 @@ function sanae_title:init()
     self.img = "sanae_title"
     self.bound = false
     self._x, self._y = screen.width-500,screen.height/2
+    self._initx,self._inity = self._x, self._y
     self.x = self._x
     self.y = self._y
     local scale = 0.8
@@ -45,6 +46,24 @@ function sanae_title:frame()
     self.x = self._x
     self.y = self._y+10*sin(self.timer)
     self.rot = 2*sin(self.timer/2)
+end
+function sanae_title:_in(x,y,t)
+    SetFieldInTime(self,t or 60,math.tween.cubicOut,{"_a",255},{"_x",x or self._initx},{"_y",y or self._inity})
+end
+function sanae_title:_out(x,y,a,t)
+    SetFieldInTime(self,t or 60,math.tween.cubicOut,{"_a",a or 0},{"_x",x or self._x + 60},{"_y",y or self._y})
+end
+function sanae_title:goIn(...)
+    local args = {...}
+    task.NewHashed(self,"inOut",function()
+        CallClass(self,"_in",unpack(args))
+    end)
+end
+function sanae_title:goOut(...)
+    local args = {...}
+    task.NewHashed(self,"inOut",function()
+        CallClass(self,"_out",unpack(args))
+    end)
 end
 local M = {}
 M.manager = zclass(MenuSys.manager)
@@ -67,12 +86,15 @@ function M.manager:render()
             {0,0,0,0+tx,0+ty,Color(128,255,255,255)}
     )
 end
+local optdef = Include(path.."option_def.lua")
 local submenu_path = path.."submenu/"
 local main = Include(submenu_path.."main.lua")
 local start = Include(submenu_path.."start.lua")
+local options = Include(submenu_path.."options.lua")
 M.manager.menus = {
     {main, "main"},
-    {start, "start"}
+    {start, "start"},
+    {options, "options"}
 }
 
 CreateRenderTarget("MENU_DROP_SHADOW")

@@ -270,6 +270,10 @@ function SetViewMode(mode)
     if lstg.viewmode == mode then
         return
     end
+    screen.hScale = setting.resx / screen.width
+    screen.vScale = setting.resy / screen.height
+    screen.resScale = setting.resx / setting.resy
+    screen.scale = math.min(screen.hScale, screen.vScale)
     lstg.viewmode = mode
     if mode == '3d' then
         SetViewport(0 * screen.scale + screen.dx, screen.width * screen.scale + screen.dx,

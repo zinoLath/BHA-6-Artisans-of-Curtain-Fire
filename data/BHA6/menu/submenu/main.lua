@@ -10,7 +10,7 @@ function M.option:ctor(data,manager)
     self.select_color = Color(255,0,0,0)
     self.out_unselect_color = Color(255,0,0,0)
     self.out_select_color = Color(255,255,255,255)
-    task.New(self,function()
+    task.NewHashed(self,"select",function()
         task.Wait(2)
         if self.selected then
             local col = self._color
@@ -36,7 +36,7 @@ function M.option:_out()
 end
 function M.option:_select()
     local menu = self.menu
-    task.New(self,function()
+    task.NewHashed(self,"select",function()
         task.Wait(5)
         local col = self._color
         local ocol = self.out_color
@@ -61,7 +61,7 @@ function M.option:_select()
     menu.selindicator:select(self)
 end
 function M.option:_unselect()
-    task.New(self,function()
+    task.NewHashed(self,"select",function()
         local col = self._color
         local ocol = self.out_color
         local ecol = self.unselect_color
@@ -97,8 +97,8 @@ M.options = {
     {M.option,"Replays", { function()
         Print("Replays")
     end }},
-    {M.option,"Options", { function()
-        Print("Options")
+    {M.option,"Options", { function(self)
+        CallClass(self.manager,"switch_menu","options")
     end }},
     {M.option,"Extra", { function()
         Print("Extra")

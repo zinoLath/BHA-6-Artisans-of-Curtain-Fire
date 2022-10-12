@@ -19,6 +19,15 @@ function task:New(f)
     return rt
 end
 
+function task:NewHashed(hash,f)
+    if not self.task then
+        self.task = {}
+    end
+    local rt = coroutine.create(f)
+    self.task[hash] = rt
+    return rt
+end
+
 function task:Do()
     if self.task then
         for _, co in pairs(self.task) do

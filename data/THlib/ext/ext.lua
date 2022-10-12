@@ -45,7 +45,7 @@ end
 
 ---设置标题
 function ChangeGameTitle()
-    local mod = setting.mod and #setting.mod > 0 and setting.mod
+    local mod = lstg.title and #lstg.title > 0 and lstg.title
     local ext =
         table.concat(
         {

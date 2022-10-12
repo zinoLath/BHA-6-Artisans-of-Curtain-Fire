@@ -1,13 +1,29 @@
+lstg.supported_res = {
+	{960,540},
+	{1280,720},
+	{1366,768},
+	{1600,900},
+	{1920,1080},
+	{2560,1440},
+	{3840,2160}
+}
+local default_res = 2
+lstg.title = "Bullet Hell Artistry #6 - Artisans of Curtain Fire"
 default_setting = {
 	username = 'User',
-	locale = "zh_cn",
+	locale = "en_us",
 	timezone = 8,
-	resx = 640,
-	resy = 480,
+	resx = lstg.supported_res[default_res][1],
+	resy = lstg.supported_res[default_res][2],
+	resid = default_res,
 	windowed = true,
 	vsync = false,
+	mastervolume = 70,
 	sevolume = 100,
 	bgmvolume = 100,
+	bulshadows = 0,
+	autoshoot = false,
+	renderskip = false,
 	keys = {
 		up = KEY.UP,
 		down = KEY.DOWN,
@@ -32,6 +48,15 @@ default_setting = {
 		repfast = KEY.CTRL,
 		repslow = KEY.SHIFT,
 		menu = KEY.ESCAPE,
+		menu_up = KEY.UP,
+		menu_down = KEY.DOWN,
+		menu_left = KEY.LEFT,
+		menu_right = KEY.RIGHT,
+		menu_confirm = KEY.Z,
+		menu_cancel = KEY.X,
+		menu_special = KEY.C,
+		menu_ctrl = KEY.CTRL,
+		menu_shift = KEY.SHIFT,
 		snapshot = KEY.HOME,
 		retry = KEY.R,
 	},
