@@ -161,6 +161,7 @@ function M.select_indicator:init(menu)
     self.layer = LAYER_MENU+20
     self.vscale = 0
     self.menu = menu
+    self.off_scale = self.menu.options[self.menu.selected].scale
     menu._servants = menu._servants or {}
     table.insert(self.menu._servants,self)
     self.select = function(self,obj)
@@ -184,12 +185,13 @@ function M.select_indicator:_out()
     SetFieldInTime(self,5,math.tween.cubicInOut,{"vscale",0})
 end
 function M.select_indicator:frame()
+    self.off_scale = math.lerp(self.off_scale,self.menu.options[self.menu.selected].scale,0.1)
     task.Do(self)
 end
 function M.select_indicator:render()
     SetViewMode("ui")
     SetImageState("select_indicator","",Color(200,0,0,0))
-    Render("select_indicator",self.x,self.y+25,self.rot,self.hscale*1000,self.vscale*4)
+    Render("select_indicator",self.x,self.y+25*self.off_scale,self.rot,self.hscale*1000,self.vscale*4)
     --RenderRect("select_indicator",0,1000,self.y-32,self.y+32)
     SetViewMode("world")
 end
@@ -208,6 +210,7 @@ end
 function M:obj_init(menu)
     local opt_cnt = menu.option_def or menu.class.options
     self._x, self._y = 700, screen.height/2 - (self.id-#opt_cnt/2) * 80
+    self.scale = 0.8
     self.delx = -400
     self.dely = self._y
     self.x = self._x

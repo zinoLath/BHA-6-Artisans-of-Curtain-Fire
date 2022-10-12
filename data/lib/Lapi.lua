@@ -177,3 +177,8 @@ UpdateSound = lstg.UpdateSound
 PostEffectApply = lstg.PostEffectApply
 PostEffectCapture = lstg.PostEffectCapture
 ShowSplashWindow = lstg.ShowSplashWindow
+
+function SetFPS(_fps)
+    lstg.maxfps = _fps
+    lstg.SetFPS(_fps)
+end

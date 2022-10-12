@@ -165,7 +165,7 @@ function option_slider:ctor(data,manager)
     self.bg_out = bar_info.bg_out or 5
     self.width = bar_info.width or 500
     self.height = bar_info.height or 32
-    self.baryoff = bar_info.baryoff or 25
+    self.baryoff = (bar_info.baryoff or 20) * self.scale
     self.fill = data.init_value or data[3]
     self.onHori = data.onHori or data[4]
     self.setBar = data[5]

@@ -234,27 +234,35 @@ end
 local Ldebug = require("lib.Ldebug")
 
 function FrameFunc()
-    Ldebug.update()
-    task.Do(lstg.gtasks)
-    GetSysInput()
-    --重设boss ui的槽位（多boss支持）
-    --boss_ui.active_count = 0
-    --执行场景逻辑
-    Event:call("onPreFrame")
-    CollisionCheck(GROUP_MENU, GROUP_CURSOR)
-    if not lstg.is_paused then
-        task.Do(lstg.stasks)
-        --处理录像速度与正常更新逻辑
-        Event:call("onStgFrame")
-        DoFrameEx()
-    else
-        Event:call("onPausedFrame")
-        for k, obj in ObjList(GROUP_MENU) do
-            UpdateObject(obj)
-        end
+    local update_count = setting.renderskip and 2 or 1
+    if setting.renderskip and lstg.maxfps ~= 30 then
+        SetFPS(30)
+    elseif not setting.renderskip and lstg.maxfps ~= 60 then
+        SetFPS(60)
     end
-    Ldebug.layout()
-    --退出游戏逻辑
+    for i=1, update_count do
+        Ldebug.update()
+        task.Do(lstg.gtasks)
+        GetSysInput()
+        --重设boss ui的槽位（多boss支持）
+        --boss_ui.active_count = 0
+        --执行场景逻辑
+        Event:call("onPreFrame")
+        CollisionCheck(GROUP_MENU, GROUP_CURSOR)
+        if not lstg.is_paused then
+            task.Do(lstg.stasks)
+            --处理录像速度与正常更新逻辑
+            Event:call("onStgFrame")
+            DoFrameEx()
+        else
+            Event:call("onPausedFrame")
+            for k, obj in ObjList(GROUP_MENU) do
+                UpdateObject(obj)
+            end
+        end
+        Ldebug.layout()
+        --退出游戏逻辑
+    end
     if lstg.quit_flag then
         GameExit()
     end
