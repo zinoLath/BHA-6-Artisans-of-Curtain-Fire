@@ -33,7 +33,7 @@ function laser:init(x,y,rot,len,width,ratioH,ratioB,ratioT,_color,img,rm)
     ratioH, ratioB, ratioT = ratioH or 0.2, ratioB or 3, ratioT or 0.2
     self.x, self.y = x,y
     self.rot = rot
-    self.rm = rm or "grad+add"
+    self.rm = rm or "add+add"
     self.color = _color or color.Red
     self.lastrot = rot
     self.dirvec = Vector.fromAngle(rot)

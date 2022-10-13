@@ -8,7 +8,7 @@ SetImageCenter("spellnamebg",cx,cy)
 local cutin_font_default = BMF:loadFont("philosopher",font_path)
 local history_font_default = BMF:loadFont("square",font_path)
 local timer_font = BMF:loadFont("chaney",font_path)
-timer_font:setMonospace(40,{",",".",":"})
+timer_font:setMonospace(30,{",",".",":"})
 --local timer_state = BMF:createState("timer_state")
 local namestate = {
     font = cutin_font_default,
@@ -209,10 +209,10 @@ end
 boss_timer = zclass(object)
 function boss_timer:init(boss)
     self.font = timer_font
-    self.y1, self.y2 = screen.height, screen.height-100
+    self.y1, self.y2 = screen.height, screen.height-130
     self.y = self.y1
     self.x = screen.width/2 - 320
-    self.scale1 = 0.7
+    self.scale1 = 1
     self.scale2 = self.scale1 * 0.4
     self.bound = false
     self.layer = LAYER_UI+100
@@ -237,7 +237,7 @@ function boss_timer:render()
     local _boss = self.boss or _boss
     local t1, t2 = math.modf(_boss.ui_time or 0)
     self.font:renderOutline(string.format("%02d", t2*100),
-            self.x+self.xoff, self.y+30,self.scale2,"left","vcenter", Color(self._a,255,255,255),nil,6,Color(255,0,0,0))
+            self.x+self.xoff, self.y+45,self.scale2,"left","vcenter", Color(self._a,255,255,255),nil,6,Color(255,0,0,0))
     self.font:renderOutline(string.format("%02d", t1),
             self.x-self.xoff, self.y,self.scale1,"right","vcenter", Color(self._a,255,255,255),nil,6,Color(255,0,0,0))
     SetViewMode("world")
@@ -278,21 +278,25 @@ SetImageState("cutin_border","",cw)
 
 local cutinstate = {
     font = history_font_default,
-    scale = 0.3,
+    scale = 1,
     color_top = Color(255,255,240,220),
     color_bot = Color(255,255,150,150)
 }
 local cutin_pool = BMF:pool('SPELLCARD!!!!!!',cutinstate,99999)
 local px1, px2, py1, py2 = BMF:getPoolRect(cutin_pool)
-local rw, rh = (px2-px1)*1, (py2-py1)*1
+local orthoscale = 4
+local rw, rh = (px2-px1)*orthoscale*0.6, (py2-py1)*orthoscale*1.5
 CreateRenderTarget("CUTIN_EFFECT_TEXT",rw,rh)
+local rat2 = 0.247
+local y2 = -rh*0.2
 function UpdateTextRT()
     PushRenderTarget("CUTIN_EFFECT_TEXT")
-    SetOrtho(0, (px2-px1), 0, (py2-py1)*1)
-    BMF:renderPool(cutin_pool,0,rh)
-    BMF:renderPool(cutin_pool,rw*0.5,rh*0.5)
-    BMF:renderPool(cutin_pool,rw*-0.5,rh*0.5)
+    SetOrtho(0, rw, 0, rh)
+    BMF:renderPool(cutin_pool,rw*rat2,rh-20+y2)
+    BMF:renderPool(cutin_pool,0,rh-20)
+    BMF:renderPool(cutin_pool,rw*-rat2,rh-20+y2)
     PopRenderTarget("CUTIN_EFFECT_TEXT")
+    SetViewMode("ui",true)
 end
 SetTextureSamplerState("CUTIN_EFFECT_TEXT","point+wrap")
 
@@ -308,7 +312,7 @@ function cutin_border:init(card,boss)
     self.border_size = 10
     task.New(self, function()
         SetFieldInTime(self,40,math.tween.cubicOut,{"height", screen.height-200})
-        task.Wait(50)
+        task.Wait(40)
         SetFieldInTime(self,40,math.tween.cubicOut,{"height", screen.height+30})
         Del(self)
     end)
@@ -323,10 +327,10 @@ function cutin_border:render()
     local x1, x2 = self.x - self.width/2, self.x + self.width/2
     local y1, y2 = self.y - self.height/2,self.y + self.height/2
     local hscale, vscale = screen.hScale, screen.vScale
-    local textscale = 1
+    local textscale = 4
     local off = Vector(1,0.3)
     PopRenderTarget("CUTIN_EFFECT_BG")
-    if self.timer == 1 then
+    if true or self.timer == 1 then
         UpdateTextRT()
     end
     local vecc = Vector(screen.width/2, screen.height/2)
@@ -359,6 +363,7 @@ function cutin_border:render()
             {x1,y2,0,x1*hscale,y1*vscale,cw}
     )
     SetViewMode(view)
+    --Render("white",0,0,0,0,0)
 end
 
 cutin_img = zclass(object)

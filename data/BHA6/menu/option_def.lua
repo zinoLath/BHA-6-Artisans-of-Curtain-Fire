@@ -130,18 +130,18 @@ function option_multihori:render()
         return
     end
     local font = self.font or self.class.font
-    font:renderOutline(self.tid,self.x,self.y,self.scale,"right","vcenter",
+    font:renderOutline(self.tid,self.x,self.y,self.scale,"right","bottom",
             self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",self._a/255)
     local selected = LoopTableK(self.__alphas,self.__subselect)
     self.selected_text = self.__text[selected]
     for k,v in ipairs(self.__alphas) do
         if k == selected then
-            self.__alphas[k] = SnapLerp(self.__alphas[k],1,0.1)
+            self.__alphas[k] = SnapLerp(self.__alphas[k],1,0.2)
         else
             self.__alphas[k] = SnapLerp(self.__alphas[k],0,0.2)
         end
         if self.__alphas[k] ~= 0 then
-            font:renderOutline(self.__text[k],self.x,self.y,self.scale,"left","vcenter",
+            font:renderOutline(self.__text[k],self.x,self.y,self.scale,"left","bottom",
                     self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",
                     self._a*self.__alphas[k]/255)
         end
@@ -165,7 +165,7 @@ function option_slider:ctor(data,manager)
     self.bg_out = bar_info.bg_out or 5
     self.width = bar_info.width or 500
     self.height = bar_info.height or 32
-    self.baryoff = (bar_info.baryoff or 20) * self.scale
+    self.baryoff = (bar_info.baryoff or 0) * self.scale
     self.fill = data.init_value or data[3]
     self.onHori = data.onHori or data[4]
     self.setBar = data[5]
@@ -215,7 +215,7 @@ function option_slider:render()
         return
     end
     local font = self.font or self.class.font
-    font:renderOutline(self.tid,self.x,self.y,self.scale,"right","vcenter",
+    font:renderOutline(self.tid,self.x,self.y,self.scale,"right","bottom",
             self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",self._a/255)
     local o2 = self.bg_out
     local ac = Color(self._a,255,255,255)

@@ -1,6 +1,7 @@
 local path = GetCurrentScriptDirectory()
 local mathpath = path.."math\\"
 Vector = Include(mathpath..'Vector.lua')
+Vector3 = Include(mathpath..'Vector3.lua')
 Rect = Include(mathpath..'Rect.lua')
 local miscpath = path.."misc\\"
 Include(miscpath..'Stack.lua')

@@ -191,7 +191,7 @@ end
 function M.select_indicator:render()
     SetViewMode("ui")
     SetImageState("select_indicator","",Color(200,0,0,0))
-    Render("select_indicator",self.x,self.y+25*self.off_scale,self.rot,self.hscale*1000,self.vscale*4)
+    Render("select_indicator",self.x,self.y+0*self.off_scale,self.rot,self.hscale*1000,self.vscale*4)
     --RenderRect("select_indicator",0,1000,self.y-32,self.y+32)
     SetViewMode("world")
 end

@@ -20,9 +20,9 @@ function sc:init()
                             local spd = 3.5
                             local x_off = ran:Float(-10,5)
                             CreateShotA(lstg.world.l-15+x_off,math.lerp(lstg.world.b,lstg.world.t,t),
-                                    spd+ran:Float(0,0.05),0,grp,color.OrangeRed,nil,"grad+add",1)
+                                    spd+ran:Float(0,0.05),0,grp,color.OrangeRed,nil,"add+add",1)
                             CreateShotA(lstg.world.r+15-x_off,math.lerp(lstg.world.b,lstg.world.t,t2),
-                                    spd+ran:Float(0,0.05),180,grp,color.OrangeRed,nil,"grad+add",1)
+                                    spd+ran:Float(0,0.05),180,grp,color.OrangeRed,nil,"add+add",1)
                         end)
                     end)
                 end)
@@ -44,9 +44,9 @@ function sc:init()
                     --ang = ang + math.clamp(AngleDifference(ang,Angle(self,player)),-wvel,wvel)
                     spd = spd + ran:Float(0,0.2)
                     CreateShotA(self.x,self.y,spd,ang + ran:Float(-spread,spread),random_grps[ran:Int(1,#random_grps)],
-                        color.DarkCyan,nil,"grad+add")
+                        color.DarkCyan,nil,"add+add")
                     CreateShotA(self.x,self.y,spd,ang + ran:Float(-spread,spread),random_grps[ran:Int(1,#random_grps)],
-                            color.DarkCyan,nil,"grad+add")
+                            color.DarkCyan,nil,"add+add")
                     task.Wait(1)
                     PlaySound("tan02", 1)
                 end)

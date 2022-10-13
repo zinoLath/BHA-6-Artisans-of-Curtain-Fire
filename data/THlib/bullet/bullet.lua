@@ -33,6 +33,9 @@ function bullet:init(img,color,subcolor,blend,delay)
     self._subcolor = subcolor or centerDefaultColor
     self._blend = blend
     self.layer = LAYER_ENEMY_BULLET
+    if blend ~= "add+alpha" then
+        self.layer = LAYER_ENEMY_BULLET + 10
+    end
     self.group = GROUP_ENEMY_BULLET
     self.delay = self.delay or delay
     if delay == nil then
@@ -54,7 +57,7 @@ function ChangeBulletImage(obj,img,color,subcolor,rm)
     obj.img = img
     obj._color = color
     obj._subcolor = subcolor
-    obj._blend = rm or 'grad+alpha'
+    obj._blend = rm or 'add+alpha'
 end
 
 function bullet:kill()
@@ -105,7 +108,7 @@ function BulletBreak:frame()
 end
 local default_sub = color.White
 local default_delay = 13
-local default_blend = "grad+alpha"
+local default_blend = "add+alpha"
 function CreateShotA(x,y,speed,angle,graphic,color,subcolor,blend,delay)
     --do return {} end
     subcolor = subcolor or default_sub

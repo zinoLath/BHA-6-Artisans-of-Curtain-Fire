@@ -3,6 +3,7 @@ M.option = zclass(main_menu_option_base)
 local path = GetCurrentScriptDirectory()
 function M.option:ctor(data,manager)
     self._a = 0
+    self.scale = 1.3
     self.onEnter = data[1]
     self.font = option_font
     self.unselect_color = self._color
@@ -140,7 +141,7 @@ end
 function M.select_indicator:render()
     SetViewMode("ui")
     SetImageState("select_indicator","",Color(200,0,0,0))
-    Render("select_indicator",self.x,self.y+25,self.rot,self.hscale*1000,self.vscale*4)
+    Render("select_indicator",self.x,self.y,self.rot,self.hscale*1000,self.vscale*4)
     --RenderRect("select_indicator",0,1000,self.y-32,self.y+32)
     SetViewMode("world")
 end

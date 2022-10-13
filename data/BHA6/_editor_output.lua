@@ -5,6 +5,7 @@ _allow_sc_practice=true
 local path = GetCurrentScriptDirectory()
 Include(path.."lib/misc.lua")
 Include(path.."lib/effect.lua")
+Include(path.."background/mistylake.lua")
 --region load_anim
 local reimu_sprites = LoadImageGroupFromFile("dot_reimu",path.."dot_reimu.png",true,8,4,16,16,false)
 local rs = reimu_sprites
@@ -111,23 +112,23 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
 	item.PlayerInit()
     difficulty=self.group.difficulty    --New(mask_fader,'open')
     --New(reimu_player)
-	New(DEBUG_BG)
 	New(sanae_player)
     task.New(self,function()
         do
-            -- New(river_background)
+			New(mistylake_bg)
             -- New(MyScene)
 			-- New(G2048)
         end
-		task.Wait(120)
+		New(cutin_border)
+		task.Wait(_infinite)
 		New(boss_timer)
 		New(straight_hpbar)
-		--local __boss = New(bha6_boss, { rp1},reimu_anim_mngr); wait_until_death(__boss)
-		--local __boss = New(bha6_boss, { sp2, sp1 },suika_anim_mngr); wait_until_death(__boss)
+		local __boss = New(bha6_boss, { rp1},reimu_anim_mngr); wait_until_death(__boss)
+		local __boss = New(bha6_boss, { sp2, sp1 },suika_anim_mngr); wait_until_death(__boss)
 		local __boss = New(bha6_boss, { rp2},reimu_anim_mngr); wait_until_death(__boss)
-		--local __boss = New(bha6_boss, { mp1},marisa_anim_mngr); wait_until_death(__boss)
-		--local __boss = New(bha6_boss, { hp2, hp1 },housui_anim_mngr); wait_until_death(__boss)
-		--local __boss = New(bha6_boss, { mp2},marisa_anim_mngr); wait_until_death(__boss)
+		local __boss = New(bha6_boss, { mp1},marisa_anim_mngr); wait_until_death(__boss)
+		local __boss = New(bha6_boss, { hp2, hp1 },housui_anim_mngr); wait_until_death(__boss)
+		local __boss = New(bha6_boss, { mp2},marisa_anim_mngr); wait_until_death(__boss)
 		while true do
 			task.Wait(1)
 		end
@@ -152,7 +153,7 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
 end)
 
 Include "BHA6\\menu\\main.lua"
-do return end
+--do return end
 stage_init = stage.New('init', true, true)
 function stage_init:init()
 	stage.group.Start(stage.groups["Normal"])

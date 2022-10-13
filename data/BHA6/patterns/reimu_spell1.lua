@@ -6,7 +6,7 @@ function reimu_square:init(x,y,rot)
     self.x, self.y = x,y
     self._color = Color(64,0,0,255)
     self.rot = rot
-    self._blend = "grad+add"
+    self._blend = "add+add"
     self.__w = 0
     self.verts = {
         Vector(-1,1),

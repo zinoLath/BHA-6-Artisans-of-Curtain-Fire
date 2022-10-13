@@ -182,3 +182,29 @@ function SetFPS(_fps)
     lstg.maxfps = _fps
     lstg.SetFPS(_fps)
 end
+
+function Render4Vec(img,v1,v2,v3,v4)
+    return Render4V(img,v1.x,v1.y,v1.z,v2.x,v2.y,v2.z,v3.x,v3.y,v3.z,v4.x,v4.y,v4.z)
+end
+local buf1, buf2, buf3, buf4 = {}, {}, {}, {}
+function RenderTextureT(img,blend,
+                        v1x,v1y,v1z,v1u,v1v,v1c,
+                        v2x,v2y,v2z,v2u,v2v,v2c,
+                        v3x,v3y,v3z,v3u,v3v,v3c,
+                        v4x,v4y,v4z,v4u,v4v,v4c)
+    buf1[1],buf1[2],buf1[3],buf1[4],buf1[5],buf1[6] = v1x,v1y,v1z,v1u,v1v,v1c
+    buf2[1],buf2[2],buf2[3],buf2[4],buf2[5],buf2[6] = v2x,v2y,v2z,v2u,v2v,v2c
+    buf3[1],buf3[2],buf3[3],buf3[4],buf3[5],buf3[6] = v3x,v3y,v3z,v3u,v3v,v3c
+    buf4[1],buf4[2],buf4[3],buf4[4],buf4[5],buf4[6] = v4x,v4y,v4z,v4u,v4v,v4c
+    RenderTexture(img,blend,buf1,buf2,buf3,buf4)
+end
+do return end
+function PostEffect()
+
+end
+function PushRenderTarget()
+
+end
+function PopRenderTarget()
+    
+end

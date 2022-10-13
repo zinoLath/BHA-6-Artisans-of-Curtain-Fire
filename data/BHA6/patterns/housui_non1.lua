@@ -1,7 +1,7 @@
 local center = Vector(0,100)
 local housui_fire = Class()
 function housui_fire:init(boss,r1,r2,sa,a,col)
-    bullet.init(self,"arrow",col,color.White,"grad+add")
+    bullet.init(self,"arrow",col,color.White,"add+add")
     self.colli = true
     self.boss = boss
     self.r1 = r1

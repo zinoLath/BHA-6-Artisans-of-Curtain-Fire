@@ -8,7 +8,7 @@ function curvy_laser:init(x,y,img,width,node_count,_color)
     self.data = BentLaserData()
     self.layer = LAYER_ENEMY_BULLET+10
     self.group = GROUP_INDES
-    self._blend = "grad+add"
+    self._blend = "add+add"
     self._color = _color or color.Red
     self.bound = false
     self._bound = true

@@ -34,12 +34,6 @@ function M:init()
         opt.omiga = 1.3
         opt.lerp_pos = true
     end)
-    task.New(self,function()
-        while true do
-            lstg.var.lifeleft = 999
-            task.Wait(1)
-        end
-    end)
     player_class.init(self)
     local sanae_manager = ZAnim(true)
     sanae_manager:addAnimation(sanae_left_anim,"left")

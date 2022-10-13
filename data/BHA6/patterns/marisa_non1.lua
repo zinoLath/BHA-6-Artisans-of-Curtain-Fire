@@ -41,7 +41,7 @@ function sc:init()
                     AdvancedFor(4+i%2,{"linear",-45,45,true},function(ang)
                         local a = ap+ang
                         local obj = CreateShotA(self.x,self.y,1,a,"star",
-                                ColorHSV(255,self.timer+180,100,100),nil,"grad+add")
+                                ColorHSV(255,self.timer+180,100,100),nil,"add+add")
                         obj.layer = LAYER_ENEMY_BULLET+50
                         obj.omiga = 3
                         DelayLine(self.x,self.y,a,96)
@@ -52,7 +52,7 @@ function sc:init()
                                 local col = ColorHSV(255,self.timer+180,100,100)
                                 local a = Angle(obj.dx,obj.dy,0,0)+ran:Float(-5,5)
                                 local eff = CreateShotR(obj.x,obj.y,1+obj.timer/10+ran:Float(-1,1),a,
-                                        "smallstar",col,-32,a,InterpolateColor(col,color.White,0.7),"grad+add",
+                                        "smallstar",col,-32,a,InterpolateColor(col,color.White,0.7),"add+add",
                                         math.lerp(30,3,math.clamp(obj.timer/60,0,1)))
                                 eff.layer = LAYER_ENEMY_BULLET-10
                                 eff.omiga = 3

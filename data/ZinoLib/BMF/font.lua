@@ -71,6 +71,7 @@ function M:loadFont(name,path)
         end
         local spr = chars[string.char(getValueN(v, '@id'))].sprite
         SetImageCenter(spr,0,getValueN(v, '@height'))
+        SetImageState(spr,"grad+alpha",color.White)
         --SetImageCenter(name .. v['id'],0,getValueN(v, '@height')*0)
     end
     local info = data._children[1]._attr
@@ -92,6 +93,7 @@ function M:loadFont(name,path)
     ret.alpha = info['alphaChnl'] == '1'
     ret.chars = chars
     ret.is_bmf = true
+    ret.movescale = 1
     local font_count = #M.fonts
     M.fonts[font_count+1] = ret
     M.fonts[name] = ret
@@ -118,7 +120,8 @@ function M.font_functions:setMonospace(monospace, mono_exception)
     return self
 end
 function M.font_functions:getSize(str,scale,offsetfunc)
-    local cursor = Vector(0,-self.base*scale/2)
+    local move_scale = 1
+    local cursor = Vector(0,-self.base*scale*move_scale/2)
     local chars = self.chars
     local base_c = cursor:clone()
     local monospace = self.monospace
@@ -133,18 +136,18 @@ function M.font_functions:getSize(str,scale,offsetfunc)
             end
             local height = char.height*scale * GetImageScale()
             local x,y = cursor.x,
-                        cursor.y - char.yoffset*scale
+                        cursor.y - char.yoffset*scale*move_scale
             min_x = math.min(min_x,x)
             max_x = math.max(max_x,x + width)
             min_y = math.min(min_y,y)
             max_y = math.max(max_y,y + height)
             if monospace and not self.mono_exception[c] then
-                cursor.x = cursor.x + monospace*scale
+                cursor.x = cursor.x + monospace*scale*move_scale
             else
-                cursor.x = cursor.x + char.xadvance*scale
+                cursor.x = cursor.x + char.xadvance*scale*move_scale
             end
         else
-            base_c.y = base_c.y + self.lineHeight*scale
+            base_c.y = base_c.y + self.lineHeight*scale*move_scale
             cursor = base_c
             cursor.x = 0
         end
@@ -152,13 +155,14 @@ function M.font_functions:getSize(str,scale,offsetfunc)
     return max_x - min_x,  max_y - min_y
 end
 local white = Color(255,255,255,255)
-function M.font_functions:render(str,x,y,scale,halign,valign,color,offsetfunc)
+function M.font_functions:render(str,x,y,scale,halign,valign,color,subcolor,offsetfunc)
     halign = halign or "center"
     valign = valign or "vcenter"
     local move_scale = 1
     if lstg.viewmode ~= "ui" then
         move_scale = 0.4444
     end
+    move_scale = move_scale * self.movescale
     local wd, hg = self:getSize(str,scale*move_scale)
     local cursor = Vector(x,y - self.base*scale*move_scale/2)
     local vec = Vector(0,0)
@@ -187,11 +191,18 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,offsetfunc)
             if offsetfunc then
                 vec = offsetfunc(i,c,str)
             end
+            if subcolor then
+                if type(subcolor) == "userdata" then
+                    SetImageSubColor(char.sprite,subcolor)
+                else
+                    SetImageSubColor(char.sprite,unpack(subcolor))
+                end
+            end
             if color then
                 if type(color) == "userdata" then
-                    SetImageColor(char.sprite,color)
+                    SetImageState(char.sprite,"grad+alpha",color)
                 else
-                    SetImageColor(char.sprite,unpack(color))
+                    SetImageState(char.sprite,"grad+alpha",unpack(color))
                 end
             end
             Render(char.sprite,cursor.x + offset + vec.x,cursor.y - char.yoffset*scale*move_scale + vec.y,
@@ -211,12 +222,27 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,offsetfunc)
         end
     end
 end
+local color_buffer = {}
 function M.font_functions:renderOutline(str,x,y,scale,halign,valign,color,offsetfunc,outline_size,outline_color,blend,alpha)
     blend = blend or "mul+alpha"
-    PushRenderTarget("BMF_FONT_BUFFER")
-    RenderClear(Color(0x00000000))
-    self:render(str,x,y,scale,halign,valign,color,offsetfunc)
-    PopRenderTarget("BMF_FONT_BUFFER")
+    --PushRenderTarget("BMF_FONT_BUFFER")
+    --RenderClear(Color(0x00000000))
+    alpha = alpha or 1
+    color = color or Color(255,255,255,255)
+    outline_color = outline_color or Color(255,0,0,0)
+    local alphcolor = Color(255*alpha,255,255,255)
+    local _color
+    if type(color) == "table" then
+        _color = color_buffer
+        for i=1, #color do
+            _color[i] = color[i] * alphcolor
+        end
+    else
+        _color = color * alphcolor
+    end
+    self:render(str,x,y,scale,halign,valign,_color,outline_color,offsetfunc)
+    --PopRenderTarget("BMF_FONT_BUFFER")
+    do return end
     local _color = outline_color
     local _size = outline_size
     alpha = alpha or 1
@@ -415,8 +441,8 @@ function M:renderPool(pool,x,y,scale,count,timer,imgscale)
     render_command._xorg = x
     render_command._yorg = y
     for _k,_v in ipairs(pool.borderList) do
-        PushRenderTarget("BMF_FONT_BUFFER")
-        RenderClear(Color(0x00000000))
+        --PushRenderTarget("BMF_FONT_BUFFER")
+        --RenderClear(Color(0x00000000))
         for k,v in ipairs(_v.glyphList) do
             if v.id > count then
                 break
@@ -438,7 +464,7 @@ function M:renderPool(pool,x,y,scale,count,timer,imgscale)
             SetImageState(render_command.img, "", render_command.topcolor,render_command.topcolor,render_command.botcolor,render_command.botcolor)
             Render(render_command.img,render_command.x,render_command.y,render_command.rot,render_command.scale,render_command.scale)
         end
-        PopRenderTarget("BMF_FONT_BUFFER")
+        --PopRenderTarget("BMF_FONT_BUFFER")
         local color = _v.color
         local size = _v.size
         local alpha = _v.alpha or 1
@@ -448,7 +474,7 @@ function M:renderPool(pool,x,y,scale,count,timer,imgscale)
         border_command[1][4] = color.a * bytetofloat
         border_command[2][1] = size
         border_command[2][2] = alpha
-        lstg.PostEffect("BMF_BORDER_SHADER", "BMF_FONT_BUFFER", 6, "mul+alpha", border_command)
+        --lstg.PostEffect("BMF_BORDER_SHADER", "BMF_FONT_BUFFER", 6, "mul+alpha", border_command)
     end
 end
 function M.font_functions:clone()

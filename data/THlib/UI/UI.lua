@@ -22,7 +22,7 @@ for k,v in ipairs(hinters) do
     SetImageCenter(v,0,h/2)
 end
 LoadFX("blur",path.."blur25.hlsl")
-num_font = BMF:loadFont("unispace_bold",font_path)
+num_font = BMF:loadFont("unispace_bold_lowout",font_path)
 local x = 1400
 ui.positions = {
     Vector(x,82),
@@ -89,14 +89,14 @@ end
 function ui:DrawHiScore(pos,id)
     Render("ui.hinter1",pos.x,pos.y)
     local top_color,bot_color = Color(255,255,255,255), Color(255,186,200,222)
-    num_font:renderOutline(FormatScore(lstg.tmpvar.hiscore or lstg.var.score),pos.x+220,pos.y-7,0.7,"left","bottom",
+    num_font:renderOutline(FormatScore(lstg.tmpvar.hiscore or lstg.var.score),pos.x+220,pos.y-13,0.85,"left","bottom",
             {top_color,top_color,bot_color,bot_color},nil,4,Color(255*0.75,0,2,21))
     self.divs[id] = Vector(pos.x,pos.y-30)
 end
 function ui:DrawScore(pos,id)
     Render("ui.hinter2",pos.x,pos.y)
     local top_color,bot_color = Color(255,255,255,255), Color(255,186,200,222)
-    num_font:renderOutline(FormatScore(lstg.var.score),pos.x+220,pos.y-7,0.7,"left","bottom",
+    num_font:renderOutline(FormatScore(lstg.var.score),pos.x+220,pos.y-13,0.85,"left","bottom",
             {top_color,top_color,bot_color,bot_color},nil,4,Color(255*0.75,0,2,21))
     self.divs[id] = Vector(pos.x,pos.y-30)
 end
@@ -182,14 +182,14 @@ end
 function ui:DrawPoint(pos,id)
     Render("ui.hinter5",pos.x,pos.y)
     local top_color,bot_color = Color(255,255,255,255), Color(0xFF779ddd)
-    num_font:renderOutline(FormatPoint(lstg.var.pointrate),pos.x+490,pos.y-7,0.7,"right","bottom",
+    num_font:renderOutline(FormatPoint(lstg.var.pointrate),pos.x+490,pos.y-13,0.85,"right","bottom",
             {top_color,top_color,bot_color,bot_color},nil,4,Color(255*0.75,0,2,21))
     self.divs[id] = Vector(pos.x,pos.y-30)
 end
 function ui:DrawGraze(pos,id)
     Render("ui.hinter6",pos.x,pos.y)
     local top_color,bot_color = Color(255,255,255,255), Color(0xFFbac8de)
-    num_font:renderOutline(FormatPoint(lstg.var.graze),pos.x+490,pos.y-7,0.7,"right","bottom",
+    num_font:renderOutline(FormatPoint(lstg.var.graze),pos.x+490,pos.y-13,0.85,"right","bottom",
             {top_color,top_color,bot_color,bot_color},nil,4,Color(255*0.75,0,2,21))
     self.divs[id] = Vector(pos.x,pos.y-30)
 end

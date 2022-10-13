@@ -39,7 +39,7 @@ function invert_range:render()
 end
 local default_sub = color.White
 local default_delay = 5
-local default_blend = "grad+alpha"
+local default_blend = "add+alpha"
 local function HCreateShotA(x,y,speed,angle,graphic,color,subcolor,blend,delay)
     --do return {} end
     subcolor = subcolor or default_sub

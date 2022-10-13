@@ -224,16 +224,16 @@ lstg.view3d = {
     at = { 0, 0, 0 },
     up = { 0, 1, 0 },
     fovy = PI_2,
-    z = { 0, 2 },
+    z = { 1, 2 },
     fog = { 0, 0, Color(0x00000000) },
 }
 
 function Reset3D()
-    lstg.view3d.eye = { 0, 0, -1 }
-    lstg.view3d.at = { 0, 0, 0 }
+    lstg.view3d.eye = { 0, 0, 0 }
+    lstg.view3d.at = { 0, 0, 1 }
     lstg.view3d.up = { 0, 1, 0 }
     lstg.view3d.fovy = PI_2
-    lstg.view3d.z = { 1, 2 }
+    lstg.view3d.z = { 0.01, _infinite }
     lstg.view3d.fog = { 0, 0, Color(0x00000000) }
 end
 
@@ -266,8 +266,8 @@ end
 ----------------------------------------
 ---视口、投影等的转换和坐标映射
 
-function SetViewMode(mode)
-    if lstg.viewmode == mode then
+function SetViewMode(mode,update)
+    if not update and lstg.viewmode == mode then
         return
     end
     screen.hScale = setting.resx / screen.width

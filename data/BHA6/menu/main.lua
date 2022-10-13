@@ -2,6 +2,8 @@ local path = GetCurrentScriptDirectory()
 local MenuSys = MenuSys
 
 option_font = BMF:loadFont("sabado",font_path)
+option_font.movescale = 1.1
+option_font.chars.i.xadvance = option_font.chars.i.xadvance*1.2
 main_menu_option_base = zclass(MenuSys.option)
 function main_menu_option_base:render()
     SetViewMode("ui")
@@ -18,7 +20,7 @@ function main_menu_option_base:render()
         SetFontState("menu","",self._color)
         RenderText('menu',self.tid,self.x,self.y,0.6*2.25*self.scale,'center')
     elseif type(font) == "table" then
-        font:renderOutline(self.tid,self.x,self.y,self.scale,"left","vcenter",
+        font:renderOutline(self.tid,self.x,self.y+0*self.scale,self.scale,"left","bottom",
                 self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",self._a/255)
     else
         SetFontState(font,self._blend,self._color)

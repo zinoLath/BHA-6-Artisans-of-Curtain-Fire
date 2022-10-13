@@ -338,11 +338,10 @@ function Vector.dir(dir)
 end
 
 
-if ffi and not brinevector_loaded then
+if ffi then
     ffi.metatype("brinevector",Vector)
 end
 
-brinevector_loaded = true
 
 Vector.zero = Vector(0,0)
 return Vector

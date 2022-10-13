@@ -1,6 +1,6 @@
 local Rect = class()
 local M = Rect
-local Vector = require("ZinoLib.math.Vector")
+--local Vector = require("ZinoLib.math.Vector")
 require("math")
 local special_properties = {
     l = "getL",
