@@ -311,9 +311,9 @@ function cutin_border:init(card,boss)
     self.x, self.y = screen.width/2,screen.height/2
     self.border_size = 10
     task.New(self, function()
-        SetFieldInTime(self,40,math.tween.cubicOut,{"height", screen.height-200})
+        SetFieldInTime(self,40,math.tween.cubicOut,{"height", screen.height-200}, {"width", screen.width-20})
         task.Wait(40)
-        SetFieldInTime(self,40,math.tween.cubicOut,{"height", screen.height+30})
+        SetFieldInTime(self,40,math.tween.cubicOut,{"height", screen.height+30}, {"width", screen.width+10})
         Del(self)
     end)
     self.txtrot = 22.5
@@ -330,7 +330,7 @@ function cutin_border:render()
     local textscale = 4
     local off = Vector(1,0.3)
     PopRenderTarget("CUTIN_EFFECT_BG")
-    if true or self.timer == 1 then
+    if self.timer == 1 then
         UpdateTextRT()
     end
     local vecc = Vector(screen.width/2, screen.height/2)
@@ -349,18 +349,18 @@ function cutin_border:render()
 
     tx1, tx2, ty1, ty2 = vecc.x + tx1, vecc.x + tx2, vecc.y + ty1, vecc.y + ty2
     SetViewMode("ui")
-    RenderTexture("CUTIN_EFFECT_TEXT","",
-            {tx1,ty1,0,v1.x*hscale*textscale+off.x,v1.y*vscale*textscale-off.y,cw},
-            {tx2,ty1,0,v2.x*hscale*textscale+off.x,v2.y*vscale*textscale-off.y,cw},
-            {tx2,ty2,0,v3.x*hscale*textscale+off.x,v3.y*vscale*textscale-off.y,cw},
-            {tx1,ty2,0,v4.x*hscale*textscale+off.x,v4.y*vscale*textscale-off.y,cw}
+    RenderTextureT("CUTIN_EFFECT_TEXT","",
+            tx1,ty1,0,v1.x*hscale*textscale+off.x,v1.y*vscale*textscale-off.y,cw,
+            tx2,ty1,0,v2.x*hscale*textscale+off.x,v2.y*vscale*textscale-off.y,cw,
+            tx2,ty2,0,v3.x*hscale*textscale+off.x,v3.y*vscale*textscale-off.y,cw,
+            tx1,ty2,0,v4.x*hscale*textscale+off.x,v4.y*vscale*textscale-off.y,cw
     )
     RenderRect("cutin_border",x1-self.border_size/2,x2+self.border_size/2,y1-self.border_size/2,y2+self.border_size/2)
-    RenderTexture("CUTIN_EFFECT_BG","",
-            {x1,y1,0,x1*hscale,y2*vscale,cw},
-            {x2,y1,0,x2*hscale,y2*vscale,cw},
-            {x2,y2,0,x2*hscale,y1*vscale,cw},
-            {x1,y2,0,x1*hscale,y1*vscale,cw}
+    RenderTextureT("CUTIN_EFFECT_BG","",
+            x1,y1,0,x1*hscale,y2*vscale,cw,
+            x2,y1,0,x2*hscale,y2*vscale,cw,
+            x2,y2,0,x2*hscale,y1*vscale,cw,
+            x1,y2,0,x1*hscale,y1*vscale,cw
     )
     SetViewMode(view)
     --Render("white",0,0,0,0,0)

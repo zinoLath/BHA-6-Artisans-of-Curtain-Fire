@@ -7,6 +7,20 @@ lstg.supported_res = {
 	{2560,1440},
 	{3840,2160}
 }
+local function deepcopy(tb,id)
+	if type(tb) ~= "table" then
+		return tb
+	end
+	local ret = {}
+	for k,v in pairs(tb) do
+		if type(v) ~= "table" then
+			ret[k] = v
+		else
+			ret[k] = deepcopy(v,id)
+		end
+	end
+	return setmetatable(ret,getmetatable(tb))
+end
 local default_res = 2
 lstg.title = "Bullet Hell Artistry #6 - Artisans of Curtain Fire"
 default_setting = {
@@ -22,8 +36,10 @@ default_setting = {
 	sevolume = 100,
 	bgmvolume = 100,
 	bulshadows = 0,
+	bgbright = 100,
 	autoshoot = false,
 	renderskip = false,
+	lowperf = false,
 	keys = {
 		up = KEY.UP,
 		down = KEY.DOWN,

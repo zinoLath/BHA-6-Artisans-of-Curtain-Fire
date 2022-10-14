@@ -91,7 +91,7 @@ function option_multihori:ctor(data,manager)
     self._a = 0
     self.__subselect = data.init_value or data[3] or 0
     self.onHori = data.onHori
-    self.onEnter = data[2]
+    self.onEnter = data.onEnter or data[2]
     self.__text = data[1]
     self.__alphas = {}
     for k,v in ipairs(data[1]) do

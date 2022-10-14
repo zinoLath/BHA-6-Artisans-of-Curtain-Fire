@@ -146,6 +146,6 @@ function mistylake_bg:render()
     local yy2 = -9.5
     Render4V("worter",_x1,-_y1*ymult,_z2*zmult,_x2,-_y1*ymult,_z2*zmult,_x2,yy2,_z2,_x1,yy2,_z2)
     SetViewMode("world")
-    SetImageState("bg_black","",InterpolateColor(Color(0),Color(150,0,0,0),(setting.bg_darkness or 0)/100))
+    SetImageState("bg_black","",InterpolateColor(Color(0),Color(150,0,0,0),1-((setting.bgbright or 0)/100)))
     RenderRect("bg_black",lstg.world.l,lstg.world.r,lstg.world.b,lstg.world.t)
 end

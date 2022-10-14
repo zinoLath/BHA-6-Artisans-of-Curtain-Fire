@@ -26,7 +26,7 @@ function DrawLoading()
     RenderRect("loading_screen",0,screen.width,0,screen.height)
     scroll = scroll + 1
     local scrollx, scrolly = scroll,scroll
-    local cw = Color(170,255,0,255)
+    local cw = Color(80,255,0,255)
     local l,r,t,b = 0,screen.width,0,screen.height
     local uv_mult = 0.7
     RenderTextureT("loading_scroll","",

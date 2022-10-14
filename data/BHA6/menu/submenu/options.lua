@@ -46,6 +46,7 @@ local res_names = {}
 for k,v in ipairs(res_list) do
     res_names[k] = string.format("%dx%d",v[1],v[2])
 end
+preconfig = {}
 M.options = {
     {option_slider, "Master Volume: ", {onHori = function(self)
         setting.mastervolume = self.fill
@@ -64,11 +65,17 @@ M.options = {
     end, init_value = setting.sevolume},
     },
     {option_multihori, "Resolution: ", {res_names,
+                                        onHori = function(self)
+                                            local selected = LoopTableK(self.__text,self.__subselect)
+                                            preconfig.resx = res_list[selected][1]
+                                            preconfig.resy = res_list[selected][2]
+                                            preconfig.resid = selected
+
+                                        end,
      function(self)
-         local selected = LoopTableK(self.__text,self.__subselect)
-         setting.resx = res_list[selected][1]
-         setting.resy = res_list[selected][2]
-         setting.resid = selected
+         setting.resx = preconfig.resx
+         setting.resy = preconfig.resy
+         setting.resid = preconfig.resid
          ChangeVideoMode(setting.resx, setting.resy, setting.windowed, setting.vsync)
     end, init_value = setting.resid},
     },
@@ -98,11 +105,31 @@ M.options = {
        onHori = function(self)
            local selected = LoopTable(self.__text,self.__subselect)
            if selected == "On" then
-               setting.renderskip = true
+               preconfig.renderskip = true
            else
-               setting.renderskip = false
+               preconfig.renderskip = false
            end
-       end, init_value = setting.renderskip and 1 or 2
+       end,
+        onEnter = function(self)
+            setting.renderskip = preconfig.renderskip
+        end
+     , init_value = setting.renderskip and 1 or 2
+     }
+    },
+    {option_multihori, "Low Performance Mode: ",
+     { { "On", "Off" },
+       onHori = function(self)
+           local selected = LoopTable(self.__text,self.__subselect)
+           if selected == "On" then
+               preconfig.lowperf = true
+           else
+               preconfig.lowperf = false
+           end
+       end,
+       onEnter = function(self)
+           setting.lowperf = preconfig.lowperf
+       end
+     , init_value = setting.lowperf and 1 or 2
      }
     },
     {option_multihori, "Auto Shoot: ",
@@ -120,6 +147,10 @@ M.options = {
     {option_slider, "Bullet Shadows: ", {onHori = function(self)
         setting.bulshadows = self.fill
     end, init_value = setting.bulshadows},
+    },
+    {option_slider, "Background Brightness: ", {onHori = function(self)
+        setting.bgbright = self.fill
+    end, init_value = setting.bgbright},
     },
     {option_multihori, "One Life in Practice: ",
      { { "On", "Off" },
@@ -146,12 +177,16 @@ M.options = {
      }
     },
     {option_base, "Save and Return", {function(self)
+        for k,v in pairs(preconfig) do
+            setting[k] = v
+        end
         saveConfigure()
         SetBGMVolume(setting.bgmvolume/100 * setting.mastervolume/100)
         SetSEVolume(setting.sevolume/100 * setting.mastervolume/100)
         ChangeVideoMode(setting.resx, setting.resy, setting.windowed, setting.vsync)
         CallClass(self.manager,"go_back")
-    end}}
+    end}
+     }
 }
 
 M.select_indicator = zclass()
@@ -209,8 +244,8 @@ function M:ctor()
 end
 function M:obj_init(menu)
     local opt_cnt = menu.option_def or menu.class.options
-    self._x, self._y = 700, screen.height/2 - (self.id-#opt_cnt/2) * 80
-    self.scale = 0.8
+    self._x, self._y = 450, screen.height/2 - (self.id-#opt_cnt/2) * 60
+    self.scale = 0.7
     self.delx = -400
     self.dely = self._y
     self.x = self._x

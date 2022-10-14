@@ -198,6 +198,7 @@ function RenderTextureT(img,blend,
     buf4[1],buf4[2],buf4[3],buf4[4],buf4[5],buf4[6] = v4x,v4y,v4z,v4u,v4v,v4c
     RenderTexture(img,blend,buf1,buf2,buf3,buf4)
 end
+
 do return end
 function PostEffect()
 
