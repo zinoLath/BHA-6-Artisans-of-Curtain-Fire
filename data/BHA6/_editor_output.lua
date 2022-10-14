@@ -5,6 +5,7 @@ _allow_sc_practice=true
 local path = GetCurrentScriptDirectory()
 Include(path.."lib/misc.lua")
 Include(path.."lib/effect.lua")
+Include(path.."lib/transition.lua")
 Include(path.."background/mistylake.lua")
 --region load_anim
 local reimu_sprites = LoadImageGroupFromFile("dot_reimu",path.."dot_reimu.png",true,8,4,16,16,false)

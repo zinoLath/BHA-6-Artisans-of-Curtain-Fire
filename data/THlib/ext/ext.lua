@@ -234,6 +234,7 @@ end
 local Ldebug = require("lib.Ldebug")
 
 function FrameFunc()
+    lstg.timer = (lstg.timer or 0) + 1
     local update_count = setting.renderskip and 2 or 1
     if setting.renderskip and lstg.maxfps ~= 30 then
         SetFPS(30)
@@ -287,6 +288,7 @@ function RenderFunc()
         end
     end
     task.Do(lstg.rtasks)
+    Event:call("onAfterRender")
     AfterRender()
     Ldebug.draw()
     EndScene()

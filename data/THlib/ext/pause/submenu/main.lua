@@ -63,7 +63,7 @@ end
 function M:init(manager,tb)
     self.option_def = {}
     for k,v in ipairs(tb) do
-        self.option_def[k] = {M.option, v[1], function( )  pause_menu.executeEvent(self,v[2]) end}
+        self.option_def[k] = {M.option, v[1], function( )  pause_menu.executeEvent(self.manager,v[2],self) end}
     end
     MenuSys.menu.init(self,manager)
     for k,v in pairs(self.option_def) do

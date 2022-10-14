@@ -1,31 +1,31 @@
 {
+	"hiscore": {
+		"Stage 1@Normal@nil": 0
+	},
 	"SpellHistory": {
-		"6th Degree of Separation ~ Love Dive": [
-			0,
-			0,
-			0,
-			1
-		],
-		"Infinite Density - Magical Astronomy": [
-			0,
-			6,
-			0,
-			12
-		],
 		"Shifting Spell ~ Temporal Mismatch": [
 			0,
 			2,
 			0,
 			3
 		],
+		"6th Degree of Separation ~ Love Dive": [
+			0,
+			0,
+			0,
+			1
+		],
 		"Trigger Happy - Tripwire Barrier": [
 			1,
 			5,
 			1,
 			8
+		],
+		"Infinite Density - Magical Astronomy": [
+			0,
+			6,
+			0,
+			12
 		]
-	},
-	"hiscore": {
-		
 	}
 }

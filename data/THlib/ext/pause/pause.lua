@@ -2,6 +2,7 @@ local path = GetCurrentScriptDirectory()
 local MenuSys = MenuSys
 local M = {}
 M.manager = zclass(MenuSys.manager)
+pause_menu = M.manager
 M.manager.name = "PauseManager"
 M.manager.intro_menu = "main"
 LoadTexture("pausemenu_halftone", path.."uihalftone.png")
@@ -83,9 +84,45 @@ function M.manager:render()
     RenderTexture("pausemenu_halftone","",unpack(self.dirty_vert))
     SetViewMode("world")
 end
+function M.manager:executeEvent(event)
+    Event:call("pause_menu_on" .. event,self)
+    if event == "resume" then
+        CallClass(self,"exit")
+    end
+    if event == "quit" then
+        Transition(function()
+            stage.group.ReturnToTitle(false, 0)
+        end)
+    end
+    if event == "quit_replay" then
+        Transition(function()
+            stage.group.ReturnToTitle(true, 0)
+        end)
+    end
+    if event == "restart" then
+        Transition(function()
+            stage.Restart()
+        end)
+    end
+    if event == "continue" then
+        local temp = lstg.var.score or 0
+        lstg.var.score = 0
+        item.PlayerReinit()
+        lstg.tmpvar.hiscore = lstg.tmpvar.hiscore or 0
+        if lstg.tmpvar.hiscore < temp then
+            lstg.tmpvar.hiscore = temp
+        end
+        stage.stages[stage.current_stage.group.title].save_replay = nil
+    end
+end
 
 Event:new("onStgFrame",function()
-    if SysKeyIsPressed("menu") and not IsValid(lstg.tmpvar.pausemenu) then
-        lstg.tmpvar.pausemenu = New(M.manager)
+    if not stage.current_stage then return end
+    if stage.current_stage.group and SysKeyIsPressed("menu") and not IsValid(lstg.tmpvar.pausemenu) then
+        lstg.tmpvar.pausemenu = New(M.manager,{
+            { "Resume", "resume" },
+            { "Return to Title", "quit" },
+            { "Restart", "restart" }
+        })
     end
 end,"pauseGame")

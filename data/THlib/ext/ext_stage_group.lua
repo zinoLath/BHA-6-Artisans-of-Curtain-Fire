@@ -307,8 +307,7 @@ function stage.group.FinishGroup()
 end
 
 function stage.group.ReturnToTitle(save_rep, finish)
-    StopMusic(deathmusic)
-    gamecontinueflag = false
+    Event:call("onReturnToTitle",save_rep,finish)
     local self = stage.current_stage
     local title = stage.stages[self.group.title]
     title.finish = finish or 0
