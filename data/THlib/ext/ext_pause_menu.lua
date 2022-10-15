@@ -393,9 +393,6 @@ end
 ----------------------------------------
 ---暂停菜单资源
 do return end
-local deathmusic = 'deathmusic'--疮痍曲
-
-LoadMusic(deathmusic, 'THlib/music/player_score.ogg', 34.834, 27.54)
 LoadTexture('pause', 'THlib/UI/pause.png')
 LoadImage('pause_pausemenu', 'pause', 2, 0, 168, 70)
 SetImageCenter('pause_pausemenu', 0, 35)

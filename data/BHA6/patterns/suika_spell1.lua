@@ -92,7 +92,7 @@ function black_hole:render()
     SetImageState("black_hole_img2","mul+sub",Color(255*t,255,255,255)*mul)
     rendercircle(self.x, self.y, self.r1, 64, "black_hole_img2")
 end
-local sc = boss.card:new("Infinite Density - Magical Astronomy", 60, 5, 2, 1200, false)
+local sc = boss.card:new("Infinite Density - Magical Astronomy", 60, 5, 2, 800, false)
 function sc:before()
     New(boss_particle_trail,self)
 end
@@ -165,4 +165,5 @@ function sc:init()
     end)
 end
 
+sc.boss_info = suika_boss_data
 return sc

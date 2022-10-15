@@ -62,19 +62,23 @@ function ext.replay.SaveReplay(stageNames, slot, playerName, finish)
         assert(replayStages[v])
         table.insert(stages, replayStages[v])
     end
+    slot = slot or (math.min(replayManager:GetCurrentSlot() + 1,replayManager:GetSlotCount()))
 
     -- TODO: gameName和gameVersion可以被用来检查录像文件的合法性
     plus.ReplayManager.SaveReplayInfo(replayManager:MakeReplayFilename(slot), {
         gameName = lstg.title,
         gameVersion = 1,
-        userName = playerName,
+        userName = setting.username,
+        stagePlayer = "sanae_player",
         group_finish = finish,
         stages = stages,
     })
+    replayManager:Refresh()
 end
 
 function ext.reload()
     replayManager = plus.ReplayManager(lstg.LocalUserData.GetReplayDirectory() .. "/" .. lstg.title)
+    ext.replay.replay_manager = replayManager
 end
 
 ext.reload()--加载一次replay管理器

@@ -1,5 +1,5 @@
 local center = Vector(0,0)
-local sc = boss.card:new("Trigger Happy - Tripwire Barrier", 60, 2, 2, 600, false)
+local sc = boss.card:new("Trigger Happy - Tripwire Barrier", 60, 3, 2, 800, false)
 local reimu_square = Class()
 local sq_img = LoadImageFromFile("reimu_square",GetCurrentScriptDirectory().."reimu_square.png")
 function reimu_square:init(x,y,rot)
@@ -239,4 +239,5 @@ while (true) do
             task.Wait(_infinite)
         end
 --]]
+sc.boss_info = reimu_boss_data
 return sc

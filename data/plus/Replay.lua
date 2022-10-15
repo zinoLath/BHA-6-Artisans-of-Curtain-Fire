@@ -165,7 +165,7 @@ function ReplayManager:init(replayDirectory)
     self._filefmt = "slot(%d+).rep"
     self._filefmt2 = "slot%d.rep"
     self._slots = nil
-    self._slotmax = 16
+    self._slotmax = 60
 
     -- 确保录像目录存在
     lstg.FileManager.CreateDirectory(replayDirectory)
@@ -328,8 +328,8 @@ function ReplayManager.SaveReplayInfo(path, data)
                 w:WriteUInt(stage.randomSeed)  -- 随机数种子
                 w:WriteFloat(stage.stageTime or 0)  -- 通关时间
                 w:WriteUInt(stage.stageDate or 0)  -- 游戏日期(UNIX时间戳)
-                w:WriteUShort(string.len(stage.stagePlayer))  -- 使用自机
-                w:WriteString(stage.stagePlayer, false)
+                w:WriteUShort(string.len(stage.stagePlayer or "sanae_player"))  -- 使用自机
+                w:WriteString(stage.stagePlayer or "sanae_player", false)
                 --                   w:WriteUShort(stage.cur_stage_num)--关卡所在位置
                 --                   w:WriteUShort(stage.group_num)  --关卡组长度
                 -- 录像数据
@@ -389,6 +389,9 @@ end
 --! @brief 获取录像数量
 function ReplayManager:GetSlotCount()
     return self._slotmax
+end
+function ReplayManager:GetCurrentSlot()
+    return #self._slots
 end
 
 --! @brief 获取录像信息

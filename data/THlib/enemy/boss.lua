@@ -254,7 +254,7 @@ function M.card:new(name,timer,armor,invult,hp,is_survival,class)
     ret.render = voidfunc; ret.kill = voidfunc; ret.del = voidfunc
     ret.survival = is_survival
     ret = setmetatable(ret, M.card.mt)
-    --table.insert(_sc_table,ret)
+    table.insert(_sc_table,ret)
     if class then
         if class.cards == nil then class.cards = {} end
         table.insert(class.cards, ret)

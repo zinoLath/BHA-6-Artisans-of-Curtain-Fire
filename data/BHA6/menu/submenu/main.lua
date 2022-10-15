@@ -92,19 +92,16 @@ M.options = {
     {M.option,"Start Game", { function(self)
         CallClass(self.manager,"switch_menu","start")
     end }},
-    {M.option,"Attack Practice", { function()
-        Print("AttackP")
+    {M.option,"Attack Practice", { function(self)
+        CallClass(self.manager,"switch_menu","spell_prac")
     end }},
-    {M.option,"Replays", { function()
-        Print("Replays")
+    {M.option,"Replays", { function(self)
+        CallClass(self.manager,"switch_menu","replay")
     end }},
     {M.option,"Options", { function(self)
         CallClass(self.manager,"switch_menu","options")
     end }},
-    {M.option,"Extra", { function()
-        Print("Extra")
-    end }},
-    {M.option,"Exit", { function()
+    {M.option,"Exit", { function(self)
         Print("Exit")
     end }},
 }

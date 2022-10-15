@@ -1,6 +1,9 @@
 local path = GetCurrentScriptDirectory()
 local MenuSys = MenuSys
 local M = {}
+local deathmusic = 'deathmusic'--疮痍曲
+
+LoadMusic(deathmusic, 'THlib/music/player_score.ogg', 34.834, 27.54)
 M.manager = zclass(MenuSys.manager)
 pause_menu = M.manager
 M.manager.name = "PauseManager"
@@ -20,6 +23,12 @@ function M.manager:init(opt_list)
         { "Return to Title", "quit" },
         { "Restart", "restart" }
     }
+    self.pausable = false
+    for k,v in ipairs(opt_list) do
+        if v[2] == "resume" then
+            self.pausable = true
+        end
+    end
     lstg.is_paused = true
     self.color = Color(0)
     MenuSys.manager.init(self,opt_list)
@@ -90,21 +99,28 @@ function M.manager:executeEvent(event)
         CallClass(self,"exit")
     end
     if event == "quit" then
+        StopMusic(deathmusic)
         Transition(function()
             stage.group.ReturnToTitle(false, 0)
         end)
     end
     if event == "quit_replay" then
+        StopMusic(deathmusic)
+        if not ext.replay.IsReplay() then
+            ext.replay.SaveReplay({"Stage 1@Normal"}, nil, "sanae", 1)
+        end
         Transition(function()
             stage.group.ReturnToTitle(true, 0)
         end)
     end
     if event == "restart" then
+        StopMusic(deathmusic)
         Transition(function()
             stage.Restart()
         end)
     end
     if event == "continue" then
+        StopMusic(deathmusic)
         local temp = lstg.var.score or 0
         lstg.var.score = 0
         item.PlayerReinit()
@@ -113,6 +129,7 @@ function M.manager:executeEvent(event)
             lstg.tmpvar.hiscore = temp
         end
         stage.stages[stage.current_stage.group.title].save_replay = nil
+        CallClass(self,"exit")
     end
 end
 

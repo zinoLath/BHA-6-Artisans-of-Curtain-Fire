@@ -1,5 +1,5 @@
 local center = Vector(0,100)
-local sc = boss.card:new("", 60, 2, 2, 600, false)
+local sc = boss.card:new("", 60, 6, 2, 600, false)
 local marisa_familiar = Class()
 function marisa_familiar:init(x,y,boss)
     --enemybase.init(self,100,true)
@@ -121,4 +121,5 @@ function sc:init()
     end)
 end
 
+sc.boss_info = marisa_boss_data
 return sc

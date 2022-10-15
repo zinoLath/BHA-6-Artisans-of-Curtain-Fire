@@ -49,7 +49,7 @@ function warning_curvy:init(x,y,img,width,node_count,_color)
     self.w = width or 2
     self.len = node_count or 64
     self.data = BentLaserData()
-    self.layer = LAYER_ENEMY_BULLET-10
+    self.layer = LAYER_ENEMY_BULLET+10
     self.group = GROUP_INDES
     self._blend = "mul+alpha"
     self._color = _color or color.Red

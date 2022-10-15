@@ -63,7 +63,7 @@ end
 function item.PlayerInit()
     lstg.var.power = 100
     lstg.var.collect_line = 130
-    lstg.var.lifeleft = 2
+    lstg.var.lifeleft = lstg.var.lifeleft or 1
     lstg.var.bomb = 3
     lstg.var.bonusflag = 0
     lstg.var.chip = 0

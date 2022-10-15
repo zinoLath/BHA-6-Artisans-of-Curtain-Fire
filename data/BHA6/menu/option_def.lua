@@ -3,7 +3,7 @@ local path = GetCurrentScriptDirectory()
 
 function option_base:ctor(data,manager)
     self._a = 0
-    self.onEnter = data[1]
+    self.onEnter = data.onEnter or data[1]
     self.font = option_font
     self.unselect_color = self._color
     self.out_color = Color(255,0,0,0)
@@ -192,8 +192,6 @@ function option_slider:ctor(data,manager)
         end
     end)
 end
-setting.keysys.menu_ctrl = setting.keysys.menu_ctrl or KEY.CTRL
-setting.keysys.menu_shift = setting.keysys.menu_shift or KEY.SHIFT
 function option_slider:hori_scroll(id)
     local isctrl = SysKeyIsDown("menu_ctrl")
     local isshift = SysKeyIsDown("menu_shift")

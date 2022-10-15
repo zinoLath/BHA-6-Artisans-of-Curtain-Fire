@@ -79,21 +79,29 @@ function stage.group.frame(self)
     if self.timer == 0 then
         New(ui,self)
     end
-    --[[
+    --
     if lstg.var.lifeleft <= -1 then
         if ext.replay.IsReplay() then
-            ext.pop_pause_menu = true
             ext.rep_over = true
-            lstg.tmpvar.pause_menu_text = { 'Replay Again', 'Return to Title', nil }
+            if IsValid(lstg.tmpvar.pausemenu) then Del(lstg.tmpvar.pausemenu) end
+            lstg.tmpvar.pausemenu = New(pause_menu,{
+                { "Replay Again", "restart" },
+                { "Return to Title", "quit" },
+            })
         else
             PlayMusic(deathmusic, 0.8)
             ext.pop_pause_menu = true
             lstg.tmpvar.death = true
-            lstg.tmpvar.pause_menu_text = { 'Continue', 'Quit and Save Replay', 'Restart' }
+            if IsValid(lstg.tmpvar.pausemenu) then Del(lstg.tmpvar.pausemenu) end
+            lstg.tmpvar.pausemenu = New(pause_menu,{
+                { "Continue", "continue" },
+                { "Return to Title", "quit_replay" },
+                { "Restart", "restart" },
+            })
         end
-        lstg.var.lifeleft = 0
+        lstg.var.lifeleft = -0.9
     end
-    --
+    --[[
     if ext.GetPauseMenuOrder() == 'Return to Title' then
         lstg.var.timeslow = nil
         stage.group.ReturnToTitle(false, 0)

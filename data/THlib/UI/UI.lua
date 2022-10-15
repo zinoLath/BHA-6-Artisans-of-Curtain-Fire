@@ -21,7 +21,7 @@ for k,v in ipairs(hinters) do
     Print(string.format("name: %s ;width: %d",v,w))
     SetImageCenter(v,0,h/2)
 end
-LoadFX("blur",path.."blur25.hlsl")
+LoadFX("blur","shader/blur25.hlsl")
 num_font = BMF:loadFont("unispace_bold_lowout",font_path)
 local x = 1400
 ui.positions = {
@@ -68,7 +68,7 @@ function ui:DrawStats()
     PopRenderTarget("UI_DROP_SHADOW")
     local offset = Vector(0.5,1) * -0.005
     PostEffect("blur","UI_DROP_SHADOW",2,"",{ { 7, offset.x, offset.y, 1 }})
-    PostEffect("EMPTY_SHADER","UI_DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
+    --PostEffect("EMPTY_SHADER","UI_DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
     for k,v in ipairs(self.divs) do
         Render("ui.div",v.x,v.y)
     end

@@ -1,5 +1,5 @@
 local center = Vector(0,100)
-local sc = boss.card:new("6th Degree of Separation ~ Love Dive", 60, 2, 2, 600, false)
+local sc = boss.card:new("6th Degree of Separation ~ Love Dive", 60, 6, 2, 600, false)
 function sc:before()
     New(boss_particle_trail,self)
 end
@@ -156,4 +156,5 @@ end
         end)
 --]]
 
+sc.boss_info = marisa_boss_data
 return sc

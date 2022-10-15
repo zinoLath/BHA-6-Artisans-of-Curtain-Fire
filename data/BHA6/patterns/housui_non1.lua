@@ -126,7 +126,7 @@ function housui_fire:exit()
         end
     end)
 end
-local sc = boss.card:new("", 60, 2, 2, 600, false)
+local sc = boss.card:new("", 60, 7, 2, 600, false)
 function sc:before()
     New(boss_particle_trail,self)
     task.New(self.particle_trail,function()
@@ -179,5 +179,5 @@ function sc:init()
         end)
     end)
 end
-
+sc.boss_info = housui_boss_data
 return sc

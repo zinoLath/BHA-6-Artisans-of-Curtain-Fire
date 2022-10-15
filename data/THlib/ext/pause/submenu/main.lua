@@ -56,7 +56,7 @@ end
 
 M.key_events = deepcopy(M.key_events)
 function M.key_events:menu()
-    if self.timer > 1 then
+    if self.manager.pausable and self.timer > 1 then
         CallClass(self.manager,"go_back")
     end
 end

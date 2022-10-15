@@ -54,11 +54,11 @@ function M.option:render()
     local font = self.font or self.class.font
     local a1 = 1-self.__vsubselect
     local a2 = self.__vsubselect
-    font:renderOutline(self.tid,self.x,self.y,self.scale,"right","vcenter",
+    font:renderOutline(self.tid,self.x,self.y,self.scale,"right","bottom",
             self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",self._a/255)
-    font:renderOutline(self.__text[1],self.x,self.y,self.scale,"left","vcenter",
+    font:renderOutline(self.__text[1],self.x,self.y,self.scale,"left","bottom",
             self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",self._a*a1/255)
-    font:renderOutline(self.__text[2],self.x,self.y,self.scale,"left","vcenter",
+    font:renderOutline(self.__text[2],self.x,self.y,self.scale,"left","bottom",
             self._color+color.Black,self.offset_func,self.out_size or 4,self.out_color or color.Black,"",self._a*a2/255)
 end
 function M.option:_in()
@@ -153,20 +153,23 @@ M.option2._in = M.option._in
 M.option2._out = M.option._out
 
 M.options = {
-    {M.option,"Shot Type: ", {"Rolling Thunder", "Spread Wind"
+    {option_multihori,"Shot Type: ", { { "Rolling Thunder", "Spread Wind" }
     ,function(self)
         Print("AttackP")
     end }},
-    {M.option,"Special Type: ", {"Bomb", "Hyper"
+    {option_multihori,"Special Type: ", { { "Bomb", "Hyper" }
     , function()
         Print("AttackP")
     end }},
-    {M.option,"Sub Type: ", {"Burst Bonus", "Communication Collection"
+    {option_multihori,"Sub Type: ", { { "Burst Bonus", "Communication Collection" }
     , function()
         Print("Replays")
     end }},
-    {M.option2,"Go!!!!!", {function()
-        stage.group.Start(stage.groups["Normal"])
+    {option_base,"Go!!!!!", {onEnter = function()
+        lstg.var.pat_id = nil
+        Transition(function()
+            stage.group.Start(stage.groups["Normal"])
+        end)
         end }},
 }
 
@@ -202,7 +205,7 @@ end
 function M.select_indicator:render()
     SetViewMode("ui")
     SetImageState("select_indicator","",Color(200,0,0,0))
-    Render("select_indicator",self.x,self.y+25,self.rot,self.hscale*1000,self.vscale*4)
+    Render("select_indicator",self.x,self.y,self.rot,self.hscale*1000,self.vscale*4)
     --RenderRect("select_indicator",0,1000,self.y-32,self.y+32)
     SetViewMode("world")
 end

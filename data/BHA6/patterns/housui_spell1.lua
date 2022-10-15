@@ -102,4 +102,5 @@ function sc:init()
     end)
 end
 
+sc.boss_info = housui_boss_data
 return sc

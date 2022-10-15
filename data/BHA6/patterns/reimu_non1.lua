@@ -1,5 +1,5 @@
 local center = Vector(0,100)
-local sc = boss.card:new("", 60, 2, 2, 600, false)
+local sc = boss.card:new("", 60, 5, 2, 300, false)
 function sc:before()
     New(boss_particle_trail,self)
 end
@@ -71,4 +71,5 @@ function sc:init()
     end)
 end
 
+sc.boss_info = reimu_boss_data
 return sc

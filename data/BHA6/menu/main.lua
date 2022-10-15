@@ -92,11 +92,15 @@ local optdef = Include(path.."option_def.lua")
 local submenu_path = path.."submenu/"
 local main = Include(submenu_path.."main.lua")
 local start = Include(submenu_path.."start.lua")
+local spell_prac = Include(submenu_path.."spell_prac.lua")
+local replay = Include(submenu_path.."replay.lua")
 local options = Include(submenu_path.."options.lua")
 M.manager.menus = {
     {main, "main"},
     {start, "start"},
-    {options, "options"}
+    {spell_prac, "spell_prac"},
+    {options, "options"},
+    {replay, "replay"}
 }
 
 CreateRenderTarget("MENU_DROP_SHADOW")
@@ -131,7 +135,7 @@ function menu_dropshadow:render()
     PopRenderTarget("MENU_DROP_SHADOW")
     local offset = self.offset * -0.0001
     PostEffect("blur","MENU_DROP_SHADOW",2,"",{ { 5, offset.x, offset.y, 0.5 }})
-    PostEffect("EMPTY_SHADER","MENU_DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
+    --PostEffect("EMPTY_SHADER","MENU_DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
 end
 
 local fftimg = CopyImage("fftimg","white")

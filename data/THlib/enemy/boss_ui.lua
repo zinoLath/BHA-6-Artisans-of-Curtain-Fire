@@ -158,7 +158,7 @@ function straight_hpbar:init(anchor,l,r,b,t,color)
     self.__l = l or lstg.world.scrl + 130
     self.__r = r or lstg.world.scrr - 20
     self.__t = t or lstg.world.scrt - 8
-    self.__b = b or self.__t - 4
+    self.__b = b or self.__t - 12
     self.yratio = 0
     self.outline = 0
     self.fill = 1
@@ -171,7 +171,7 @@ function straight_hpbar:init(anchor,l,r,b,t,color)
     self.__y = 1
 
     self.outline = 0
-    self.colorout = Color(128,0,0,0)
+    self.colorout = Color(200,0,0,0)
 end
 function straight_hpbar:frame()
     task.Do(self)
@@ -201,7 +201,7 @@ function straight_hpbar:render()
     local l,r,b,t = self.__l, self.__r, self.__b, self.__t
     local _r = math.lerp(l,r,self.fill)
     local _t = math.lerp(b,t,self.yratio)
-    RenderRect(self.imgout,l+3,_r+3,b-1,_t-1)
+    RenderRect(self.imgout,l+3,_r+3,b-3,_t-3)
     RenderRect(self.imgfill,l,_r,b,_t)
     SetViewMode('world')
 end
