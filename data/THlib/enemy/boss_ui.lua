@@ -10,19 +10,18 @@ local history_font_default = BMF:loadFont("square",font_path)
 local timer_font = BMF:loadFont("chaney",font_path)
 timer_font:setMonospace(30,{",",".",":"})
 --local timer_state = BMF:createState("timer_state")
+local namescale = 0.4
 local namestate = {
     font = cutin_font_default,
-    scale = 0.3,
+    scale = namescale,
     border_color = Color(255,0,0,0),
-    border_size = 3,
     color_top = Color(255,255,255,255),
     color_bot = Color(255,200,200,200)
 }
 local historystate = {
     font = history_font_default,
-    scale = 0.15,
+    scale = namescale*0.6,
     border_color = Color(255,0,0,0),
-    border_size = 3,
     color_top = Color(255,255,255,255),
     color_bot = Color(255,200,200,200)
 }
@@ -68,15 +67,17 @@ function cutin_obj:render()
     --self.namepool.stateList[1].color_top = Color(255 * self.alpha * self.alpha2,255,255,255)
     --self.namepool.stateList[1].color_bot = Color(255 * self.alpha * self.alpha2,200,200,200)
     --self.namepool.stateList[1].border_color = Color(255 * self.alpha * self.alpha2,0,0,0)
-    self.namepool.borderList[1].alpha = alpha
+    --self.namepool.borderList[1].alpha = alpha
     --self.historypool.stateList[1].color_top = Color(255 * self.alpha * self.alpha2,255,255,255)
     --self.historypool.stateList[1].color_bot = Color(255 * self.alpha * self.alpha2,200,200,200)
     --self.historypool.stateList[1].border_color = Color(255 * self.alpha * self.alpha2,0,0,0)
-    self.historypool.borderList[1].alpha = alpha
+    --self.historypool.borderList[1].alpha = alpha
+    local imgscale = 2.25
     SetImageState("spellnamebg", "", Color(255 * self.alpha * self.alpha2,255,255,255))
     Render("spellnamebg",self.x,self.y-10,0,self.hscale, self.vscale)
-    BMF:renderPool(self.namepool,self.x-self.namepoolw,self.y+4,self.hscale,nil,self.timer,2.25)
-    BMF:renderPool(self.historypool,self.x-self.historypoolw,self.y-15,self.hscale,nil,self.timer,2.25)
+    local offx = 40
+    BMF:renderPool(self.namepool,self.x-self.namepoolw+offx,self.y+4,self.hscale,nil,self.timer,imgscale,alpha)
+    BMF:renderPool(self.historypool,self.x-self.historypoolw+offx,self.y-15,self.hscale,nil,self.timer,imgscale,alpha)
 end
 function cutin_obj:kill()
     PreserveObject(self)

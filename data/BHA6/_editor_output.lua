@@ -47,6 +47,12 @@ function NormalStage(self)
 
 end
 function SpellPractice(self)
+	if lstg.var.replaydeath then
+		lstg.var.lifeleft = 0
+	else
+		lstg.var.lifeleft = 999
+	end
+	player.nextspell = _infinite
 	New(boss_timer)
 	New(straight_hpbar)
 	local spell_prac = _sc_table[lstg.var.pat_id]
@@ -67,6 +73,9 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
             -- New(MyScene)
 			-- New(G2048)
         end
+		if lstg.var.judging then
+			lstg.lifeleft = 999
+		end
 		if lstg.var.pat_id then
 			SpellPractice(self)
 		else

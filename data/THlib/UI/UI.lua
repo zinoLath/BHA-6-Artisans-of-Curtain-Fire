@@ -107,7 +107,7 @@ function ui:DrawLife(pos,id)
     local pool_vt = ui.pool_vert
     local bgpool_vt = ui.bgpool_vert
     local draw_vt = ui.draw_vert
-    local ratio = (lstg.var.lifeleft+1)/6
+    local ratio = math.clamp((lstg.var.lifeleft)/6,0,1)
     local rw,rh = scroll_w*ratio,50
     local tw,th = scroll_w*ratio,scroll_h
     local _u,_v = -self.timer*0.4, 0
@@ -143,7 +143,7 @@ function ui:DrawSpell(pos,id)
     local pool_vt = ui.pool_vert
     local bgpool_vt = ui.bgpool_vert
     local draw_vt = ui.draw_vert
-    local ratio = (lstg.var.bomb+1)/6
+    local ratio = math.clamp((lstg.var.bomb+1)/6,0,1)
     local rw,rh = scroll_w*ratio,50
     local tw,th = scroll_w*ratio,scroll_h
     local _u,_v = -self.timer*0.4, 0

@@ -169,12 +169,21 @@ function M:cardStartEffect(card)
     if not isnon then
         self.snameobj = New(cutin_obj,card,self)
         self.cutin_effect = New(cutin_border,card,self)
+        lstg.tmpvar.bg.spell_color = card.boss_info.spell_bg_color
+        lstg.tmpvar.bg.is_spell = true
+        task.NewHashed(lstg.tmpvar.bg,"spellInOut",function()
+            SetFieldInTime(lstg.tmpvar.bg,30,math.tween.cubicOut,{"spell_t",1})
+        end)
     end
 end
 function M:cardKillEffect(card)
     --the whole explosion thing
     local isnon = card.name == ""
     if not isnon then
+        task.NewHashed(lstg.tmpvar.bg,"spellInOut",function()
+            SetFieldInTime(lstg.tmpvar.bg,30,math.tween.cubicOut,{"spell_t",0})
+            lstg.tmpvar.bg.is_spell = false
+        end)
         Kill(self.snameobj)
     end
 end

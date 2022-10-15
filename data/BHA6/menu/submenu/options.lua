@@ -47,6 +47,9 @@ for k,v in ipairs(res_list) do
     res_names[k] = string.format("%dx%d",v[1],v[2])
 end
 preconfig = {}
+lstg.var.autoshoot = setting.autoshoot
+lstg.var.judge = setting.judging
+lstg.var.replaydeath = setting.replaydeath
 M.options = {
     {option_slider, "Master Volume: ", {onHori = function(self)
         setting.mastervolume = self.fill
@@ -141,6 +144,7 @@ M.options = {
            else
                setting.autoshoot = false
            end
+           lstg.var.autoshoot = setting.autoshoot
        end, init_value = setting.autoshoot and 1 or 2
      }
     },
@@ -161,6 +165,7 @@ M.options = {
            else
                setting.replaydeath = false
            end
+           lstg.var.replaydeath = setting.replaydeath
        end, init_value = setting.replaydeath and 1 or 2
      }
     },
@@ -173,6 +178,7 @@ M.options = {
            else
                setting.judging = false
            end
+           lstg.var.judging = setting.judging
        end, init_value = setting.judging and 1 or 2
      }
     },

@@ -26,6 +26,7 @@ M.charlist = {
 }
 local ctdefault = Color(255,255,255,255)
 local cbdefault = Color(255,255,255,255)
+local outdefault = Color(255,0,0,0)
 CreateRenderTarget("BMF_FONT_BUFFER")
 CreateRenderTarget("BMF_FONT_BORDER")
 LoadFX("BMF_BORDER_SHADER", GCSD .. "shader.fx")
@@ -280,7 +281,7 @@ M.tag_funcs.border = {
     init = function(tag,state)
         state.render_funcs = state.render_funcs or {}
         if tag._attr.color then
-            state.border_color = StringToColor(tag._attr.color)
+            state.out_color = StringToColor(tag._attr.color)
         end
     end
 }
@@ -379,32 +380,6 @@ function M:pool(text,init_state,width)
     local si = 1
     local max_border_size = 0
     local first_border_size = 0
-    for k,v in ipairs(glyphList) do
-        v.id = k
-        stateList[v.state].border_size = stateList[v.state].border_size or 0
-        max_border_size = math.max(max_border_size,stateList[v.state].border_size)
-        if k == 1 then
-            first_border_size = stateList[v.state].border_size
-        end
-        stateList[v.state].border_color = stateList[v.state].border_color or Color(255,0,0,0)
-        if v.state ~= si then
-            for _k,_v in ipairs(borderList) do
-                if _v.color == stateList[v.state].border_color then
-                    i = _k
-                    hasHash = true
-                end
-            end
-            if not hasHash then
-                i = #borderList + 1
-            end
-        end
-        si = v.state
-        local borderHash = stateList[si].border_color.r * 255 * 255 + stateList[si].border_color.g * 255 + stateList[si].border_color.b
-        if not borderList[i] then
-            borderList[i] = {borderHash = borderHash, color = stateList[si].border_color, glyphList = {}, size = stateList[si].border_size, alpha = stateList[si].alpha or 1}
-        end
-        table.insert(borderList[i].glyphList,v)
-    end
     local ret = {glyphList = glyphList, stateList = stateList, borderList = borderList, max_border = max_border_size, first_border = first_border_size}
     return ret
 end
@@ -432,7 +407,7 @@ local border_command = {
     { 0, 0, 0, 0 },
     { 0, 0, 0, 0}
 }
-function M:renderPool(pool,x,y,scale,count,timer,imgscale)
+function M:renderPool(pool,x,y,scale,count,timer,imgscale,alpha)
     table.clear(render_command)
     scale = scale or 1
     count = count or 9999999999
@@ -440,41 +415,31 @@ function M:renderPool(pool,x,y,scale,count,timer,imgscale)
     imgscale = imgscale or 1
     render_command._xorg = x
     render_command._yorg = y
-    for _k,_v in ipairs(pool.borderList) do
-        --PushRenderTarget("BMF_FONT_BUFFER")
-        --RenderClear(Color(0x00000000))
-        for k,v in ipairs(_v.glyphList) do
-            if v.id > count then
-                break
-            end
-            local state = pool.stateList[v.state]
-            local char = state.font.chars[M.charlist[v._char]]
-            render_command.x = x+v.x*scale
-            render_command.y = y+v.y*scale
-            render_command.img = char.sprite
-            render_command.scale = scale*state.scale*imgscale
-            render_command.topcolor = state.color_top or ctdefault
-            render_command.botcolor = state.color_bot or cbdefault
-            render_command.rot = 0
-            if state.render_funcs then
-                for _,_funcs in pairs(state.render_funcs) do
-                    _funcs(render_command,state,char,timer,v)
-                end
-            end
-            SetImageState(render_command.img, "", render_command.topcolor,render_command.topcolor,render_command.botcolor,render_command.botcolor)
-            Render(render_command.img,render_command.x,render_command.y,render_command.rot,render_command.scale,render_command.scale)
+    alpha = alpha or 1
+    local alphmult = Color(255*alpha,255,255,255)
+    for k,v in ipairs(pool.glyphList) do
+        if v.id > count then
+            break
         end
-        --PopRenderTarget("BMF_FONT_BUFFER")
-        local color = _v.color
-        local size = _v.size
-        local alpha = _v.alpha or 1
-        border_command[1][1] = color.r * bytetofloat
-        border_command[1][2] = color.g * bytetofloat
-        border_command[1][3] = color.b * bytetofloat
-        border_command[1][4] = color.a * bytetofloat
-        border_command[2][1] = size
-        border_command[2][2] = alpha
-        --lstg.PostEffect("BMF_BORDER_SHADER", "BMF_FONT_BUFFER", 6, "mul+alpha", border_command)
+        local state = pool.stateList[v.state]
+        local char = state.font.chars[M.charlist[v._char]]
+        render_command.x = x+v.x*scale
+        render_command.y = y+v.y*scale
+        render_command.img = char.sprite
+        render_command.scale = scale*state.scale*imgscale
+        render_command.topcolor = state.color_top or ctdefault
+        render_command.botcolor = state.color_bot or cbdefault
+        render_command.out_color = state.out_color or outdefault
+        render_command.rot = 0
+        if state.render_funcs then
+            for _,_funcs in pairs(state.render_funcs) do
+                _funcs(render_command,state,char,timer,v)
+            end
+        end
+        local topc, botc = render_command.topcolor*alphmult,render_command.botcolor*alphmult
+        SetImageState(render_command.img, "grad+alpha", topc,topc,botc,botc)
+        SetImageSubColor(render_command.img, render_command.out_color*alphmult)
+        Render(render_command.img,render_command.x,render_command.y,render_command.rot,render_command.scale,render_command.scale)
     end
 end
 function M.font_functions:clone()

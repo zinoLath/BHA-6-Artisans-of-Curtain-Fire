@@ -17,6 +17,9 @@ function mistylake_bg:init()
     lstg.view3d.at = { 0, 0, -1 }
     self.scroll_speed = 10
     self.scroll = 0
+    self.spell_color = Color(128,64,0,0,0)
+    self.spell_t = 0
+    self.is_spell = false
     local shadow = 240
     local water_color = Color(255,78, 163, 194)
     local water_color_shadow = water_color * Color(255,shadow,shadow,shadow)
@@ -146,6 +149,11 @@ function mistylake_bg:render()
     local yy2 = -9.5
     Render4V("worter",_x1,-_y1*ymult,_z2*zmult,_x2,-_y1*ymult,_z2*zmult,_x2,yy2,_z2,_x1,yy2,_z2)
     SetViewMode("world")
+    local __l,__r,__b,__t = -1000,1000,-1000,1000
     SetImageState("bg_black","",InterpolateColor(Color(0),Color(150,0,0,0),1-((setting.bgbright or 0)/100)))
-    RenderRect("bg_black",lstg.world.l,lstg.world.r,lstg.world.b,lstg.world.t)
+    RenderRect("bg_black",__l,__r,__b,__t)
+    if self.is_spell then
+        SetImageState("bg_black","",(self.spell_color) * Color(255 * self.spell_t, 255,255,255))
+        RenderRect("bg_black",__l,__r,__b,__t)
+    end
 end

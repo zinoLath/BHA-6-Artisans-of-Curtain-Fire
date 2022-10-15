@@ -171,7 +171,11 @@ function player_class:do_input()
         self.class.special(self)
     end
     self.shooting = 0
-    if KeyIsDown('shoot') then
+    local do_shoot = KeyIsDown('shoot')
+    if lstg.var.autoshoot then
+        do_shoot = not do_shoot
+    end
+    if do_shoot then
         self.shooting = 1
         self.class.shoot(self)
     end

@@ -1,5 +1,5 @@
 local center = Vector(0,100)
-local sc = boss.card:new("", 60, 5, 2, 300, false)
+local sc = boss.card:new("", 60, 5, 2, 500, false)
 function sc:before()
     New(boss_particle_trail,self)
 end

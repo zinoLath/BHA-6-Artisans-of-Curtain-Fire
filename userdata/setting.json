@@ -1,36 +1,25 @@
 {
-	"timezone": 8,
 	"resid": 4,
 	"mastervolume": 70,
-	"resx": 1600,
-	"resy": 900,
-	"replaydeath": true,
+	"last_mod": "Bullet Hell Artistry #6 - Artisans of Curtain Fire",
+	"bgbright": 100,
+	"autoshoot": true,
 	"renderskip": false,
 	"lowperf": true,
 	"keys": {
-		"shoot": 90,
-		"spell": 88,
-		"special": 67,
 		"up": 38,
 		"down": 40,
 		"left": 37,
 		"right": 39,
-		"slow": 16
+		"slow": 16,
+		"shoot": 90,
+		"spell": 88,
+		"special": 67
 	},
-	"keys2": {
-		"shoot": 83,
-		"spell": 68,
-		"special": 70,
-		"up": 101,
-		"down": 98,
-		"left": 97,
-		"right": 99,
-		"slow": 65
-	},
+	"windowed": true,
+	"resx": 1600,
+	"resy": 900,
 	"keysys": {
-		"menu_shift": 16,
-		"snapshot": 36,
-		"retry": 82,
 		"repfast": 17,
 		"repslow": 16,
 		"menu": 27,
@@ -41,17 +30,28 @@
 		"menu_confirm": 90,
 		"menu_cancel": 88,
 		"menu_special": 67,
-		"menu_ctrl": 17
+		"menu_ctrl": 17,
+		"menu_shift": 16,
+		"snapshot": 36,
+		"retry": 82
 	},
-	"bgbright": 100,
+	"sevolume": 100,
 	"bgmvolume": 100,
 	"judging": true,
-	"last_mod": "Bullet Hell Artistry #6 - Artisans of Curtain Fire",
-	"sevolume": 100,
-	"windowed": true,
-	"vsync": true,
+	"replaydeath": false,
+	"keys2": {
+		"up": 101,
+		"down": 98,
+		"left": 97,
+		"right": 99,
+		"slow": 65,
+		"shoot": 83,
+		"spell": 68,
+		"special": 70
+	},
 	"username": "User",
-	"autoshoot": true,
+	"bulshadows": 0,
 	"locale": "en_us",
-	"bulshadows": 0
+	"vsync": true,
+	"timezone": 8
 }

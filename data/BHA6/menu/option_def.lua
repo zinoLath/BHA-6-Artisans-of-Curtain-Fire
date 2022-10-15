@@ -121,7 +121,7 @@ function option_multihori:ctor(data,manager)
 end
 function option_multihori:hori_scroll(id)
     self.__subselect = self.__subselect+id
-    CallClass(self, "onHori")
+    CallClass(self, "onHori",id)
 end
 function option_multihori:render()
     SetViewMode("ui")

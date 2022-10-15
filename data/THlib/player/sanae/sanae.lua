@@ -63,11 +63,13 @@ function M.shot:kill()
 end
 local obj_tsk = function(obj)
     obj.bound = false
+    local maxalpha = 170
     for t=0, 1, 1/5 do
         --local t = i/10
-        obj._a = 128 * t
+        obj._a = maxalpha * t
         task.Wait(1)
     end
+    obj._a = maxalpha
     obj.bound = true
 end
 function M:shoot()

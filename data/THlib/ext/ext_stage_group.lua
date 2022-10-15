@@ -99,7 +99,7 @@ function stage.group.frame(self)
                 { "Restart", "restart" },
             })
         end
-        lstg.var.lifeleft = -0.9
+        lstg.var.lifeleft = 0
     end
     --[[
     if ext.GetPauseMenuOrder() == 'Return to Title' then
