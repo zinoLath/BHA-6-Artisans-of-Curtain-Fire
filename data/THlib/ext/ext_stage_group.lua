@@ -93,11 +93,20 @@ function stage.group.frame(self)
             ext.pop_pause_menu = true
             lstg.tmpvar.death = true
             if IsValid(lstg.tmpvar.pausemenu) then Del(lstg.tmpvar.pausemenu) end
-            lstg.tmpvar.pausemenu = New(pause_menu,{
-                { "Continue", "continue" },
-                { "Return to Title", "quit_replay" },
-                { "Restart", "restart" },
-            })
+            if lstg.var.practice then
+                lstg.tmpvar.pausemenu = New(pause_menu,{
+                    { "Restart", "restart" },
+                    { "Return to Title", "quit" },
+                    { "Save Replay and Quit", "quit_replay" },
+                })
+            else
+                lstg.tmpvar.pausemenu = New(pause_menu,{
+                    { "Continue", "continue" },
+                    { "Return to Title", "quit" },
+                    { "Save Replay and Quit", "quit_replay" },
+                    { "Restart", "restart" },
+                })
+            end
         end
         lstg.var.lifeleft = 0
     end

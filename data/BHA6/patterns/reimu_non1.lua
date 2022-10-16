@@ -7,12 +7,15 @@ function sc:init()
     task.New(self,function()
         MoveToV(self,center,60,math.tween.quadOut)
         local impact_wait = 5
-        local impact_times = 50
+        local impact_times = 40
+        local vol1 = 0.4
+        local vol2 = 0.2
         local idk_timing = 5
         local var_spd = {"linear",3,0.25}
         while(true) do
             task.Wait(impact_wait)
             AdvancedFor(6,var_spd,function(spd)
+                PlaySound("tan00", vol1)
                 AdvancedFor(impact_times,{"linear",0,360,true},function(ang)
                     CreateShotR(self.x,self.y,spd,ang,"amulet",color.Red,spd*10)
                 end)
@@ -21,6 +24,7 @@ function sc:init()
             ReimuWarp(self,-100,150,3,60)
             task.Wait(impact_wait)
             AdvancedFor(6,var_spd,function(spd)
+                PlaySound("tan00", vol1)
                 AdvancedFor(impact_times,{"linear",0,360,true},function(ang)
                     CreateShotR(self.x,self.y,spd,ang,"amulet",color.Red,spd*10)
                 end)
@@ -30,6 +34,7 @@ function sc:init()
             ReimuWarp(self,100,150,-3,60)
             task.Wait(impact_wait)
             AdvancedFor(6,var_spd,function(spd)
+                PlaySound("tan00", vol1)
                 AdvancedFor(impact_times,{"linear",0,360,true},function(ang)
                     CreateShotR(self.x,self.y,spd,ang,"amulet",color.Red,spd*10)
                 end)
@@ -48,6 +53,7 @@ function sc:init()
             end)
             local wwait = 5
             AdvancedFor((180+60+150)/wwait,{"incremental",0,15},{"linear",2,5},function(ang,_spd)
+                PlaySound("tan02", vol2)
                 AdvancedFor(6,{"linear",0,360,true},function(_ang)
                     AdvancedFor(5,{"linear",0,5},{"linear",_spd*0.925,_spd*1.075},function(__ang,spd)
                         local a = ang+_ang+__ang+Angle(self,player)

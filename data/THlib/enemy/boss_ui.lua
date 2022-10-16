@@ -75,7 +75,10 @@ function cutin_obj:render()
     local imgscale = 2.25
     SetImageState("spellnamebg", "", Color(255 * self.alpha * self.alpha2,255,255,255))
     Render("spellnamebg",self.x,self.y-10,0,self.hscale, self.vscale)
-    local offx = 40
+    local offx = 0
+    if lstg.var.practice then
+        offx = 40
+    end
     BMF:renderPool(self.namepool,self.x-self.namepoolw+offx,self.y+4,self.hscale,nil,self.timer,imgscale,alpha)
     BMF:renderPool(self.historypool,self.x-self.historypoolw+offx,self.y-15,self.hscale,nil,self.timer,imgscale,alpha)
 end

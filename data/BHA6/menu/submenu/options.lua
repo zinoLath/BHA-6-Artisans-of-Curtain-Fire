@@ -55,17 +55,17 @@ M.options = {
         setting.mastervolume = self.fill
         SetBGMVolume(GetBGMVolume() * setting.mastervolume/100)
         SetSEVolume(GetSEVolume() * setting.mastervolume/100)
-    end, init_value = setting.mastervolume},
+    end, init_value = function() return setting.mastervolume end},
     },
     {option_slider, "BGM Volume: ", {onHori = function(self)
         setting.bgmvolume = self.fill
         SetBGMVolume(setting.bgmvolume/100)
-    end, init_value = setting.bgmvolume},
+    end, init_value = function() return setting.bgmvolume end},
     },
     {option_slider, "SE Volume: ", {onHori = function(self)
         setting.sevolume = self.fill
         SetSEVolume(setting.sevolume/100)
-    end, init_value = setting.sevolume},
+    end, init_value = function() return setting.sevolume end },
     },
     {option_multihori, "Resolution: ", {res_names,
                                         onHori = function(self)
@@ -80,7 +80,7 @@ M.options = {
          setting.resy = preconfig.resy
          setting.resid = preconfig.resid
          ChangeVideoMode(setting.resx, setting.resy, setting.windowed, setting.vsync)
-    end, init_value = setting.resid},
+    end, init_value = function() return setting.resid  end},
     },
     {option_multihori, "Vsync: ",
      { { "On", "Off" },
@@ -100,8 +100,29 @@ M.options = {
                setting.vsync = false
            end
            ChangeVideoMode(setting.resx, setting.resy, setting.windowed, setting.vsync)
-       end, init_value = setting.vsync and 1 or 2
+       end, init_value = function() return setting.vsync and 1 or 2  end
     }
+    },
+    {option_multihori, "Windowed: ",
+     { { "On", "Off" },
+       onHori = function(self)
+           local selected = LoopTable(self.__text,self.__subselect)
+           if selected == "On" then
+               setting.windowed = true
+           else
+               setting.windowed = false
+           end
+       end,
+       function(self)
+           local selected = LoopTable(self.__text,self.__subselect)
+           if selected == "On" then
+               setting.windowed = true
+           else
+               setting.windowed = false
+           end
+           ChangeVideoMode(setting.resx, setting.resy, setting.windowed, setting.vsync)
+       end, init_value = function() return setting.windowed and 1 or 2 end
+     }
     },
     {option_multihori, "Render Skip: ",
      { { "On", "Off" },
@@ -116,7 +137,7 @@ M.options = {
         onEnter = function(self)
             setting.renderskip = preconfig.renderskip
         end
-     , init_value = setting.renderskip and 1 or 2
+     , init_value = function() return setting.renderskip and 1 or 2 end
      }
     },
     {option_multihori, "Low Performance Mode: ",
@@ -132,7 +153,7 @@ M.options = {
        onEnter = function(self)
            setting.lowperf = preconfig.lowperf
        end
-     , init_value = setting.lowperf and 1 or 2
+     , init_value = function() return setting.lowperf and 1 or 2 end
      }
     },
     {option_multihori, "Auto Shoot: ",
@@ -145,7 +166,7 @@ M.options = {
                setting.autoshoot = false
            end
            lstg.var.autoshoot = setting.autoshoot
-       end, init_value = setting.autoshoot and 1 or 2
+       end, init_value = function() return setting.autoshoot and 1 or 2 end
      }
     },
     {option_slider, "Bullet Shadows: ", {onHori = function(self)
@@ -154,7 +175,7 @@ M.options = {
     },
     {option_slider, "Background Brightness: ", {onHori = function(self)
         setting.bgbright = self.fill
-    end, init_value = setting.bgbright},
+    end, init_value = function() return setting.bgbright end},
     },
     {option_multihori, "One Life in Practice: ",
      { { "On", "Off" },
@@ -166,7 +187,7 @@ M.options = {
                setting.replaydeath = false
            end
            lstg.var.replaydeath = setting.replaydeath
-       end, init_value = setting.replaydeath and 1 or 2
+       end, init_value = function() return setting.replaydeath and 1 or 2 end
      }
     },
     {option_multihori, "Judge Mode: ",
@@ -179,7 +200,7 @@ M.options = {
                setting.judging = false
            end
            lstg.var.judging = setting.judging
-       end, init_value = setting.judging and 1 or 2
+       end, init_value = function() return setting.judging and 1 or 2 end
      }
     },
     {option_base, "Save and Return", {function(self)

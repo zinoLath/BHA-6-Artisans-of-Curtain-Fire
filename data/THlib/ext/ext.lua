@@ -114,7 +114,8 @@ function GetInput()
     -- 不是录像时更新按键状态
     if not ext.replay.IsReplay() then
         for k, v in pairs(setting.keys) do
-            KeyState[k] = GetKeyState(v)
+            v = string.upper(v)
+            KeyState[k] = GetKeyState(KEY[v])
         end
     end
 
@@ -185,11 +186,11 @@ function DoFrameEx()
         --播放录像时
         ext.replayTicker = ext.replayTicker + 1
         ext.slowTicker = ext.slowTicker + 1
-        if GetKeyState(setting.keysys.repfast) then
+        if SysKeyIsDown(setting.keysys.repfast) then
             for _ = 1, 4 do
                 DoFrame(true, false)
             end
-        elseif GetKeyState(setting.keysys.repslow) then
+        elseif SysKeyIsDown(setting.keysys.repslow) then
             if ext.replayTicker % 4 == 0 then
                 DoFrame(true, false)
             end

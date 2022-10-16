@@ -29,12 +29,6 @@ function mistylake_bg:init()
         {water_color_shadow.r/255,water_color_shadow.g/255,water_color_shadow.b/255,water_color_shadow.a/255},
         {water_color_highlight.r/255,water_color_highlight.g/255,water_color_highlight.b/255,water_color_highlight.a/255},
     }
-    task.New(self,function()
-        while not KeyIsPressed("special") do
-            task.Wait(1)
-        end
-        CallClass(self,"viewSun")
-    end)
 end
 function mistylake_bg:frame()
     task.Do(self)

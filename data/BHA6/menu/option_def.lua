@@ -89,7 +89,11 @@ end
 option_multihori = Class(option_base)
 function option_multihori:ctor(data,manager)
     self._a = 0
-    self.__subselect = data.init_value or data[3] or 0
+    local init_value = data.init_value
+    if type(init_value) == "function" then
+        init_value = data.init_value(self,data,manager)
+    end
+    self.__subselect = init_value or data[3] or 0
     self.onHori = data.onHori
     self.onEnter = data.onEnter or data[2]
     self.__text = data[1]
@@ -166,7 +170,11 @@ function option_slider:ctor(data,manager)
     self.width = bar_info.width or 500
     self.height = bar_info.height or 32
     self.baryoff = (bar_info.baryoff or 0) * self.scale
-    self.fill = data.init_value or data[3]
+    local init_value = data.init_value
+    if type(init_value) == "function" then
+        init_value = data.init_value(self,data,manager)
+    end
+    self.fill = init_value or data[3] or 0
     self.onHori = data.onHori or data[4]
     self.setBar = data[5]
     CallClass(self,"setBar")

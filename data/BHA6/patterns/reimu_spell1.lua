@@ -1,5 +1,5 @@
 local center = Vector(0,0)
-local sc = boss.card:new("Trigger Happy - Tripwire Barrier", 60, 3, 2, 800, false)
+local sc = boss.card:new("Trigger Happy - Tripwire Barrier", 60, 6, 2, 1000, false)
 local reimu_square = Class()
 local sq_img = LoadImageFromFile("reimu_square",GetCurrentScriptDirectory().."reimu_square.png")
 function reimu_square:init(x,y,rot)
@@ -93,7 +93,8 @@ local function GenerateTask(obj,self,square)
                     local v_start = Vector.lerp(v1,v2,t)
                     local _x, _y = obj.x, obj.y
                     local _color = obj._color
-                    --CreateShotR(v_final.x,v_final.y,1,obj.rot,"amulet",color.Red,square.__w)
+                    PlaySound("kira01", 0.1)
+                    --CreateShotR(v_final.xz,v_final.y,1,obj.rot,"amulet",color.Red,square.__w)
                     task.New(self,function()
                         local delay = DelayLine(_x,_y,Angle(v_start.x,v_start.y,v_final.x,v_final.y),32,1000,
                                 _color * Color(80,255,255,255),15,45,15)
@@ -109,6 +110,7 @@ local function GenerateTask(obj,self,square)
                             end
                         end)
                         task.Wait(60)
+                        PlaySound("lazer00", 0.2)
                         local _obj = CreateStraightLaser(v_start.x,v_start.y,90*-k+square.rot,1000,4,1,20,0,_color)
                         _obj.colli = false
                         _obj.bound = false
@@ -148,6 +150,7 @@ end
 function sc:init()
     task.New(self,function()
         MoveToV(self,center,60,math.tween.quadOut)
+        PlaySound("ch00", 1)
         local square = New(reimu_square,self.x,self.y,0)
         square._a = 0
         square.omiga = 0.1
@@ -160,6 +163,7 @@ function sc:init()
         task.Wait(120)
         while true do
             AdvancedFor(3,function()
+                PlaySound("tan02", 0.2)
                 AdvancedFor(30,{"linear",0,360},function(ang)
                     local obj = CreateShotA(self.x,self.y,2,ang,"amulet",color.Red)
                     task.New(obj,GenerateTask(obj,self,square))
@@ -171,6 +175,7 @@ function sc:init()
             AdvancedFor(20, {"linear",3,1},function(spd)
                 local prev_ang = ang
                 AdvancedFor(3,function()
+                    PlaySound("tan02", 0.2)
                     AdvancedFor(4,{"linear",0,360},function(_a)
                         local obj = CreateShotA(self.x,self.y,spd,ang+_a,"amulet",Color(255,32,32,255))
                         task.New(obj,GenerateTask(obj,self,square))
@@ -183,6 +188,7 @@ function sc:init()
             end)
             task.Wait(60)
             local stream = Angle(self,player)
+            PlaySound("tan00", 0.2)
             AdvancedFor(4,{"linear",0,360},function(_a)
                 DelayLine(self.x,self.y,stream+_a,128,1000,Color(64,255,255,128))
                 AdvancedFor(7,{"linear",-15,15},{"zigzag",1,2,1,true},function(spread,spd)

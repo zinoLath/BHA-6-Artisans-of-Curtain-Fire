@@ -13,8 +13,9 @@ SysKeyStatePre = {}
 ---刷新输入
 function GetInput()
     for k, v in pairs(setting.keys) do
+        v = string.upper(v)
         KeyStatePre[k] = KeyState[k]
-        KeyState[k] = GetKeyState(v)
+        KeyState[k] = GetKeyState(KEY[v])
     end
 end
 function GetSysInput()
@@ -26,7 +27,8 @@ function GetSysInput()
         SysKeyStatePre[k] = SysKeyState[k]
     end
     for k, v in pairs(setting.keysys) do
-        SysKeyState[k] = GetKeyState(v)
+        v = string.upper(v)
+        SysKeyState[k] = GetKeyState(KEY[v])
     end
 end
 

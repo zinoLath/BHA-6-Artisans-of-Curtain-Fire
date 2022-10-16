@@ -60,6 +60,11 @@ function M.key_events:menu()
         CallClass(self.manager,"go_back")
     end
 end
+function M.key_events:retry()
+    if self.manager.retry and self.timer > 1 then
+        CallClass(self.manager,"executeEvent","restart")
+    end
+end
 function M:init(manager,tb)
     self.option_def = {}
     for k,v in ipairs(tb) do

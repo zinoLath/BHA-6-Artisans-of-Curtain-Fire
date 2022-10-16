@@ -184,7 +184,7 @@ function SetFPS(_fps)
 end
 
 function Render4Vec(img,v1,v2,v3,v4)
-    return Render4V(img,v1.x,v1.y,v1.z,v2.x,v2.y,v2.z,v3.x,v3.y,v3.z,v4.x,v4.y,v4.z)
+    return Render4V(img,v1.x,v1.y,v1.z or 0,v2.x,v2.y,v2.z or 0,v3.x,v3.y,v3.z or 0,v4.x,v4.y,v4.z or 0)
 end
 local buf1, buf2, buf3, buf4 = {}, {}, {}, {}
 function RenderTextureT(img,blend,

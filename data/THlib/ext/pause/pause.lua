@@ -24,9 +24,13 @@ function M.manager:init(opt_list)
         { "Restart", "restart" }
     }
     self.pausable = false
+    self.retry= false
     for k,v in ipairs(opt_list) do
         if v[2] == "resume" then
             self.pausable = true
+        end
+        if v[2] == "restart" then
+            self.retry = true
         end
     end
     lstg.is_paused = true
@@ -136,7 +140,7 @@ end
 Event:new("onStgFrame",function()
     if not stage.current_stage then return end
     if stage.current_stage.group and SysKeyIsPressed("menu") and not IsValid(lstg.tmpvar.pausemenu) then
-        lstg.tmpvar.pausemenu = New(M.manager,{
+        lstg.tmpvar.pausemenu = New(pause_menu,{
             { "Resume", "resume" },
             { "Return to Title", "quit" },
             { "Restart", "restart" }

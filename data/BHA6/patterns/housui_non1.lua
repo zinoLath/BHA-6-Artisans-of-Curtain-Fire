@@ -31,8 +31,9 @@ function housui_fire:frame()
     self.last_rot = self.rot
     self.rot = Angle(0,0,self.dx,self.dy)
     task.Do(self)
-    if self.timer > 2 then
-        local obj = New(bullet,"scale",self._color,self._subcolor,"grad+add",false)
+    if self.timer > 2 and self.timer % 2 == 0 then
+        local alpha = 200
+        local obj = New(bullet,"scale",self._color * Color(alpha,255,255,255),self._subcolor,"grad+add",false)
         obj.x, obj.y = self.x,self.y
         obj.vx,obj.vy = -self.dx*0.1,-self.dy*0.1
         obj.rot = self.rot
@@ -44,7 +45,7 @@ function housui_fire:frame()
             end
             task.Wait(30)
             for i=0,1,1/30 do
-                obj._a = math.lerp(255,0,i)
+                obj._a = math.lerp(alpha,0,i)
                 task.Wait(1)
             end
             RawDel(obj)
@@ -80,7 +81,7 @@ function housui_fire:exit()
     local __time = 60
     task.New(self,function()
         PlaySound("ch00", 1)
-        local delayobj = DelayLine(self.x,self.y,a,96,nil,Color(128,0,0,255),15,0,90)
+        local delayobj = DelayLine(self.x,self.y,a,96,nil,Color(64,0,0,255),15,0,90)
         for i=1, _infinite do
             local t = math.clamp(i,0,__time)/__time
             vs = math.lerp(svs,10,math.tween.cubicOut(math.clamp(i-__time/2,0,__time)/__time))
@@ -101,6 +102,7 @@ function housui_fire:exit()
                     AdvancedFor(15,{"linear",-180,180,false},function(_ang)
                         AdvancedFor(3,{"linear",-2,2},{"zigzag",0,0.25,1,true},function(__ang,_spd)
                             local ang = _ang+__ang+base_ang+180+ang
+                            PlaySound("don00",1)
                             local __obj = CreateShotA(self.x,self.y,0.4-_spd,ang,"amulet",color.Green)
                             task.New(__obj,function()
                                 for i=1, 30 do
@@ -144,6 +146,7 @@ function sc:init()
             while(true) do
                 for count=1, 4 do
                     for i=1, 4 do
+                        PlaySound("tan00",0.6)
                         task.New(self,function()
                             local r1, r2 = ran:Float(32,64),ran:Float(32,64)
                             local fire = New(housui_fire,self,r1, r2,ran:Float(0,360),ran:Float(0,360),color.Red)
@@ -160,6 +163,7 @@ function sc:init()
                 local baseang = 0
                 AdvancedFor(50,{"sinewave",baseang,baseang+90,0,50},{"sinewave",3,3.5,0,5},{"sinewave",-5,5,0,50},{"linear",10,1,true,math.tween.circOut}
                 ,function(angoff,base_spd,spread,wait)
+                            PlaySound("tan01",0.3)
                     AdvancedFor(10,{"linear",0,360},function(rad)
                         AdvancedFor(3,{"linear",0,-spread},{"linear",base_spd,base_spd*1.1},function(ang,spd)
                             CreateShotA(self.x,self.y,spd,ang+angoff+rad,"circle",color.Blue)

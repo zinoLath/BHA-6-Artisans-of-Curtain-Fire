@@ -100,6 +100,7 @@ function sc:init()
     task.New(self,function()
         MoveToV(self,center,60,math.tween.quadOut)
         local hole = New(black_hole,self.x,self.y,0,0,0)
+        PlaySound("ch00",1)
         task.New(hole,function()
             SetFieldInTime(hole,60,math.tween.cubicOut,{"r1",32},{"r2",1024},{"force",4})
             while true do
@@ -138,6 +139,7 @@ function sc:init()
         task.New(self,function()
             local __ang = 0
             for i=10,_infinite do
+                PlaySound("tan00",0.1)
                 AdvancedFor(12,{"linear",0,360,false}, function(ang)
                     local obj = CreateShotA(self.x,self.y,2,ang+__ang,"scale",color.Green)
                     obj.navi = true
@@ -153,6 +155,7 @@ function sc:init()
             for i=1,_infinite do
                 local __ang = Angle(self,player)
                 local spr = 75 + 15 * cos(self.timer)
+                PlaySound("tan02",0.2)
                 AdvancedFor(5,{"linear",-spr,spr,true}, function(ang)
                     AdvancedFor(2,{"linear",6,5.5},function(spd)
                         local obj = CreateShotA(self.x,self.y,spd,ang+__ang+ran:Float(-1,1),"amulet",color.Red)

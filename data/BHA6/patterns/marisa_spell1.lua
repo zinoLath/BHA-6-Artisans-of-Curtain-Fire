@@ -1,5 +1,7 @@
 local center = Vector(0,100)
-local sc = boss.card:new("6th Degree of Separation ~ Love Dive", 60, 6, 2, 600, false)
+local path = GetCurrentScriptDirectory()
+local sc = boss.card:new("6th Degree of Separation ~ Love Dive", 60, 6, 2, 800, false)
+LoadImageFromFile("mari_laser", path.."marisa_square.png")
 function sc:before()
     New(boss_particle_trail,self)
 end
@@ -8,108 +10,174 @@ local function ShapeTask(obj)
     task.Wait(900/obj._spd)
     Del(obj)
 end
-local function SpawnPolygon(x,y,_sign,_sang,spd,initang,_somiga,roff)
-    local shape_list1 = {}
+local marisa_polygon = Class()
+local marisa_poly_laser = Class()
+function marisa_polygon:init(x,y,_sign,_sang,spd,initang,_somiga,roff)
+    self.point_count = 3
+    local point_count = self.point_count
+    self.bul_list = {}
     spd = spd or 1
     _somiga = _somiga or 0
     initang = initang or 0
+    self.x, self.y = x,y
+    self._sign = _sign
+    self.spd = spd
+    self.angomg = 0.1 * _sign
+    self.ang = initang
+    self.somiga = _somiga
+    self.sang = _sang
+    self.radius = roff
+    self._edges = {}
+    self.edges = {}
+    for i=1, point_count do
+        self._edges[i] = Vector.fromAngle(i*360/point_count)
+        self.edges[i] = Vector.fromAngle(i*360/point_count)
+    end
     local obj_count = 35
     local star_color = _sign == 1 and color.Red or color.Blue
+    self._color = (star_color + Color(255,64,64,64)) * Color(128,255,255,255)
     AdvancedFor(obj_count,{"linear",0,360},function(_ang)
         local _x, _y = x,y
         local _obj = CreateShotA(_x,_y,0,0,"smallstar",star_color)
         _obj.omiga = 3
         _obj._spd = spd
-        local __sign = _sign
-        task.New(_obj,function()
-            --do return end
-            while(true) do
-                local poly_vec = Vector.fromPolygon(3,(_ang + _obj.timer * 0.1 * __sign+initang)/360):rotated(_sang+_obj.timer*_somiga) * (_obj.timer*spd-roff)
-                _obj.x = _x + poly_vec.x
-                _obj.y = _y + poly_vec.y
-                task.Wait(1)
-            end
-        end)
-        table.insert(shape_list1,_obj)
-        task.New(_obj,ShapeTask)
+        table.insert(self.bul_list,_obj)
     end)
-    --[[
-    AdvancedFor(obj_count,{"linear",0-ang_diff,360-ang_diff},function(_ang)
-        local poly_vec = Vector.fromPolygon(4,(_ang)/360):rotated(_sang+ang_diff)
-        local _obj = CreateShotA(self.x,self.y,poly_vec.length*spd*1,poly_vec.angle,"smallstar",color.Blue)
-        table.insert(shape_list2,_obj)
-        task.New(_obj,ShapeTask)
-    end)
-    --]]
-    local final_shape = {}
-    for i=1, #shape_list1,1 do
-        if IsValid(shape_list1[i]) then
-            table.insert(final_shape,shape_list1[i])
-        end
-        --table.insert(final_shape,shape_list2[i])
+    local spd = 1.7/100
+    local len = 0.999
+    self.laser = New(marisa_poly_laser,self,0,len,-spd*_sign)
+    self.laser._color = color.Yellow
+    self.wlaser = New(marisa_poly_laser,self,-len*_sign,len,-spd*_sign)
+    self.wlaser._color = color.Purple * Color(64,255,255,255)
+    self.wlaser._subcolor = (color.Purple + Color(255,128,128,128)) * Color(255,255,255,255)
+    self.wlaser.colli = false
+    self.group = GROUP_INDES
+    self.layer = LAYER_ENEMY_BULLET-51
+end
+function marisa_polygon:frame()
+    self.radius = self.radius + self.spd
+    if self.radius > 700 then
+        Del(self)
     end
-    local node_count = 64
-    local tspace = obj_count*0.4
-    local tspeed = spd*_sign*obj_count/(8*30)
-    local crobj = CreateCurvyLaser(x,y,nil,nil,node_count,color.Yellow)
-    crobj.update_laser = false
-    crobj._bound = false
-    local crobjW = CreateCurvyLaser(x,y,nil,nil,node_count,color.Purple * Color(64,255,255,255))
-    crobjW.update_laser = false
-    crobjW._bound = false
-    crobjW.colli = false
-    local crline = CreateCurvyWarning(x,y,nil,nil,node_count,(star_color + Color(255,128,128,128)) * Color(200,255,255,255))
-    crline.update_laser = false
-    crline._bound = false
-    task.New(crobj,function()
-        --do return end
-        local x_pos, y_pos = {},{}
-        local x_pos1, y_pos1 = {},{}
-        local x_pos2, y_pos2 = {},{}
-        local vec_list = {}
-        for i=1, _infinite do
-            for k,v in ipairs(final_shape) do
-                if not IsValid(v) then
-                    Del(crobj)
-                    Del(crobjW)
-                    Del(crline)
-                    return
-                end
-                vec_list[k] = Vector(v.x,v.y)
-                x_pos1[k] = v.x
-                y_pos1[k] = v.y
-            end
-            x_pos1[#final_shape+1] = x_pos1[1]
-            y_pos1[#final_shape+1] = y_pos1[1]
-            for i=1, node_count do
-                local vec = Vector.list_lerp(vec_list,crobj.timer*tspeed + tspace*i/node_count - 2)
-                x_pos[i] = vec.x
-                y_pos[i] = vec.y
-                local vec2 = Vector.list_lerp(vec_list,crobj.timer*tspeed + tspace*i/node_count - 2+8*_sign)
-                x_pos2[i] = vec2.x
-                y_pos2[i] = vec2.y
-            end
-            crobj.data:UpdateAllNode(node_count-2, x_pos, y_pos, crobj.w)
-            crobjW.data:UpdateAllNode(node_count-2, x_pos2, y_pos2, crobj.w)
-            crline.data:UpdateAllNode(#x_pos1, x_pos1, y_pos1, 4)
-            task.Wait(1)
+    self.sang = self.sang + self.somiga
+    for i=1, self.point_count do
+        self.edges[i] = self._edges[i]:rotated(self.sang) * self.radius
+    end
+    local __len = #self.bul_list
+    for k,v in ipairs(self.bul_list) do
+        if IsValid(v) then
+            local t = (k/__len) + self.timer * 0.0003 * self._sign
+            local vec = Vector.list_lerp(self.edges,t*self.point_count)
+            v.x, v.y = self.x + vec.x, self.y + vec.y
         end
-    end)
+    end
+end
+function marisa_polygon:render()
+    local pos_vec = Vector(self.x,self.y)
+    SetImageState("curvy_white","",self._color)
+    for k=1, #self.edges do
+        local nextk = LoopTableK(self.edges,k+1)
+        local v1, v2 = self.edges[k]+pos_vec, self.edges[nextk]+pos_vec
+        local pervec = (v1 - v2).normalized:perpendicular() * 1
+        Render4Vec("curvy_white",v1 - pervec, v1 + pervec, v2 + pervec, v2- pervec)
+    end
+end
+function marisa_polygon:del()
+    Del(self.laser)
+    Del(self.wlaser)
+    for k,v in ipairs(self.bul_list) do
+        if IsValid(v) then
+            Del(v)
+        end
+    end
+end
+function marisa_polygon:kill()
+    Kill(self.laser)
+    Kill(self.wlaser)
+    for k,v in ipairs(self.bul_list) do
+        if IsValid(v) then
+            Kill(v)
+        end
+    end
+end
+function marisa_poly_laser:init(master,i,len,spd)
+    self.master = master
+    self.t = i
+    self.len = len
+    self.spd = spd
+    self.img = "mari_laser"
+    --self.data = BentLaserData()
+    self.vec = {}
+    self._blend = "grad+add"
+    self.width = 4
+    self.group = GROUP_INDES
+end
+function marisa_poly_laser:frame()
+    local master = self.master
+    if not IsValid(master) then
+        return Del(self)
+    end
+    self.t = self.t + self.spd
+    self.x, self.y = master.x, master.y
+    table.clear(self.vec)
+    local t1 = self.t
+    local t2 = self.t-self.len
+    local posv = Vector(self.x, self.y)
+    local v = Vector.list_lerp(master.edges,t1) + posv
+    table.insert(self.vec,v)
+    local v = Vector.list_lerp(master.edges,int(t1)) + posv
+    table.insert(self.vec,v)
+    local v = Vector.list_lerp(master.edges,t2) + posv
+    table.insert(self.vec,v)
+    if self.colli then
+        for k=1, #self.vec-1 do
+            local v1, v2 = self.vec[k], self.vec[k+1]
+            if CircleToCapsule(Vector.fromTable(player), player.a,v1,v2,self.width*0.8/2) then
+                Collide(self,player)
+            end
+        end
+    end
+end
+function marisa_poly_laser:render()
+    SetImageState(self.img, self._blend, self._color)
+    SetImageSubColor(self.img,self._subcolor)
+    for k=1, #self.vec-1 do
+        local pervec = (self.vec[k+1] - self.vec[k]).normalized:perpendicular() * self.width
+        local v1, v2 = self.vec[k], self.vec[k+1]
+        local lb, lt, rt, rb = v1 + pervec, v1 - pervec, v2 - pervec, v2 + pervec
+        Render4V(self.img,lt.x, lt.y, 0, rt.x, rt.y, 0, rb.x, rb.y, 0, lb.x, lb.y, 0)
+    end
+end
+local function SpawnPolygon(...)
+    return New(marisa_polygon,...)
 end
 function sc:init()
     task.New(self,function()
         MoveToV(self,center,60,math.tween.quadOut)
+        task.New(self,function()
+            task.Wait(300)
+            for count=1, _infinite do
+                PlaySound("tan02", 0.1)
+                AdvancedFor(4,{"linear",0,360},function(ang)
+                    local obj = CreateShotA(self.x,self.y,2,ang+self.timer*math.pi*1.3434,"scale",
+                            ColorHSV(255,self.timer,100,100))
+                    obj.vx = obj.vx * 3
+                end)
+                task.Wait(1)
+            end
+        end)
         local _sign = 1
-        local speed = 2
+        local speed = 1.3
         local _sang = 90
         while(true) do
             local angoff = ran:Float(180/30,-180/30)
+            PlaySound("kira00", 1)
             AdvancedFor(4,{"linear",1.0,1.0},{"linear",0,0},{"linear",0,32},function(spd,ang,off)
                 SpawnPolygon(self.x,self.y,_sign,0+_sang,spd*speed,ang+angoff,0.1*_sign,off)
                 SpawnPolygon(self.x,self.y,-_sign,180+_sang,spd*speed,ang+angoff,0.1*_sign,off)
             end)
             _sign = -_sign
-            task.Wait(60/speed)
+            task.Wait(120/speed)
             MoveRandom(self,8,16,lstg.world.l+64,lstg.world.r-64,100,lstg.world.t-80,90/speed)
         end
     end)

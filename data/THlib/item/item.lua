@@ -63,7 +63,7 @@ end
 function item.PlayerInit()
     lstg.var.power = 100
     lstg.var.collect_line = 130
-    lstg.var.lifeleft = lstg.var.lifeleft or 1
+    lstg.var.lifeleft = lstg.var.lifeleft or 3
     lstg.var.bomb = 3
     lstg.var.bonusflag = 0
     lstg.var.chip = 0
@@ -86,7 +86,7 @@ end
 ---重置部分自机信息（道具相关）
 function item.PlayerReinit()
     lstg.var.power = 400
-    lstg.var.lifeleft = 2
+    lstg.var.lifeleft = 3
     lstg.var.chip = 0
     lstg.var.bomb = 2
     lstg.var.bomb_chip = 0
