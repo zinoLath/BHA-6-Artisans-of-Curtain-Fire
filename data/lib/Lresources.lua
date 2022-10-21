@@ -49,6 +49,11 @@ function LoadTexture(tex,...)
     SetTextureSamplerState(tex,"linear+wrap")
     return tex
 end
+OriginalLoadMusic = LoadMusic
+function LoadMusic(name,...)
+    OriginalLoadMusic(name,...)
+    return name
+end
 ----------------------------------------
 ---资源载入
 

@@ -24,5 +24,6 @@ suika_anim_mngr:addAnimation(suika_std,"stand")
 --reimu_anim_mngr.side_frame_max = 8
 suika_anim_mngr.side_deadzone = 0.01
 M.anim_manager = suika_anim_mngr
+M.song = LoadMusic("suika_theme",path.."suika_theme.ogg",0,0)
 
 return M

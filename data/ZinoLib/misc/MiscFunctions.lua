@@ -221,6 +221,27 @@ function CircleToCapsuleUnPen(cP, cR, pA, pB, pR)
     local l2 = (cP-pA-(pB-pA)*h).length2
     return l2 < (cR + pR)*(cR + pR), h
 end
+function Rotate2DAround(pos,angle,opos)
+    local _vec = pos-opos
+    return _vec:rotate(angle) + opos
+end
+function PointToPolygon(pos,polypos,sides,r,polyang)
+    local cpos = Rotate2DAround(pos,polyang,polypos)
+    local f = 180/sides
+    local cf = cos(f)
+    local dv = cpos - polypos
+    local len = dv.length
+    local bool = len <= r
+    if bool then
+        local r_apothem = r * cf
+        bool = r <= r_apothem
+        if not bool then
+            local ang = math.fmod(NormalizeAngle(dv.angle),2 * f)
+            bool = len <= (r_apothem/cos(ang-f))
+        end
+    end
+    return bool
+end
 
 function SnapLerp(a,b,x,y)
     y = y or 0.01

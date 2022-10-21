@@ -138,6 +138,7 @@ function M:card_coroutine()
     end
     coroutine.yield()
     while(self.hp > 0 and self.timer < card.time and not self.skip_card) do --while card is alive
+        lstg.var.boss_timer = self.timer
         self.ui_time = (card.time - self.timer)/60
         if card.frame then card.frame(self) end
         if isspell then
@@ -292,6 +293,16 @@ function M.card:newNonCombat()
         table.insert(self.cards, ret)
     end
     return ret
+end
+function M.card:newWalkOut(wait,time,x,y,tween)
+    x,y = x or 100,y or 200
+    time = time or 120
+    tween = tween or math.tween.cubicOut
+    local ret = M.card.newNonCombat()
+    function ret:init()
+        task.Wait(wait or 60)
+        MoveTo(self,x,y,time,tween)
+    end
 end
 M.card.mt = {
     __index = M,

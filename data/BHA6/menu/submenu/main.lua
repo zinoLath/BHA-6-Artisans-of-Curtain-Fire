@@ -102,7 +102,7 @@ M.options = {
         CallClass(self.manager,"switch_menu","options")
     end }},
     {M.option,"Exit", { function(self)
-        Print("Exit")
+        stage.QuitGame()
     end }},
 }
 

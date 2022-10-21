@@ -45,17 +45,29 @@ end
 ---
 ---碎片奖励结算（默认）
 function item.EndChipBonus(x, y)
+    Event:call("onSpellEnd",x,y)
     if lstg.var.chip_bonus and lstg.var.bombchip_bonus then
         --同时奖励时并排分开
         --New(item_chip, x - 20, y)
         --New(item_bombchip, x + 20, y)
+        Event:call("onSpellCap",x,y)
+        Event:call("onSpellNMNB",x,y)
+        return
     else
+        Event:call("onSpellNotCap",x,y)
         if lstg.var.chip_bonus then
             --New(item_chip, x, y)
+            Event:call("onSpellNM",x,y)
+            return
         end
         if lstg.var.bombchip_bonus then
             --New(item_bombchip, x, y)
+            Event:call("onSpellNB",x,y)
+            return
         end
+    end
+    if not lstg.var.chip_bonus and not lstg.var.bombchip_bonus then
+        Event:call("onSpellNotCap",x,y)
     end
 end
 
@@ -174,23 +186,27 @@ function item.base_item:init(x,y,v,vy_bonus,rot,img,size)
     self.group = GROUP_ITEM
     self.layer = LAYER_ITEM
     self.img = img
-    self.mvy = sin(rot+180)*0.5 + 0.5
     self.vx, self.vy = v * cos(rot), v *sin(rot)
     self.vy = self.vy + vy_bonus
+    self.mvy = sin(rot+180)*0.5 + 0.5
     self.rot = 2
-    self.omiga = 5
+    --self.omiga = 5
     self.ay = -0.15
     self.t = 30
     self.come_speed = 6
     self.a, self.b = item_colli_size*self.final_size, item_colli_size*self.final_size
     self.hscale, self.vscale = 0,0
-    self.A = 0
+    self._a = 0
+    self.bound = false
 end
 function item.base_item:frame()
+    if self.y < -300 then
+        Del(self)
+    end
     task.Do(self)
     if self.timer < self.t then
         self.hscale, self.vscale = (self.final_size*tweenk(self.timer/self.t)),(self.final_size*tweenk(self.timer/self.t))
-        self.A = 255*tweenk(self.timer/self.t)
+        self._a = 255*tweenk(self.timer/self.t)
     end
     local dist_player = Dist(self,player)
     if (self.collect == nil or self.collect == false) and (player.y > lstg.var.collect_line or dist_player < 128) then
@@ -199,9 +215,7 @@ function item.base_item:frame()
     if self.collect == true then
         self.collect = player
     end
-    if self.vy < -3*self.mvy-6 then
-        self.vy = -3*self.mvy-6
-    end
+    self.vy = math.max(self.vy,-6*self.mvy-2)
     if self.collect and self.timer > self.t then
         self.vx, self.vy, self.ay, self.ax = 0,0,0,0
         SetV(self,self.come_speed,Angle(self,self.collect))
@@ -220,10 +234,10 @@ function item.base_item:kill()
     PreserveObject(self)
     self.group = GROUP_GHOST
     task.New(self, function()
-        local alpha = self.A
+        local alpha = self._a
         local scalex, scaley = self.hscale, self.vscale
         for i=0, 1, 1/15 do
-            self.A = lerp(alpha,0,tweenk(i))
+            self._a = lerp(alpha,0,tweenk(i))
             self.hscale = lerp(scalex,scalex*1.2,tweenk(clamp(i*6,0,1)))
             self.vscale = lerp(scaley,scaley*1.2,tweenk(clamp(i*6,0,1)))
             coroutine.yield()
@@ -262,9 +276,12 @@ end
 function SpawnPIV(x,y)
     return New(item.piv,x,y,0,2,90,MultiplyTable(lstg.var.piv_mul)*(lstg.var.faith/1000))
 end
+function ProtectPlayer(t)
+    player.protect = max(player.protect,t)
+end
 item.life = Class(item.base_item)
 function item.life:init(x,y,v,vy_bonus,rot,life)
-    local size = lerp(8,32,math.clamp(life,0,1))
+    local size = lerp(16,16,math.clamp(life*75,0,1))
     self.spawn_size = size * 2
     self.life = life
     item.base_item.init(self,x,y,v,vy_bonus,rot,"item_life",size)
@@ -274,7 +291,7 @@ function item.life:collect()
 end
 item.bomb = Class(item.base_item)
 function item.bomb:init(x,y,v,vy_bonus,rot,life)
-    local size = lerp(8,32,math.clamp(life,0,1))
+    local size = lerp(16,16,math.clamp(life,0,1))
     self.spawn_size = size * 2
     self.life = life
     item.base_item.init(self,x,y,v,vy_bonus,rot,"item_bomb",size)
@@ -292,6 +309,7 @@ function item.piv:init(x,y,v,vy_bonus,rot,value)
     self.come_speed = 12
     self.bombed = false
     self.ay = -0.05
+    self.omiga = 5
 end
 function item.piv:frame()
     if self.bombed then
@@ -303,3 +321,23 @@ end
 function item.piv:collect()
     lstg.var.faith = lstg.var.faith + self.value * (self.bombed and 2 or 1)
 end
+local up_v = 5
+local spd = 1
+local vals = 1.05/3
+local count = 10
+Event:new("onSpellNM",function(x,y)
+    AdvancedFor(count,{"linear",-180,180},function(_ang)
+        local _item = New(item.life,x,y,spd,up_v,_ang,vals/count)
+    end)
+end)
+Event:new("onSpellNB",function(x,y)
+    AdvancedFor(count,{"linear",-180,180},function(_ang)
+        local _item = New(item.bomb,x,y,spd,up_v,_ang,vals/count)
+    end)
+end)
+Event:new("onSpellNMNB",function(x,y)
+    AdvancedFor(count*1.2/2,{"linear",-180,180},function(_ang)
+        local _item = New(item.bomb,x,y,spd*1.2,up_v,_ang,vals*2/count)
+        local _item = New(item.life,x,y,spd,up_v,_ang+180/6,vals*2/count)
+    end)
+end)

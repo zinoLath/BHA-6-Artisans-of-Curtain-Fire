@@ -54,6 +54,8 @@ function M.manager:init(opt_list)
             task.Wait(1)
         end
     end)
+
+    PauseMusic("boss_theme")
 end
 function M.manager:exit()
     task.New(self, function()
@@ -78,6 +80,7 @@ function M.manager:exit()
         end
         lstg.is_paused = false
         self.active = false
+        ResumeMusic("boss_theme")
         task.Wait(30)
         RawKill(self)
     end)

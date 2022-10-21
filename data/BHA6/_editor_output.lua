@@ -38,15 +38,21 @@ local hp1 = require("BHA6.patterns.housui_non1")
 local hp2 = require("BHA6.patterns.housui_spell1")
 function NormalStage(self)
 	CallClass(lstg.tmpvar.bg,"viewSun")
-	task.Wait(30)
+	PlayMusic("boss_theme")
+	task.Wait(60)
 	local _timer = New(boss_timer)
 	local _hpbar = New(straight_hpbar)
-	local __boss = New(bha6_boss, { rp1, rp2 }); wait_until_death(__boss)
-	local __boss = New(bha6_boss, { sp1, sp2 }); wait_until_death(__boss)
-	local __boss = New(bha6_boss, { mp1, mp2 }); wait_until_death(__boss)
-	local __boss = New(bha6_boss, { hp1, hp2 }); wait_until_death(__boss)
+	local __boss = New(bha6_boss, { rp1, rp2, boss.card:newWalkOut(60,120) }); wait_until_death(__boss)
+	local __boss = New(bha6_boss, { sp1, sp2, boss.card:newWalkOut(60,120) }); wait_until_death(__boss)
+	local __boss = New(bha6_boss, { mp1, mp2, boss.card:newWalkOut(60,120) }); wait_until_death(__boss)
+	local __boss = New(bha6_boss, { hp1, hp2, boss.card:newWalkOut(60,120) }); wait_until_death(__boss)
 	Kill(_timer)
 	Kill(_hpbar)
+	local time = self.timer
+	task.Wait(210+60)
+	lstg.var.boss_timer = stage.current_stage.timer
+	New(capture_message,"Stage Clear!!!",true)
+	task.Wait(210)
 end
 function SpellPractice(self)
 	CallClass(lstg.tmpvar.bg,"viewSun")
@@ -56,6 +62,8 @@ function SpellPractice(self)
 		lstg.var.lifeleft = 999
 	end
 	player.nextspell = _infinite
+	PlayMusic("boss_theme")
+	task.Wait(60)
 	local _timer = New(boss_timer)
 	local _hpbar = New(straight_hpbar)
 	local spell_prac = _sc_table[lstg.var.pat_id]
@@ -66,6 +74,7 @@ end
 stage.group.New('menu',{},"Normal",{lifeleft=60,power=100,faith=50000,bomb=3},true,1)
 stage.group.AddStage('Normal','Stage 1@Normal',{lifeleft=7,power=300,faith=50000,bomb=3},true)
 stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
+	lstg.var.current_theme = nil
 	item.PlayerInit()
     difficulty=self.group.difficulty    --New(mask_fader,'open')
 	New(mistylake_bg)
@@ -78,9 +87,17 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
             -- New(MyScene)
 			-- New(G2048)
         end
+		--New(dialogue_manager,sample_dialogue)
+		--task.Wait(_infinite)
+		LoadMusic("boss_theme",path.."bgm02.ogg",0,0)
+		local _,bgm=EnumRes('bgm')
+		for _,v in pairs(bgm) do
+			StopMusic(v)
+		end
 		if lstg.var.judging then
 			lstg.lifeleft = 999
 		end
+		task.Wait(15)
 		if lstg.var.pat_id then
 			lstg.var.practice = true
 			SpellPractice(self)
@@ -126,9 +143,9 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
 						end
 						task.Wait()
 					end
-				end)
-				Transition(function()
-					stage.group.ReturnToTitle(true, 1)
+					Transition(function()
+						stage.group.ReturnToTitle(true, 1)
+					end)
 				end)
 			end)
 		end
@@ -137,7 +154,7 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
 end)
 
 Include "BHA6\\menu\\main.lua"
-do return end
+--do return end
 stage_init = stage.New('init', true, true)
 function stage_init:init()
 	stage.group.Start(stage.groups["Normal"])

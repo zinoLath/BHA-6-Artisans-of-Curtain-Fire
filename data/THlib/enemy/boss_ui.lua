@@ -9,6 +9,7 @@ local cutin_font_default = BMF:loadFont("philosopher",font_path)
 local history_font_default = BMF:loadFont("square",font_path)
 local timer_font = BMF:loadFont("chaney",font_path)
 timer_font:setMonospace(30,{",",".",":"})
+local spell_cap_font = BMF:loadFont("sabado",font_path)
 --local timer_state = BMF:createState("timer_state")
 local namescale = 0.4
 local namestate = {
@@ -401,3 +402,52 @@ function cutin_img:render()
     DefaultRenderFunc(self)
     SetViewMode(vm)
 end
+
+capture_message = Class()
+function capture_message:init(txt,ignore_bonus)
+    self.x, self.y = 0,0
+    self.moscale = 1
+    self._color = color.White
+    self.txt = txt
+    local c1, c2 = color.Black,color.Red
+    self.subcolor = c1
+    self.scale = 1.4
+    self.time = (lstg.var.boss_timer or 0)/60
+    task.New(self,function()
+        self.moscale = 2
+        self._a = 0
+        SetFieldInTime(self,15,math.tween.cubicOut,{"moscale",0.8},{"y",100},{"_a",255})
+        SetFieldInTime(self,120,math.tween.cubicInOut,{"y",120})
+        SetFieldInTime(self,60,math.tween.cubicInOut,{"moscale",0},{"y",300},{"_a",0},{"scale",2})
+    end)
+    if ignore_bonus then
+        return
+    end
+    self.spell_bonus = lstg.var.bombchip_bonus
+    self.life_bonus = lstg.var.chip_bonus
+end
+function capture_message:frame()
+    task.Do(self)
+end
+function capture_message:render()
+    spell_cap_font:renderOutline(self.txt,self.x,self.y,
+            self.scale,"center","vcenter",self._color,nil,nil,self.subcolor,nil,self._a/255,self.moscale)
+    local t1,t2 = math.modf(self.time)
+    spell_cap_font:renderOutline(string.format("Time Taken: %02d:%02d",t1,t2*100),self.x,self.y-20,
+            self.scale*0.6,"center","vcenter",self._color,nil,nil,self.subcolor,nil,self._a/255,self.moscale)
+    local alphcol = Color(self._a,255,255,255)
+    if self.life_bonus then
+        spell_cap_font:renderOutline("No Miss! Life+",self.x,self.y-60,
+                self.scale*0.6,"center","vcenter",color.HotPink*alphcol,nil,nil,self.subcolor,nil,self._a/255,self.moscale)
+    end
+    if self.spell_bonus then
+        spell_cap_font:renderOutline("No Spell! Spell+",self.x,self.y-80,
+                self.scale*0.6,"center","vcenter",Color(255,0,255,0)*alphcol,nil,nil,self.subcolor,nil,self._a/255,self.moscale)
+    end
+end
+Event:new("onSpellCap",function()
+    New(capture_message,"Good Job! Card Captured!")
+end)
+Event:new("onSpellNotCap",function()
+    New(capture_message,"Try Again... Card Failed...")
+end)

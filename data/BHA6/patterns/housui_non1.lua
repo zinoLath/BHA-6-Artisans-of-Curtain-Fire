@@ -2,6 +2,7 @@ local center = Vector(0,100)
 local housui_fire = Class()
 function housui_fire:init(boss,r1,r2,sa,a,col)
     bullet.init(self,"arrow",col,color.White,"add+add")
+    self.group = GROUP_INDES
     self.colli = true
     self.boss = boss
     self.r1 = r1
@@ -161,7 +162,7 @@ function sc:init()
                 MoveRandom(self,32,64,lstg.world.l+64,lstg.world.r-64,100,lstg.world.t-80,60)
                 task.Wait(120)
                 local baseang = 0
-                AdvancedFor(50,{"sinewave",baseang,baseang+90,0,50},{"sinewave",3,3.5,0,5},{"sinewave",-5,5,0,50},{"linear",10,1,true,math.tween.circOut}
+                AdvancedFor(50,{"sinewave",baseang,baseang+90,0,1},{"sinewave",3,3.5,0,3},{"sinewave",-5,5,0,50},{"linear",10,1,true,math.tween.circOut}
                 ,function(angoff,base_spd,spread,wait)
                             PlaySound("tan01",0.3)
                     AdvancedFor(10,{"linear",0,360},function(rad)

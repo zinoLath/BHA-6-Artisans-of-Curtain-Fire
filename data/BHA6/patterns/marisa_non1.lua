@@ -79,8 +79,9 @@ function sc:init()
                 task.Wait(15)
             end
         end)
-        AdvancedFor(4,{"linear",0,360,false},function(familiar_ang)
+        AdvancedFor(6,{"linear",0,360,false},function(familiar_ang)
             local familiar = New(marisa_familiar,self.x,self.y,self)
+            New(smear,familiar,nil,nil,nil,0.8)
             local fam = familiar
             local maxrad = 100
             familiar.rad1, familiar.rad2, familiar.ang, familiar.shape_ang = 0,0,familiar_ang,shape_angle

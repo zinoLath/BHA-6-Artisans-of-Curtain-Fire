@@ -1,5 +1,5 @@
 local center = Vector(0,100)
-local sc = boss.card:new("", 60, 5, 2, 500, false)
+local sc = boss.card:new("", 60, 5, 2, 400, false)
 function sc:before()
     New(boss_particle_trail,self)
 end
@@ -54,7 +54,7 @@ function sc:init()
             local wwait = 5
             AdvancedFor((180+60+150)/wwait,{"incremental",0,15},{"linear",2,5},function(ang,_spd)
                 PlaySound("tan02", vol2)
-                AdvancedFor(6,{"linear",0,360,true},function(_ang)
+                AdvancedFor(5,{"linear",0,360},function(_ang)
                     AdvancedFor(5,{"linear",0,5},{"linear",_spd*0.925,_spd*1.075},function(__ang,spd)
                         local a = ang+_ang+__ang+Angle(self,player)
                         local obj = CreateShotA(self.x,self.y,0.4,a,"amulet",color.Gray)

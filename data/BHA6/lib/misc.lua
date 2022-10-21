@@ -100,3 +100,31 @@ function MoveCurveDown(self, x2_, y2_, time_, curveScale_, tween_, maxt)
 
     return;
 end
+
+function PlayBossTheme(theme)
+    do return end
+    if lstg.var.current_theme then
+        local v = lstg.var.current_theme
+        task.New(stage.current_stage,function()
+            AdvancedFor(30,{"linear",0,1,true},function(t)
+                if GetMusicState(v)=='playing' then
+                    SetBGMVolume(v,math.lerp(1,0,math.tween.cubicOut(t)))
+                end
+                task.Wait(1)
+            end)
+            StopMusic(v)
+        end)
+    end
+    PlayMusic(theme)
+    lstg.var.current_theme = theme
+    SetBGMVolume(theme,0)
+    task.New(stage.current_stage,function()
+        AdvancedFor(30,{"linear",0,1,true},function(t)
+            if GetMusicState(theme)=='playing' then
+                SetBGMVolume(theme,math.lerp(0,1,math.tween.cubicOut(t)))
+            end
+            task.Wait(1)
+        end)
+    end)
+
+end

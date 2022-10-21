@@ -1,0 +1,14 @@
+<dialogue>
+	<meta>
+		<speaker id="housui" name="Housui" position="-200,0" flip="false"/>
+		<speaker id="marisa" name="Marisa" position="200,0" flip="true"/>
+	</meta>
+	<action>
+		<message speaker="housui">
+			Hey everyone!<wait time="input"/> I'm here to tell everyone dialogue is working as intended<wait time="60"/>.<wait time="60"/>.<wait time="60"/>.<wait time="10"/>ish.
+		</message>
+		<message speaker="marisa">
+			Lmfao
+		</message>
+	</action>
+</dialogue>

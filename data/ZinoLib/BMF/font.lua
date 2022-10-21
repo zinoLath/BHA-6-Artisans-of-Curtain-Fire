@@ -24,6 +24,14 @@ M.charlist = {
     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
     'z', '{', '|', '}', '~'
 }
+M.punctuation = {
+    ["!"] = true,
+    ["."] = true,
+    [","] = true,
+    ["?"] = true,
+    [";"] = true,
+    [":"] = true,
+}
 local ctdefault = Color(255,255,255,255)
 local cbdefault = Color(255,255,255,255)
 local outdefault = Color(255,0,0,0)
@@ -156,7 +164,7 @@ function M.font_functions:getSize(str,scale,offsetfunc)
     return max_x - min_x,  max_y - min_y
 end
 local white = Color(255,255,255,255)
-function M.font_functions:render(str,x,y,scale,halign,valign,color,subcolor,offsetfunc)
+function M.font_functions:render(str,x,y,scale,halign,valign,color,subcolor,offsetfunc,_move_scale)
     halign = halign or "center"
     valign = valign or "vcenter"
     local move_scale = 1
@@ -164,6 +172,7 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,subcolor,offs
         move_scale = 0.4444
     end
     move_scale = move_scale * self.movescale
+    move_scale = move_scale * (_move_scale or 1)
     local wd, hg = self:getSize(str,scale*move_scale)
     local cursor = Vector(x,y - self.base*scale*move_scale/2)
     local vec = Vector(0,0)
@@ -224,7 +233,7 @@ function M.font_functions:render(str,x,y,scale,halign,valign,color,subcolor,offs
     end
 end
 local color_buffer = {}
-function M.font_functions:renderOutline(str,x,y,scale,halign,valign,color,offsetfunc,outline_size,outline_color,blend,alpha)
+function M.font_functions:renderOutline(str,x,y,scale,halign,valign,color,offsetfunc,outline_size,outline_color,blend,alpha,_move_scale)
     blend = blend or "mul+alpha"
     --PushRenderTarget("BMF_FONT_BUFFER")
     --RenderClear(Color(0x00000000))
@@ -241,7 +250,7 @@ function M.font_functions:renderOutline(str,x,y,scale,halign,valign,color,offset
     else
         _color = color * alphcolor
     end
-    self:render(str,x,y,scale,halign,valign,_color,outline_color,offsetfunc)
+    self:render(str,x,y,scale,halign,valign,_color,outline_color,offsetfunc,_move_scale)
     --PopRenderTarget("BMF_FONT_BUFFER")
     do return end
     local _color = outline_color
@@ -282,6 +291,16 @@ M.tag_funcs.border = {
         state.render_funcs = state.render_funcs or {}
         if tag._attr.color then
             state.out_color = StringToColor(tag._attr.color)
+        end
+    end
+}
+M.tag_funcs.space = {
+    init = function(tag,state,cursor)
+        if tag._attr.x then
+            cursor.x = cursor.x + tonumber(tag._attr.x)
+        end
+        if tag._attr.y then
+            cursor.y = cursor.y + tonumber(tag._attr.y)
         end
     end
 }
@@ -327,31 +346,42 @@ local function returnTList(txt,info,state,ret,state_list,cursor)
                     end
                     local scale = cr_state.scale
                     local char = cr_state.font.chars[c]
-                    local char_advance, nextchar_width
-                    if (not cr_state.monospace) and (not (cr_state.monospace_exception and cr_state.monospace_exception[c])) then
-                        char_advance = chars[c].xadvance*scale
-                    else
-                        char_advance = cr_state.monospace
+                    if char then
+                        local char_advance, nextchar_width
+                        if (not cr_state.monospace) and (not (cr_state.monospace_exception and cr_state.monospace_exception[c])) then
+                            char_advance = chars[c].xadvance*scale
+                        else
+                            char_advance = cr_state.monospace
+                        end
+                        if nextc and nextchar then
+                            nextchar_width = nextchar.width - nextchar.xoffset
+                        else
+                            nextchar_width = 0
+                        end
+                        if cursor.x + char_advance + nextchar_width*0 > width and c == " " then
+                            cursor.x = 0
+                            cursor.y = cursor.y - info.maxheight or 0
+                        end
+                        local glyph = ffi.new("zfontrender",0,M.charlist[c] or 0,state_id, cursor.x + char.xoffset*scale, cursor.y - char.yoffset*scale - cr_state.font.base*scale)
+                        cursor.x = cursor.x + char_advance
+                        if M.punctuation[c] then
+                            if nextc then
+                                if not M.punctuation[nextc] then
+                                    cursor.x = cursor.x + chars[" "].xadvance*scale
+                                end
+                            else
+                                cursor.x = cursor.x + chars[" "].xadvance*scale
+                            end
+                        end
+                        info.maxheight = math.max(info.maxheight or 0, cr_state.font.lineHeight * cr_state.scale)
+                        table.insert(ret, glyph)
                     end
-                    if nextc and nextchar then
-                        nextchar_width = nextchar.width - nextchar.xoffset
-                    else
-                        nextchar_width = 0
-                    end
-                    if cursor.x + char_advance + nextchar_width*0 > width and c ~= " " then
-                        cursor.x = 0
-                        cursor.y = cursor.y - info.maxheight or 0
-                    end
-                    local glyph = ffi.new("zfontrender",0,M.charlist[c] or 0,state_id, cursor.x + char.xoffset*scale, cursor.y - char.yoffset*scale - cr_state.font.base*scale)
-                    cursor.x = cursor.x + char_advance
-                    info.maxheight = math.max(info.maxheight or 0, cr_state.font.lineHeight * cr_state.scale)
-                    table.insert(ret, glyph)
                 end
             end
             --table.remove(ret)
         else
             if M.tag_funcs[v._name] then
-                M.tag_funcs[v._name].init(v,state)
+                M.tag_funcs[v._name].init(v,state,cursor)
             end
             returnTList(v,info,state,ret,state_list,cursor)
             --table.insert(ret, { _type = "TAG_END" })
@@ -380,7 +410,7 @@ function M:pool(text,init_state,width)
     local si = 1
     local max_border_size = 0
     local first_border_size = 0
-    local ret = {glyphList = glyphList, stateList = stateList, borderList = borderList, max_border = max_border_size, first_border = first_border_size}
+    local ret = {glyphList = glyphList, stateList = stateList, length = #glyphList}
     return ret
 end
 function M:getPoolRect(pool)
@@ -418,7 +448,7 @@ function M:renderPool(pool,x,y,scale,count,timer,imgscale,alpha)
     alpha = alpha or 1
     local alphmult = Color(255*alpha,255,255,255)
     for k,v in ipairs(pool.glyphList) do
-        if v.id > count then
+        if k > count then
             break
         end
         local state = pool.stateList[v.state]

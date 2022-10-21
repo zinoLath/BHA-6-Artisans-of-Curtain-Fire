@@ -16,18 +16,22 @@ M.options = {
             local selected = LoopTableK(self.__text,self.__subselect)
             lstg.var.shot_type = selected
     end }},
-    {option_multihori,"Special Type: ", { { "Bomb", "Hyper" }
-    , onHori = function()
+    {option_multihori,"Special Type: ", { { "Offensive", "Defensive" }
+    , onHori = function(self)
             local selected = LoopTableK(self.__text,self.__subselect)
             lstg.var.bomb_type = selected
     end }},
-    {option_multihori,"Sub Type: ", { { "Burst Bonus", "Communication Collection" }
-    , onHori = function()
+    {option_multihori,"Sub Type: ", { { "-Suwako- Frog's Absorption", "-Kanako- Snake's Lifesteal" }
+    , onHori = function(self)
             local selected = LoopTableK(self.__text,self.__subselect)
             lstg.var.sub_type = selected
     end }},
-    {option_base,"Go!!!!!", {onEnter = function()
+    {option_base,"Go!!!!!", {onEnter = function(self)
         lstg.var.pat_id = nil
+        local menu = self.menu
+        for k,v in ipairs(menu.options) do
+            CallClass(v, "onHori",0)
+        end
         Transition(function()
             stage.group.Start(stage.groups["Normal"])
         end)

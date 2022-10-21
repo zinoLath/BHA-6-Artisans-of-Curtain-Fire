@@ -171,7 +171,7 @@ M.options = {
     },
     {option_slider, "Bullet Shadows: ", {onHori = function(self)
         setting.bulshadows = self.fill
-    end, init_value = setting.bulshadows},
+    end, init_value = function() return setting.bulshadows end},
     },
     {option_slider, "Background Brightness: ", {onHori = function(self)
         setting.bgbright = self.fill

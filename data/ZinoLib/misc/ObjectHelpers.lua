@@ -63,3 +63,14 @@ function DelBullets()
     DelGroup(GROUP_ENEMY_BULLET)
     DelGroup(GROUP_INDES)
 end
+function ForeachGroup(groups,func)
+    for _,group in ipairs(groups) do
+        func(group)
+    end
+end
+function IsGroupBullet(group)
+    return group == GROUP_ENEMY_BULLET or group == GROUP_INDES
+end
+function IsGroupEnemy(group)
+    return group == GROUP_ENEMY_BULLET or group == GROUP_NONTJT
+end

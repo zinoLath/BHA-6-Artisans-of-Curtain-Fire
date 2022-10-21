@@ -24,5 +24,6 @@ housui_anim_mngr:addAnimation(housui_std,"stand")
 --reimu_anim_mngr.side_frame_max = 8
 housui_anim_mngr.side_deadzone = 0.01
 M.anim_manager = housui_anim_mngr
+M.song = LoadMusic("housui_theme",path.."housui_theme.ogg",0,0)
 
 return M
