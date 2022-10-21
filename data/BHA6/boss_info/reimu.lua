@@ -24,6 +24,6 @@ reimu_anim_mngr:addAnimation(reimu_std,"stand")
 --reimu_anim_mngr.side_frame_max = 8
 reimu_anim_mngr.side_deadzone = 0.01
 M.anim_manager = reimu_anim_mngr
-M.song = LoadMusic("reimu_theme",path.."reimu_theme.ogg",0,0)
+--M.song = LoadMusic("reimu_theme",path.."reimu_theme.ogg",0,0)
 
 return M

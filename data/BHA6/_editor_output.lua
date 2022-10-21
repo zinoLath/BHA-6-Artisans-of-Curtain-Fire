@@ -154,7 +154,7 @@ stage.group.DefStageFunc('Stage 1@Normal','init',function(self)
 end)
 
 Include "BHA6\\menu\\main.lua"
---do return end
+do return end
 stage_init = stage.New('init', true, true)
 function stage_init:init()
 	stage.group.Start(stage.groups["Normal"])

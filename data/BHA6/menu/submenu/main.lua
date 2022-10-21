@@ -4,7 +4,13 @@ local path = GetCurrentScriptDirectory()
 function M.option:ctor(data,manager)
     self._a = 0
     self.scale = 1.3
-    self.onEnter = data[1]
+    local on_enter = data.onEnter or data[1]
+    if on_enter then
+        self.onEnter = function(...)
+            PlaySound('ok00',0.7)
+            return on_enter(...)
+        end
+    end
     self.font = option_font
     self.unselect_color = self._color
     self.out_color = Color(255,0,0,0)
@@ -59,6 +65,7 @@ function M.option:_select()
         self.out_color.g = eocol.g
         self.out_color.b = eocol.b
     end)
+    PlaySound('select00',0.7)
     menu.selindicator:select(self)
 end
 function M.option:_unselect()

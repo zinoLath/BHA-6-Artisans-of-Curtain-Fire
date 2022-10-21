@@ -295,14 +295,15 @@ function M.card:newNonCombat()
     return ret
 end
 function M.card:newWalkOut(wait,time,x,y,tween)
-    x,y = x or 100,y or 200
     time = time or 120
     tween = tween or math.tween.cubicOut
     local ret = M.card.newNonCombat()
     function ret:init()
+        x,y = x or ran:Float(lstg.world.l,lstg.world.r),y or lstg.world.t+64
         task.Wait(wait or 60)
         MoveTo(self,x,y,time,tween)
     end
+    return ret
 end
 M.card.mt = {
     __index = M,

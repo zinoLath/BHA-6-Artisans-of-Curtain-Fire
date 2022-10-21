@@ -78,7 +78,7 @@ function cutin_obj:render()
     Render("spellnamebg",self.x,self.y-10,0,self.hscale, self.vscale)
     local offx = 0
     if lstg.var.practice then
-        offx = 40
+        --offx = 40
     end
     BMF:renderPool(self.namepool,self.x-self.namepoolw+offx,self.y+4,self.hscale,nil,self.timer,imgscale,alpha)
     BMF:renderPool(self.historypool,self.x-self.historypoolw+offx,self.y-15,self.hscale,nil,self.timer,imgscale,alpha)

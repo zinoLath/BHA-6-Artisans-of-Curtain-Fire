@@ -4,6 +4,16 @@ CreateRenderTarget("TRANSITION_LOAD")
 LoadFX("mask",path.."mask.fx")
 local scroll = 0
 local animations = {}
+function FadeOutBGM()
+    local _,bgm=EnumRes('bgm')
+    for i=1,30 do
+        for _,v in pairs(bgm) do
+            if GetMusicState(v)=='playing' then
+                SetBGMVolume(v,1-i/30) end
+        end
+        task.Wait()
+    end
+end
 LoadTexture("loading_scroll",path.."loading_scroll.png")
 LoadImageFromFile("loading_screen",path.."loading_screen.png")
 lstg.itrans = 0

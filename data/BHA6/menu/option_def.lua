@@ -3,7 +3,13 @@ local path = GetCurrentScriptDirectory()
 
 function option_base:ctor(data,manager)
     self._a = 0
-    self.onEnter = data.onEnter or data[1]
+    local on_enter = data.onEnter or data[1]
+    if on_enter then
+        self.onEnter = function(...)
+            PlaySound('ok00',0.7)
+            return on_enter(...)
+        end
+    end
     self.font = option_font
     self.unselect_color = self._color
     self.out_color = Color(255,0,0,0)
@@ -58,6 +64,7 @@ function option_base:_select()
         self.out_color.g = eocol.g
         self.out_color.b = eocol.b
     end)
+    PlaySound('select00',0.7)
     menu.selindicator:select(self)
 end
 function option_base:_unselect()
@@ -95,7 +102,13 @@ function option_multihori:ctor(data,manager)
     end
     self.__subselect = init_value or data[3] or 0
     self.onHori = data.onHori
-    self.onEnter = data.onEnter or data[2]
+    local on_enter = data.onEnter or data[2]
+    if on_enter then
+        self.onEnter = function(...)
+            PlaySound('ok00',0.7)
+            return on_enter(...)
+        end
+    end
     self.__text = deepcopy(data[1])
     self.__alphas = {}
     for k,v in ipairs(data[1]) do

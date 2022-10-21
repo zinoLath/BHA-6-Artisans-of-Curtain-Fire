@@ -137,9 +137,13 @@ function menu_dropshadow:render()
     PostEffect("blur","MENU_DROP_SHADOW",2,"",{ { 5, offset.x, offset.y, 0.5 }})
     --PostEffect("EMPTY_SHADER","MENU_DROP_SHADOW",2,"",{ { 10, 0, 0, 1 }})
 end
-
+local start_point = 5142350
+local end_point = 10266495
+local rate = 44100
 local fftimg = CopyImage("fftimg","white")
 stage_init = stage.New("menu",true,true)
 function stage_init:init()
+    LoadMusic("title_theme",path.."JamTitle.ogg",end_point/rate,(end_point-start_point)/rate)
+    PlayMusic("title_theme")
     New(M.manager)
 end

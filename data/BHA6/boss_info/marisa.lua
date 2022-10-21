@@ -24,6 +24,6 @@ marisa_anim_mngr:addAnimation(marisa_std,"stand")
 --reimu_anim_mngr.side_frame_max = 8
 marisa_anim_mngr.side_deadzone = 0.01
 M.anim_manager = marisa_anim_mngr
-M.song = LoadMusic("marisa_theme",path.."marisa_theme.ogg",0,0)
+--M.song = LoadMusic("marisa_theme",path.."marisa_theme.ogg",0,0)
 
 return M

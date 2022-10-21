@@ -89,7 +89,9 @@ function stage.group.frame(self)
                 { "Return to Title", "quit" },
             })
         else
-            PlayMusic(deathmusic, 0.8)
+            if play_death_music then
+                PlayMusic(deathmusic, 0.8)
+            end
             ext.pop_pause_menu = true
             lstg.tmpvar.death = true
             if IsValid(lstg.tmpvar.pausemenu) then Del(lstg.tmpvar.pausemenu) end
